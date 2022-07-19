@@ -23,9 +23,15 @@ class RPSGame:
     def __init__(self):
         # 멤버 변수 선언 및 초기 세팅
         self.gameCount = 0
-        self.gameResult = {}
+        self.gameResult = {0: '승리!', 1: '패배', 2:'비겼습니다'}
+        self.sel = ['가위', '바위', '보']
+        self.result = "{}전{}승{}패"
         self.user_choice = 0
         self.com_choice = 0
+        self.com_choice = self.sel[self.com_choice]
+     
+                
+        
         # print(type(self.gameResult))
 
     def play_game(self):
@@ -33,17 +39,27 @@ class RPSGame:
         self.gameCount = int(input('플레이 할 게임 횟수를 입력하세요(최대 5회): '))
         if self.gameCount < 6 :
             while True:
-                print("가위 바위 보 게임 (가위 : 0, 바위 : 1, 보:2)")
-                if 
+                self.user_choice = input("가위, 바위, 보 : ")
+                self.com_choice = random.randint(0, 2)
+                self.com_choice = self.sel[self.com_choice]
+                print("가위 바위 보 게임 (가위, 바위, 보)")
+                if not self.user_choice in self.sel:
+                    print("가위, 바위, 보 만 입력하실 수 있습니다.")
+                    return False
+                elif self.user_choice == self.com_choice:
+                    state = 2
+                elif self.user_choice == '가위' and self.com_choice == '바위':
+                    state = 1
+                elif self.user_choice == '바위' and self.com_choice == '보':
+                    state = 1
+                elif self.user_choice == '보' and self.com_choice == '가위':
+                    state = 1
+                else:
+                    state = 0
+                print(self.result[state])
+                    
         else:
             print("최대 게임횟수 5회를 넘길 수 없습니다.")
-            game.play_game()
-        
-        #count = input("게임 횟수 입력:")
-
-        #user_choice = input("선택:")
-
-        # com_choice =
 
     def show_result(self, number):
         # 게임 결과 검색 함수
