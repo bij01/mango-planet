@@ -1,6 +1,7 @@
 # 가위 바위 보 게임
 # 요구 사항
 # 1. 플레이 할 게임 횟수를 입력 받는다 (5회 이내) -> 5회 이상(6) 입력 시 재입력 받아야 함
+    
 # 2. 가위 바위 보 게임 진행 결과에 따라 "gameResult"에 결과 값을 기록해 둔다
 # 3. 현재 게임이 몇 회차인지 출력하고 입력을 받으면 입력 값의 공백을 제거한 다음 컴퓨터의 랜덤한 선택과 비교하여 결과를 함께 출력한다.
 #    [결과 값은 다음 양식에 맞게 출력]
@@ -23,20 +24,30 @@ class RPSGame:
         # 멤버 변수 선언 및 초기 세팅
         self.gameCount = 0
         self.gameResult = {}
+        self.user_choice = 0
+        self.com_choice = 0
         # print(type(self.gameResult))
 
     def play_game(self):
         # 게임 진행 로직 함수
-        count = input("게임 횟수 입력:")
+        self.gameCount = int(input('플레이 할 게임 횟수를 입력하세요(최대 5회): '))
+        if self.gameCount < 6 :
+            while True:
+                print("가위 바위 보 게임 (가위 : 0, 바위 : 1, 보:2)")
+                if 
+        else:
+            print("최대 게임횟수 5회를 넘길 수 없습니다.")
+            game.play_game()
+        
+        #count = input("게임 횟수 입력:")
 
-        user_choice = input("선택:")
+        #user_choice = input("선택:")
 
         # com_choice =
 
     def show_result(self, number):
         # 게임 결과 검색 함수
         return self.gameResult[number]
-
 
 if __name__ == "__main__":
     game = RPSGame()
