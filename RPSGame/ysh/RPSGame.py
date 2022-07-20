@@ -28,7 +28,7 @@ class RPSGame:
     def play_game(self):
         # 게임 진행 로직 함수
         global gameCount
-        gameCount = input("게임 횟수 입력:")
+        gameCount = input("\n게임 횟수 입력:")
         try:
             if int(gameCount) == 0:
                 print("0 이상 을 입력하세요")
@@ -60,7 +60,7 @@ class RPSGame:
             to_count = int(gameCount)
             if game_cnt < int(gameCount):
                 if not user_choice in game:
-                    print("5 이하의 숫자만 입력하세요")
+                    print("\n5 이하의 '숫자' 또는 '한글'만 입력하세요")
                     continue
                 if user_choice == game[0]:
                     if com_choice == game[0]:
@@ -103,25 +103,27 @@ class RPSGame:
     def show_result(self,number):
         # 게임 결과 검색 함수
         try:
-            if int(number) > int(gameCount):
-                print("정확한 회차를 입력하세요")
-                #return self.show_result()
-            elif int(number) <= int(gameCount):
-                print(gameResult[int(number)])
-                quit = input('종료하시려면 "q"를 입력하세요: ')
-                if quit in('q','Q','ㅃ','ㅂ'):
-                    print("게임을 종료합니다")
+            while True:
+                if number in ('q','Q','ㅂ','ㅃ'):
+                    print("\n게임을 종료합니다")
                     return False
-                else:
-                    return number
-                # return self.gameResult[number]
+                elif int(number) <= int(gameCount):
+                    print("\n", gameResult[int(number)])
+                    # return self.show_result(number)
+                elif int(number) > int(gameCount):
+                    print("\n정확한 회차를 '범위'안에서 입력하세요 ")
+                    # return self.gameResult[number]
+                elif number not in ('q','Q','ㅂ','ㅃ'):
+                    print("\n숫자 또는 Q만 입력 가능합니다.")
+                    # return self.gameResult[number]
+
         except ValueError:
-            print("정확한 회차를 숫자로 입력하세요 ")
-            # return self.gameResult[number]
-            
+            print("\n'Q'또는 숫자만 입력가능합니다")
+            return self.show_result()
+        
 if __name__ == "__main__":
     game = RPSGame()
     game.play_game()
-    number = input("게임 결과 검색:")
-    game.show_result(int(number))
+    number = input("\n게임 결과 검색을 하시려면 숫자를 하시거나 \n 종료를 원하시면 'Q'를 입력하세요 ")
+    game.show_result(number)
     #print(game.show_result(int(number)))
