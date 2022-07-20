@@ -15,7 +15,12 @@
 # 5. 게임 결과는 유저가 "q"를 입력할 때까지 반복해서 결과를 검색할 수 있도록 프로그램을 유지한다.
 # 6. 유저가 "q"를 입력하면 프로그램 종료
 
+from cgi import test
+from itertools import count
 import random
+from re import A
+from unittest import result
+
 
 class RPSGame:
     def __init__(self):
@@ -49,6 +54,7 @@ class RPSGame:
         game_Result = ["유저승리","컴퓨터승리","비김"]
         global gameResult
         gameResult = {}
+        global game_cnt
         game_cnt = 0
         user_win = 0
         com_win = 0
@@ -64,20 +70,20 @@ class RPSGame:
                     continue
                 if user_choice == game[0]:
                     if com_choice == game[0]:
-                        result = ("[결과] {}".format(game_Result[2]))
+                        result=("[결과] {}".format(game_Result[2]))
                         uc_sam += 1
                     elif com_choice == game[1]:
                         result = ("[결과] {}".format(game_Result[1]))
                         com_win += 1
                     elif com_choice == game[2]:
-                        result = ("[결과] {}".format(game_Result[0]))
+                        result=("[결과] {}".format(game_Result[0]))
                         user_win += 1
                 elif user_choice == game[1]:
                     if com_choice == game[0]:
-                        result = ("[결과] {}".format(game_Result[0]))
+                        result=("[결과] {}".format(game_Result[0]))
                         user_win +=1
                     elif com_choice == game[1]:
-                        result = ("[결과] {}".format(game_Result[2]))
+                        result=("[결과] {}".format(game_Result[2]))
                         uc_sam += 1
                     elif com_choice == game[2]:
                         result = ("[결과] {}".format(game_Result[1]))
@@ -90,7 +96,7 @@ class RPSGame:
                         result = ("[결과] {}".format(game_Result[0]))
                         user_win +=1
                     elif com_choice == game[2]:
-                        result =("[결과] {}".format(game_Result[2]))
+                        result=("[결과] {}".format(game_Result[2]))
                         uc_sam += 1
                 print("({}/{}) 회차 유저: {}, 컴퓨터: {} {}".format(to_game,to_count,user_choice,com_choice,result))
                 gameResult[to_game] = ("({}/{}) 회차 유저: {}, 컴퓨터: {} {}".format(to_game,to_count,user_choice,com_choice,result))
@@ -100,28 +106,29 @@ class RPSGame:
                 break
             
     
-    def show_result(self,number):
-        # 게임 결과 검색 함수
+    #def show_result(self,number):
+    def show_result(self):
         try:
-            if int(number) > int(gameCount):
-                print("정확한 회차를 입력하세요")
-                #return self.show_result()
-            elif int(number) <= int(gameCount):
-                print(gameResult[int(number)])
-                quit = input('종료하시려면 "q"를 입력하세요: ')
-                if quit in('q','Q','ㅃ','ㅂ'):
-                    print("게임을 종료합니다")
-                    return False
+            number = input("게임 결과 검색:")
+            # 게임 결과 검색 함수
+            while True:
+                if int(number) > int(gameCount):
+                    print("정확한 회차를 입력하세요")
+                    return self.show_result()
                 else:
-                    return number
-                # return self.gameResult[number]
+                    print(gameResult[int(number)])
+                    quit = input('종료하시려면 "Q"를 입력하세요 :')
+                    if quit in('q','Q','ㅂ','ㅃ'):
+                        print("게임을 종료합니다")
+                        return False
+                    else:
+                        return self.show_result()
         except ValueError:
             print("정확한 회차를 숫자로 입력하세요 ")
-            # return self.gameResult[number]
-            
+            return self.show_result()
+        
 if __name__ == "__main__":
     game = RPSGame()
     game.play_game()
-    number = input("게임 결과 검색:")
-    game.show_result(int(number))
+    game.show_result()
     #print(game.show_result(int(number)))
