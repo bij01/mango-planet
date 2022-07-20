@@ -66,7 +66,7 @@ class RPSGame:
             to_count = int(gameCount)
             if game_cnt < int(gameCount):
                 if not user_choice in game:
-                    print("\n5 이하의 '숫자'만 입력하세요")
+                    print("\n5 이하의 '숫자'또는 '한글'만 입력하세요")
                     continue
                 if user_choice == game[0]:
                     if com_choice == game[0]:
