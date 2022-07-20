@@ -15,16 +15,11 @@
 # 5. 게임 결과는 유저가 "q"를 입력할 때까지 반복해서 결과를 검색할 수 있도록 프로그램을 유지한다.
 # 6. 유저가 "q"를 입력하면 프로그램 종료
 
-from cgi import test
-from itertools import count
 import random
-from re import A
-from unittest import result
-
 
 class RPSGame:
     def __init__(self):
-        # 멤버 변수 선언 및 초기 세팅5
+        # 멤버 변수 선언 및 초기 세팅
         self.gameCount = 0
         self.gameResult = {}
         self.result = []
@@ -33,7 +28,7 @@ class RPSGame:
     def play_game(self):
         # 게임 진행 로직 함수
         global gameCount
-        gameCount = input("게임 횟수 입력:")
+        gameCount = input("\n게임 횟수 입력:")
         try:
             if int(gameCount) == 0:
                 print("0 이상 을 입력하세요")
@@ -61,7 +56,7 @@ class RPSGame:
         uc_sam = 0 # 유저, 컴퓨터 비길때
         while True:
             com_choice = game[random.randint(0,2)]
-            user_choice = input("가위, 바위 보 입력: ")
+            user_choice = input("\n가위, 바위 보 입력: ")
             to_game = game_cnt+1
             to_count = int(gameCount)
             if game_cnt < int(gameCount):
