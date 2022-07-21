@@ -8,7 +8,9 @@ import numpy as np
 
 class DataManager:
     def __init__(self):
-        print()
+        self.connect_db()
+        # self.drop_data(self.col1)
+        self.check_data(self.col1)
 
     # DB 연결
     def connect_db(self):
@@ -24,7 +26,14 @@ class DataManager:
     # Collection 데이터 확인
     def check_data(self, col):
         for data in col.find():
-            print(data)
+            for k, v in data.items():
+                if k == "_id":
+                    pass
+                else:
+                    print(k, v)
+
+    def drop_data(self, col):
+        col.drop()
 
     # 지역별(시단위) 맛집리스트 갯수 도표(bar chart)
     def show_localres_bchart(self):

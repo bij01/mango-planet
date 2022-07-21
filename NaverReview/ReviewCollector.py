@@ -7,13 +7,18 @@ from pymongo import mongo_client
 
 class ReviewCollector:
     def __init__(self):
+        self.connect_db()
         self.open_browser()
+        self.collect_theme_list()
+        self.insert_data(self.col1, self.link_list)
+        # self.collect_res_list()
+        # self.insert_data(self.col1, self.res_list)
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
         self.driver = webdriver.Chrome(path)
         self.driver.implicitly_wait(3)
-        url = "http://map.naver.com/v5/search/%EA%B0%80%EC%82%B0%EB%8F%99%EB%A7%9B%EC%A7%91?c=14125057.2647629,4505791.9329055,15,0,0,0,dh"
+        url = "https://www.mangoplate.com/top_lists"
         self.driver.get(url)
 
     def collect_data(self):
@@ -29,8 +34,55 @@ class ReviewCollector:
     # 4) 가공 형태
     # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
     def collect_theme_list(self):
+        input("팝업창 닫고 ENTER")
         # 유승하
-        print()
+        click_cnt = 0
+        i = 0
+        k = 0
+        j = 1
+        self.link_list = {}
+        
+        # 더보기 클릭 
+        for click_cnt in range(16):
+            if click_cnt < 16 :
+                self.driver.find_element(By.CLASS_NAME,'btn-more').click()
+                click_cnt += 1
+            elif click_cnt>=16:
+                break
+        
+        # 주소 뽑기 && 리스트 담기
+        href_li = 0
+        hli_add= [] # 주소를 리스트에 담기 
+        while True:
+            if href_li >= 300:
+                break
+            elif href_li < 300:
+                href_li +=1
+                hrefs = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li['+str(href_li)+']/a')
+                for x in hrefs:
+                    href = x.get_attribute('href')
+                    hli_add.append(href)
+        
+        # 타이틀 뽑기 && 리스트 담기
+        Titles_li = 0
+        Tli_add = [] # 타이틀 리스트
+        while True:
+            if Titles_li >= 300:
+                break
+            elif Titles_li < 300:
+                Titles_li +=1
+                Titles = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li['+str(Titles_li)+']/a/figure/figcaption/div/span')
+                for x in Titles:
+                    # print(x.text)
+                    Tli_add.append(x.text)
+                    
+        # 타이틀 및 주소 딕셔너리에 담기 
+        while True:
+            if j <= 300:
+                self.link_list[Tli_add[i]] = (hli_add[k])
+                i+=1; k+=1; j+=1
+            else:
+                break
 
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
@@ -40,15 +92,15 @@ class ReviewCollector:
     # -> res_list = {"식당이름1":"링크주소", "식당이름2":"링크주소", "식당이름3":"링크주소" ...}
     def collect_res_list(self):
         # 박종원
-        # for title, link in link_list.items():
+        # for title, link in self.link_list.items():
         #     print(title, link)
-        #     driver.get(link)
+        #     # self.driver.get(link)
         print()
 
     # 3. 식당 별 정보 가져오기
     # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
     # 2) 가공 형태
-    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대], ...}
+    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
     # -> menu_list = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
     def collect_res_info(self):
         # 권기민
@@ -78,7 +130,9 @@ class ReviewCollector:
 
     # Collection(table) 데이터 삽입
     def insert_data(self, col, dic):
-        col.insert_one(dic)
+        for key, value in dic.items():
+            new_dic = {key:value}
+            col.insert_one(new_dic)
 
     # Collection 데이터 확인
     def check_data(self, col):
