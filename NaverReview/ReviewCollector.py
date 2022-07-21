@@ -12,7 +12,7 @@ class ReviewCollector:
         path = "c:/python/chromedriver.exe"
         self.driver = webdriver.Chrome(path)
         self.driver.implicitly_wait(3)
-        url = "http://map.naver.com/v5/search/%EA%B0%80%EC%82%B0%EB%8F%99%EB%A7%9B%EC%A7%91?c=14125057.2647629,4505791.9329055,15,0,0,0,dh"
+        url = "https://www.mangoplate.com/top_lists"
         self.driver.get(url)
 
     def collect_data(self):
