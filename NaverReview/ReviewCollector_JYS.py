@@ -1,0 +1,101 @@
+from urllib import request
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+import time
+
+class ReviewCollector:
+    def __init__(self):
+        self.open_browser()
+        self.collect_res_reviews()
+
+    def open_browser(self):
+        path = "c:/python/chromedriver.exe"
+        self.driver = webdriver.Chrome(path)
+        self.driver.implicitly_wait(3)
+        url = "https://www.mangoplate.com/restaurants/1KoxMlQL0NZk"
+        self.driver.get(url)
+        time.sleep(5)
+
+    def collect_data(self):
+        # 백인준 (합칠거)
+        print()
+
+
+
+    # 1. 맛집 베스트 XX곳 목록 정보 가져오기
+    # 1) 수집할 데이터: 타이틀, 타이틀링크
+    # 2) 목표데이터: 300개
+    # 3) 목적: 수집한 데이터를 2번 함수에 제공
+    # 4) 가공 형태
+    # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
+    def collect_theme_list(self):
+        # 유승하
+        print()
+
+    # 2. 맛집리스트 별 식당정보 가져오기
+    # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
+    # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
+    # 3) 목적: 식당목록, 식당상세페이지 링크를 3번 함수에 제공
+    # 4) 가공 형태
+    # -> res_list = {"식당이름1":"링크주소", "식당이름2":"링크주소", "식당이름3":"링크주소" ...}
+    def collect_res_list(self):
+        # 박종원
+        # for title, link in link_list.items():
+        #     print(title, link)
+        #     driver.get(link)
+        print()
+
+    # 3. 식당 별 정보 가져오기
+    # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
+    # 2) 가공 형태
+    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대], ...}
+    # -> menu_list = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
+    def collect_res_info(self):
+        # 권기민
+        # for title, link in res_list.items():
+        #     print(title, link)
+        #     driver.get(link)
+        print()
+
+    # 4. 식당 별 리뷰정보 가져오기
+    # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
+    # 2) 가공 형태
+    # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), [리뷰내용(str)]]}
+#    review_list = {"식당이름", [1,2,3,4,["댓글1", ]]}
+    def collect_res_reviews(self):
+        # 지예성
+        t = 1
+        while True:
+            try:
+                btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                self.driver.execute_script("arguments[0].click();", btn)
+                #self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > div.RestaurantReviewList__MoreReviewButton").click() #더보기 클릭
+                time.sleep(1)
+                t += 1
+                if t == 10:
+                    break
+            except:
+                break
+        time.sleep(2)
+        i = 1
+        while True:
+            try:
+                self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > ul > li:nth-child("+str(i)+") > a").send_keys(Keys.ENTER) #댓글 클릭                    time.sleep(2)
+                time.sleep(2)                
+                self.driver.window_handles[0]
+                self.driver.switch_to.window(self.driver.window_handles[1])
+                comment = self.driver.find_element(By.CLASS_NAME,"ReviewCard__ReviewText").text
+                print(comment)
+                self.driver.close()
+                self.driver.switch_to.window(self.driver.window_handles[0])
+                i += 1
+            except:
+                break
+        
+
+#    print(review_list)
+rc = ReviewCollector()
