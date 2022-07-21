@@ -12,7 +12,7 @@ class ReviewCollector:
         path = "c:/python/chromedriver.exe"
         self.driver = webdriver.Chrome(path)
         self.driver.implicitly_wait(3)
-        url = "http://map.naver.com/v5/search/%EA%B0%80%EC%82%B0%EB%8F%99%EB%A7%9B%EC%A7%91?c=14125057.2647629,4505791.9329055,15,0,0,0,dh"
+        url = "https://www.mangoplate.com/top_lists"
         self.driver.get(url)
 
     def collect_data(self):
@@ -29,8 +29,56 @@ class ReviewCollector:
     # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
     def collect_theme_list(self):
         # 유승하
-        print()
+        click_cnt = 0
+        i = 0
+        k = 0
+        j = 1
+        link_list={}
+        
+        # 더보기 클릭 
+        for click_cnt in range(16):
+            if click_cnt < 16 :
+                self.driver.find_element(By.CLASS_NAME,'btn-more').click()
+                click_cnt += 1
+            elif click_cnt>=16:
+                break
+        
+        # 주소 뽑기 && 리스트 담기
+        href_li = 0
+        hli_add= [] # 주소를 리스트에 담기 
+        while True:
+            if href_li >= 300:
+                break
+            elif href_li < 300:
+                href_li +=1
+                hrefs = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li['+str(href_li)+']/a')
+                for x in hrefs:
+                    href = x.get_attribute('href')
+                    hli_add.append(href)
+        
+        # 타이틀 뽑기 && 리스트 담기
+        Titles_li = 0
+        Tli_add = [] # 타이틀 리스트
+        while True:
+            if Titles_li >= 300:
+                break
+            elif Titles_li < 300:
+                Titles_li +=1
+                Titles = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li['+str(Titles_li)+']/a/figure/figcaption/div/span')
+                for x in Titles:
+                    # print(x.text)
+                    Tli_add.append(x.text)
+                    
+        # 타이틀 및 주소 딕셔너리에 담기 
+        while True:
+            if j <= 300:
+                link_list[Tli_add[i]] = (hli_add[k])
+                i+=1; k+=1; j+=1
+            else:
+                break
+        print(link_list['브라우니 맛집 베스트 10곳'])
 
+                    
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
@@ -67,4 +115,7 @@ class ReviewCollector:
     def connect_db(self):
         print()
 
-
+if __name__ == "__main__":
+    rvc = ReviewCollector()
+    #rvc.open_browser()
+    rvc.collect_theme_list()
