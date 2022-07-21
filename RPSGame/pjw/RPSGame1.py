@@ -17,26 +17,21 @@
 
 import random
 
-
 class RPSGame:
     def __init__(self):
-       # 멤버 변수 선언 및 초기 세팅
+        # 멤버 변수 선언 및 초기 세팅
         self.gameCount = 0
-        self.user_score = 0
-        self.computer_score = 0
+        self.rps = ["가위","바위","보"]
+        self.gameResult = { 0: 'Win!', 1:"Lose!", 2:"Draw!"}
+        self.com_win = 0
         self.user_win = 0
-        self.computer_win = 0
-        
-        #self.gameResult = {0 : 'Win!', 1:'Lose!', 2: 'Darw!'}
         # print(type(self.gameResult))
 
     def play_game(self):
         # 게임 진행 로직 함수
-        global count
-        count = 0
-        print("가위바위보 게임 (가위 :1, 바위:2, 보: 3)")
-        while count == '0' or not count.isdigit(): #isdigit : 입력받은게 숫자인지 확인하는 함수
-            count = input("게임 횟수 입력:(5회까지만 가능)")
+        print("가위 바위 보 게임")
+        if self.gameCount == 0:
+            count = input("게임 횟수 입력(5판 이하만 가능):")
         for i in range(int(count)):
             user = ''
             if int(count)<6:
@@ -45,44 +40,53 @@ class RPSGame:
                 print("6회이하로만 가능합니다")
                 return self.play_game()
     def game(self):
-        for i in range (int(count)):
-            user_choice = int(float(input("가위바위보 :")))   
-            com_choice = random.randrange(1,4)
-            print("user",user_choice)
-            print("com", com_choice)
-            
-            if user_choice == 1:
-                if com_choice == 1:
-                    print("Draw!")
-                elif com_choice == 2:
-                    print('com Win!')
-                    computer_win += 1
-                elif com_choice == 3:
-                    print('user Win!')
-                    user_win +=1
-            elif user_choice == 2:
-                if com_choice == 2:
-                    print("Draw!")
-                elif com_choice == 3:
-                    print('com Win!')
-                    computer_win += 1
-                elif com_choice == 1:
-                    print('user Win!')
-                    user_win +=1
-            elif user_choice == 3:
-                if com_choice == 3:
-                    print("Draw!")
-                elif com_choice == 1:
-                    print('com Win!')
-                    computer_win += 1
-                elif com_choice == 2:
-                    print('user Win!') 
-                    user_win +=1
-                    
+        user_choice = input("가위 바위 보:")
+        com_choice = random.choice(self.rps)
+        if com_choice == "가위":
+            print('com = 가위')
+            if user_choice == "가위":
+                print('user = 가위')
+                print("Draw!")
+            elif user_choice == "바위":
+                print('user = 바위')
+                print("Win!")
+                self.user_win += 1
+            elif user_choice == "보":
+                print("user = 보")
+                print("Lose!")
+                self.com_win += 1
+        if com_choice == "바위":
+            print('com = 바위')
+            if user_choice == "가위":
+                print('user = 가위')
+                print("Lose!")
+                self.com_win += 1
+            elif user_choice == "바위":
+                print('user = 바위')
+                print("draw!")
+            elif user_choice == "보":
+                print("user = 보")
+                print("win!")
+                self.user_win += 1
+        if com_choice == "보":
+            print('com = 보')
+            if user_choice == "가위":
+                print('user = 가위')
+                print("Win!")
+                self.user_win += 1
+            elif user_choice == "바위":
+                print('user = 바위')
+                print("Lose!")
+                self.com_win += 1
+            elif user_choice == "보":
+                print("user = 보")
+                print("Draw!")
+        
+        
 
     #def show_result(self, number):
         # 게임 결과 검색 함수
-     #   return self.gameResult[number]
+    #    return self.gameResult[number]
 
 
 if __name__ == "__main__":

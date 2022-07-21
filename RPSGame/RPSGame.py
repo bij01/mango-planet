@@ -22,7 +22,7 @@ class RPSGame:
     def __init__(self):
         # 멤버 변수 선언 및 초기 세팅
         self.gameCount = 0
-        self.gameResult = {}
+        #self.gameResult = {}
         # print(type(self.gameResult))
 
     def play_game(self):
