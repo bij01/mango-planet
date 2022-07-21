@@ -2,13 +2,21 @@ from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from pymongo import mongo_client
 
 
 class ReviewCollector:
     def __init__(self):
+        self.connect_db()
         self.open_browser()
         self.collect_theme_list()
+<<<<<<< HEAD
         
+=======
+        self.insert_data(self.col1, self.link_list)
+        # self.collect_res_list()
+        # self.insert_data(self.col1, self.res_list)
+>>>>>>> 5a337be3773341942e0d599fd4319e1a7b1fced3
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -30,12 +38,13 @@ class ReviewCollector:
     # 4) 가공 형태
     # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
     def collect_theme_list(self):
+        input("팝업창 닫고 ENTER")
         # 유승하
         click_cnt = 0
         i = 0
         k = 0
         j = 1
-        link_list={}
+        self.link_list = {}
         
         # 더보기 클릭 
         for click_cnt in range(16):
@@ -74,12 +83,12 @@ class ReviewCollector:
         # 타이틀 및 주소 딕셔너리에 담기 
         while True:
             if j <= 300:
-                link_list[Tli_add[i]] = (hli_add[k])
+                self.link_list[Tli_add[i]] = (hli_add[k])
                 i+=1; k+=1; j+=1
             else:
                 break
-        print(link_list['브라우니 맛집 베스트 10곳'])
 
+<<<<<<< HEAD
                 
                 
                 
@@ -95,6 +104,8 @@ class ReviewCollector:
         else:
             pass
         
+=======
+>>>>>>> 5a337be3773341942e0d599fd4319e1a7b1fced3
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
@@ -103,15 +114,15 @@ class ReviewCollector:
     # -> res_list = {"식당이름1":"링크주소", "식당이름2":"링크주소", "식당이름3":"링크주소" ...}
     def collect_res_list(self):
         # 박종원
-        # for title, link in link_list.items():
+        # for title, link in self.link_list.items():
         #     print(title, link)
-        #     driver.get(link)
+        #     # self.driver.get(link)
         print()
 
     # 3. 식당 별 정보 가져오기
     # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
     # 2) 가공 형태
-    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대], ...}
+    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
     # -> menu_list = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
     def collect_res_info(self):
         # 권기민
@@ -128,8 +139,28 @@ class ReviewCollector:
         # 지예성
         print()
 
+    # DB 연결
     def connect_db(self):
-        print()
+        url = "mongodb://localhost:27017/"
+        mgClient = mongo_client.MongoClient(url)
+        db = mgClient["restaurants"]
+        self.col1 = db["link_list"]
+        self.col2 = db["res_list"]
+        self.col3 = db["info_list"]
+        self.col4 = db["menu_list"]
+        self.col5 = db["review_list"]
+
+    # Collection(table) 데이터 삽입
+    def insert_data(self, col, dic):
+        for key, value in dic.items():
+            new_dic = {key:value}
+            col.insert_one(new_dic)
+
+    # Collection 데이터 확인
+    def check_data(self, col):
+        for data in col.find():
+            print(data)
+
 
 if __name__ == "__main__":
     ReviewCollector()
