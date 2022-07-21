@@ -2,6 +2,7 @@ from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from pymongo import mongo_client
 
 
 class ReviewCollector:
@@ -64,8 +65,25 @@ class ReviewCollector:
         # 지예성
         print()
 
+    # DB 연결
     def connect_db(self):
-        print()
+        url = "mongodb://localhost:27017/"
+        mgClient = mongo_client.MongoClient(url)
+        db = mgClient["restaurants"]
+        self.col1 = db["link_list"]
+        self.col2 = db["res_list"]
+        self.col3 = db["info_list"]
+        self.col4 = db["menu_list"]
+        self.col5 = db["review_list"]
+
+    # Collection(table) 데이터 삽입
+    def insert_data(self, col, dic):
+        col.insert_one(dic)
+
+    # Collection 데이터 확인
+    def check_data(self, col):
+        for data in col.find():
+            print(data)
 
 
 if __name__ == "__main__":
