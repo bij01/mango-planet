@@ -1,4 +1,9 @@
 import time
+import os
+import socket
+
+from urllib import request
+
 from sub.SubCollector import collect_res_reviews
 
 from pymongo import mongo_client
@@ -12,14 +17,14 @@ class ReviewCollector:
     def __init__(self):
         self.connect_db()
         self.open_browser()
+        self.collect_data()
         # self.check_data(self.col1)
         # self.repeat_crawling(self.col1)
         # self.collect_theme_list()  # 테마별 리스트 수집
         # self.insert_data(self.col1, self.link_list)
-        self.collect_res_info("https://www.mangoplate.com/restaurants/gQUKnpHqDvPM")
+        # self.collect_res_info("https://www.mangoplate.com/restaurants/gQUKnpHqDvPM")
 
         # self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
-        # self.collect_res_list()
         # self.insert_data(self.col1, self.res_list)
 
     def open_browser(self):
@@ -31,24 +36,34 @@ class ReviewCollector:
 
     def repeat_crawling(self, col):
         x = 1
+        count = 0
+        for data in col.find():
+            count += 1
         for data in col.find():
             for key, value in data.items():
                 if key == "_id":
                     pass
                 else:
+                    if col == self.col1:
+                        print(f"식당 리스트 크롤링 {x}/{count}")
+                        self.collect_res_list(value)
+                        x += 1
                     if col == self.col2:
-                        print(f"식당 정보 크롤링 {x}")
+                        print(f"식당 정보 및 리뷰 크롤링 {x}/{count}")
                         self.collect_res_info(value)
+                        info, review = collect_res_reviews(driver=self.driver, url=value)
+                        self.insert_data(self.col5, info)
+                        self.insert_data(self.col6, review)
                         x += 1
                     else:
                         pass
 
     def collect_data(self):
         # 백인준 (합칠거)
-
-        # 4. 리뷰 수집
-        info, review = collect_res_reviews(driver=self.driver, url)
-        print()
+        # 2. 식당리스트 수집 및 데이터 입력
+        self.repeat_crawling(self.col1)
+        # 3. 식당정보 및 리뷰 수집
+        self.repeat_crawling(self.col2)
 
     # 1. 맛집 베스트 XX곳 목록 정보 가져오기
     # 1) 수집할 데이터: 타이틀, 타이틀링크
@@ -135,12 +150,89 @@ class ReviewCollector:
     # 3) 목적: 식당목록, 식당상세페이지 링크를 3번 함수에 제공
     # 4) 가공 형태
     # -> res_list = {"식당이름1":"링크주소", "식당이름2":"링크주소", "식당이름3":"링크주소" ...}
-    def collect_res_list(self):
+    def collect_res_list(self, url):
+        print("식당 리스트 수집 시작")
+
         # 박종원
-        # for title, link in self.link_list.items():
-        #     print(title, link)
-        #     # self.driver.get(link)
-        print()
+        self.driver.get(url)
+
+        while True:
+            try:
+                more = self.driver.find_element(By.CLASS_NAME, "more_btn")
+                more.click()
+            except:
+                break
+        info = self.driver.find_elements(By.CLASS_NAME, "info")
+        # print(info)
+        i = -1
+
+        for _ in info:
+            try:
+                i = i + 1
+                # print(info[i].find_element(By.TAG_NAME, "a").text[3:].strip())
+            except:
+                break
+        imgs = self.driver.find_elements(By.CLASS_NAME, "center-croping.lazy")
+
+        lastnum = 0
+        items = self.driver.find_elements(By.CLASS_NAME, "restaurant-item")
+        # print(lastnum)
+        if not os.path.isdir("imgs"):
+            # print("폴더 생성 완료")
+            os.mkdir("imgs")
+        else:
+            # print("동일한 폴더 존재")
+            pass
+        for item in items:
+            text = item.find_element(By.CLASS_NAME, "title ").text
+            imglink = item.find_element(By.TAG_NAME, "img").get_attribute("data-original")
+            try:
+                int(text[0])
+                lastnum += 1
+                # print(text, imglink)
+                socket.setdefaulttimeout(10)
+                try:
+                    # print("이미지 다운로드 시도")
+                    request.urlretrieve(imglink, "imgs/"+text[3:].strip()+'.jpg')
+                    # print("다운로드 성공")
+                except:
+                    # print("다운로드 실패")
+                    continue
+            except:
+                pass
+
+        info = self.driver.find_elements(By.CLASS_NAME, "info")
+        i = -1
+
+        lista = []
+        for abc in info:
+            try:
+                i = i + 1
+                # print(info[i].find_element(By.TAG_NAME, "a").text[3:].strip())
+                lista.append(info[i].find_element(By.TAG_NAME, "a").text[3:].strip())
+            except:
+                break
+        # print(lista)
+
+        listb = []
+        for x in range(1, int(lastnum) + 1):
+            link = self.driver.find_elements(By.XPATH, '//*[@id="contents_list"]/ul/li[' + str(
+                x) + ']/div/figure/figcaption/div/span/a')
+            for y in link:
+                href = y.get_attribute('href')
+                listb.append(href)
+        # print(listb)
+
+        dic = {}
+        for x1 in range(0, len(lista)):
+            k = lista[x1]
+            v = listb[x1]
+            dic[k] = v
+            for k, v in dic.items():
+                new_dic = {k: v}
+                # print(new_dic)
+                self.insert_data(self.col2, new_dic)
+        print("식당 리스트 수집 종료")
 
     # 3. 식당 별 정보 가져오기
     # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
@@ -193,24 +285,28 @@ class ReviewCollector:
             v = listb[x]
             dic[title1][k] = v
         menu_list = dic
-        print(menu_list)
+        # print(menu_list)
 
         infolist = [star_review.text, evaluation.text.replace(",", ""), info.text[0:index - 1], telephone_number.text,
                     str(price_range.text)]
         # print(infolist)
         info_list = {title.text: infolist}
-        print(info_list)
+        # print(info_list)
+        self.insert_data(self.col3, info_list)
+        self.insert_data(self.col4, menu_list)
+        print("식당 정보 수집 완료")
 
     # DB 연결
     def connect_db(self):
-        url = "mongodb://localhost:27017/"
+        url = "mongodb://192.168.0.138:27017/"
         mgclient = mongo_client.MongoClient(url)
         db = mgclient["restaurants"]
         self.col1 = db["link_list"]
         self.col2 = db["res_list"]
         self.col3 = db["info_list"]
         self.col4 = db["menu_list"]
-        self.col5 = db["review_list"]
+        self.col5 = db["review_info_list"]
+        self.col6 = db["review_list"]
 
     # Collection(table) 데이터 삽입
     def insert_data(self, col, dic):
@@ -220,8 +316,11 @@ class ReviewCollector:
 
     # Collection 데이터 확인
     def check_data(self, col):
+        count = 0
         for data in col.find():
             print(data)
+            count += 1
+        print(count)
 
 
 if __name__ == "__main__":

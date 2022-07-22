@@ -9,28 +9,32 @@ import numpy as np
 class DataManager:
     def __init__(self):
         self.connect_db()
-        # self.drop_data(self.col1)
-        self.check_data(self.col1)
+        # self.drop_data(self.col2)
+        self.check_data(self.col2)
 
     # DB 연결
     def connect_db(self):
-        url = "mongodb://localhost:27017/"
+        url = "mongodb://192.168.0.138:27017/"
         mgClient = mongo_client.MongoClient(url)
         db = mgClient["restaurants"]
         self.col1 = db["link_list"]
         self.col2 = db["res_list"]
         self.col3 = db["info_list"]
         self.col4 = db["menu_list"]
-        self.col5 = db["review_list"]
+        self.col5 = db["review_info_list"]
+        self.col6 = db["review_list"]
 
     # Collection 데이터 확인
     def check_data(self, col):
+        count = 0
         for data in col.find():
             for k, v in data.items():
                 if k == "_id":
                     pass
                 else:
+                    count += 1
                     print(k, v)
+        print(count)
 
     def drop_data(self, col):
         col.drop()
