@@ -4,24 +4,20 @@ from pymongo import mongo_client
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
-import requests
-import urllib
-import os
-from urllib import request
-from urllib.request import urlopen
-from urllib.request import urlretrieve
+
 
 class ReviewCollector:
     def __init__(self):
         self.connect_db()
         self.open_browser()
-        #self.collect_theme_list()
-        #self.change_review_page()
-        # self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
+        self.collect_theme_list()
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
+        
+=======
         # self.insert_data(self.col1, self.link_list)
-        self.collect_res_list()
+        # self.collect_res_list()
         # self.insert_data(self.col1, self.res_list)
+>>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -40,7 +36,6 @@ class ReviewCollector:
     # 3) 목적: 수집한 데이터를 2번 함수에 제공
     # 4) 가공 형태
     # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
-
     def collect_theme_list(self):
         input("팝업창 닫고 ENTER")
         # 유승하
@@ -49,14 +44,13 @@ class ReviewCollector:
         j = 1
         self.link_list = {}
 
-        # 더보기 클릭
+        # 더보기 클릭 
         for click_cnt in range(16):
             if click_cnt < 16:
                 self.driver.find_element(By.CLASS_NAME, 'btn-more').click()
                 click_cnt += 1
             elif click_cnt >= 16:
-                pass
-
+                break
 
         # 주소 뽑기 && 리스트 담기
         href_li = 0
@@ -66,7 +60,8 @@ class ReviewCollector:
                 break
             elif href_li < 300:
                 href_li += 1
-                hrefs = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li[' + str(href_li) + ']/a')
+                hrefs = self.driver.find_elements(By.XPATH,
+                                                  '/html/body/main/article/section/div/ul/li[' + str(href_li) + ']/a')
                 for x in hrefs:
                     href = x.get_attribute('href')
                     hli_add.append(href)
@@ -85,7 +80,7 @@ class ReviewCollector:
                     # print(x.text)
                     Tli_add.append(x.text)
 
-        # 타이틀 및 주소 딕셔너리에 담기
+        # 타이틀 및 주소 딕셔너리에 담기 
         while True:
             if j <= 300:
                 self.link_list[Tli_add[i]] = (hli_add[k])
@@ -95,7 +90,10 @@ class ReviewCollector:
             else:
                 break
 
-    '''
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
+    '''    
+=======
+>>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
     def change_review_page(self):
         # btn1 맛있다, btn2 괜찮다, btn3 별로
         btn1 = self.driver.find_element(By.CSS_SELECTOR,
@@ -103,6 +101,7 @@ class ReviewCollector:
         btn2 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton')
         # 별로의 개수가 없으면 넘어가지 않음
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
         btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
 
         review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
@@ -111,8 +110,18 @@ class ReviewCollector:
             #btn1.click()
         else:
             pass
-    '''
+    ''' 
+=======
+        btn3 = self.driver.find_element(By.CSS_SELECTOR,
+                                        '.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton')
+        review_cnt = self.driver.find_element(By.XPATH,
+                                              "/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
+        if str(review_cnt) == str(30):  # 리뷰 개수(bb)와 30개 비교
+            btn1.click()
+        else:
+            pass
 
+>>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
@@ -120,98 +129,7 @@ class ReviewCollector:
     # 4) 가공 형태
     # -> res_list = {"식당이름1":"링크주소", "식당이름2":"링크주소", "식당이름3":"링크주소" ...}
     def collect_res_list(self):
-        input("팝업창 닫고 ENTER")
-  
         # 박종원
-        '''
-        path = "c:/python/chromedriver.exe"
-        self.driver = webdriver.Chrome(path)
-        self.driver.implicitly_wait(3)
-        url = "https://www.mangoplate.com/top_lists/2820_kaisendon"
-        self.driver.get(url)
-        '''
-        a = self.driver.find_element(By.XPATH,"/html/body/main/article/section/div/ul/li[1]/a/figure/figcaption").click()
-                
-        while True:
-            try:
-                more = self.driver.find_element(By.CLASS_NAME, "more_btn")
-                more.click()
-            except:
-                break
-        info = self.driver.find_elements(By.CLASS_NAME, "info")
-        #print(info)
-        i = -1
-
-        for d in info:
-            try:
-                i = i+1
-                print(info[i].find_element(By.TAG_NAME, "a").text[3:].strip())
-            except:
-                break
-        imgs = self.driver.find_elements(By.CLASS_NAME, "center-croping.lazy")
-
-
-        lastnum = 0
-        items = self.driver.find_elements(By.CLASS_NAME, "restaurant-item")
-        #print(lastnum)
-        if not os.path.isdir("C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs"):
-            print("폴더 생성 완료")
-            os.mkdir("C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs")
-        else:
-            print("동일한 폴더 존재")
-        for item in items:
-            text = item.find_element(By.CLASS_NAME, "title ").text
-            imglink = item.find_element(By.TAG_NAME, "img").get_attribute("data-original")
-
-            #print(text)
-            #print(text[0])
-            try:
-                 int(text[0])
-                 lastnum += 1
-                 print(text, imglink)
-                # try :
-                #     print("이미지 다운로드 시도")
-                #     urllib.request.urlretrieve(imglink,"C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs/"+text[3:].strip()+'.jpg')
-                #     print("다운로드 성공")
-                # except :
-                #     print("다운로드 실패")
-                #     continue
-                # file_no = 0
-            except:
-                pass
-        
-        info = self.driver.find_elements(By.CLASS_NAME, "info")
-        i = -1
-
-        lista = []
-        for abc in info:
-            try:
-                i = i+1
-                #print(info[i].find_element(By.TAG_NAME, "a").text[3:].strip())
-                lista.append(info[i].find_element(By.TAG_NAME, "a").text[3:].strip())
-            except:
-                break
-        print(lista)
-
-        listb = []
-        for x in range(1, int(lastnum)+1):
-            link = self.driver.find_elements(By.XPATH, '//*[@id="contents_list"]/ul/li['+str(x)+']/div/figure/figcaption/div/span/a')
-            for y in link:
-                href = y.get_attribute('href')
-                listb.append(href)
-        print(listb)
-        
-        
-        dic = {}
-        for x1 in range(0, len(lista)):
-            k = lista[x1]
-            v = listb[x1]
-            dic[k]=v
-            for k, v in dic.items():
-                new_dic = {k:v}
-            print(new_dic)
-
-
         # for title, link in self.link_list.items():
         #     print(title, link)
         #     # self.driver.get(link)
@@ -233,29 +151,18 @@ class ReviewCollector:
     # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
     # 2) 가공 형태
     # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), 리뷰내용(str)]}
-    '''
-    def collect_res_reviews(self, url):
+    def collect_res_reviews(self):
         # 지예성
-        self.driver.get(url)
-        oldcount, newcount = None, 0
+        t = 1
         # 더보기 클릭
         while True:
             try:
-                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
-                if oldcount == newcount:
-                    # print("old:", oldcount, "new:", newcount)
+                btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                self.driver.execute_script("arguments[0].click();", btn)
+                time.sleep(1)
+                t += 1
+                if t == 10:
                     break
-                else:
-                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
-                    oldcount = len(reviews)
-                    # print("old:", oldcount)
-                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
-                    self.driver.execute_script("arguments[0].click();", btn)
-                    time.sleep(1)
-                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
-                    newcount = len(reviews)
-                    # print("new:", newcount)
-                    print()
             except:
                 break
         time.sleep(2)
@@ -275,7 +182,8 @@ class ReviewCollector:
                 i += 1
             except:
                 break
-    '''
+        print()
+
     # DB 연결
     def connect_db(self):
         url = "mongodb://localhost:27017/"
