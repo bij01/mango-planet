@@ -65,37 +65,121 @@ class ReviewCollector:
     # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
     # 2) 가공 형태
     # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), [리뷰내용(str)]]}
-#    review_list = {"식당이름", [1,2,3,4,["댓글1", ]]}
+    
     def collect_res_reviews(self):
         # 지예성
-        t = 1
+        restaurantname = self.driver.find_element(By.CLASS_NAME,"restaurant_name").text
+        print(restaurantname)
+
+        self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(2) > button").send_keys(Keys.ENTER)
+        oldcountB, newcountB = None, 0
+        # 더보기 클릭
         while True:
             try:
-                btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
-                self.driver.execute_script("arguments[0].click();", btn)
-                #self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > div.RestaurantReviewList__MoreReviewButton").click() #더보기 클릭
-                time.sleep(1)
-                t += 1
-                if t == 10:
+                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
+                if oldcountB == newcountB:
+                    print("old:", oldcountB, "new:", newcountB)
                     break
+                else:
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    oldcountB = len(reviews)
+                    print("old:", oldcountB)
+                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                    self.driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(1)
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    newcountB = len(reviews)
+                    print("new:", newcountB)
+                    print()
+            except:
+                break
+
+        self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(3) > button").send_keys(Keys.ENTER)
+        oldcountC, newcountC = None, 0
+        # 더보기 클릭
+        while True:
+            try:
+                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
+                if oldcountC == newcountC:
+                    print("old:", oldcountC, "new:", newcountC)
+                    break
+                else:
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    oldcountC = len(reviews)
+                    print("old:", oldcountC)
+                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                    self.driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(1)
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    newcountC = len(reviews)
+                    print("new:", newcountC)
+                    print()
+            except:
+                break
+
+        self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(4) > button").send_keys(Keys.ENTER)
+        oldcountD, newcountD = None, 0
+        # 더보기 클릭
+        while True:
+            try:
+                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
+                if oldcountD == newcountD:
+                    print("old:", oldcountD, "new:", newcountD)
+                    break
+                else:
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    oldcountD = len(reviews)
+                    print("old:", oldcountD)
+                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                    self.driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(1)
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    newcountD = len(reviews)
+                    print("new:", newcountD)
+                    print()
+            except:
+                break
+        self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(1) > button").send_keys(Keys.ENTER)
+        oldcountA, newcountA = None, 0
+        # 더보기 클릭
+        while True:
+            try:
+                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
+                if oldcountA == newcountA:
+                    print("old:", oldcountA, "new:", newcountA)
+                    break
+                else:
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    oldcountA = len(reviews)
+                    print("old:", oldcountA)
+                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                    self.driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(1)
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    newcountA = len(reviews)
+                    print("new:", newcountA)
+                    print()
             except:
                 break
         time.sleep(2)
         i = 1
         while True:
             try:
-                self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > ul > li:nth-child("+str(i)+") > a").send_keys(Keys.ENTER) #댓글 클릭                    time.sleep(2)
-                time.sleep(2)                
+                self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > ul > li:nth-child("+str(i)+") > a").send_keys(Keys.ENTER) #댓글 클릭
+                time.sleep(2)
                 self.driver.window_handles[0]
                 self.driver.switch_to.window(self.driver.window_handles[1])
+                name = self.driver.find_element(By.CLASS_NAME,"ReviewCard__UserName").text
                 comment = self.driver.find_element(By.CLASS_NAME,"ReviewCard__ReviewText").text
-                print(comment)
+                print("닉네임: ", name, "\n")
+                print(comment, "\n")
                 self.driver.close()
                 self.driver.switch_to.window(self.driver.window_handles[0])
                 i += 1
             except:
                 break
-        
-
+        reviewlist = ["전체: ", newcountA, "맛있다: ", newcountB, "괜찮다: ", newcountC, "별로다: ", newcountD, ["닉네임: ", name, "리뷰: ", comment]]
+        review_list = {restaurantname : reviewlist}
+        print(review_list)
 #    print(review_list)
 rc = ReviewCollector()
