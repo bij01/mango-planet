@@ -1,4 +1,5 @@
 import time
+from sub.SubCollector import collect_res_reviews
 
 from pymongo import mongo_client
 from selenium import webdriver
@@ -16,6 +17,7 @@ class ReviewCollector:
         # self.collect_theme_list()  # 테마별 리스트 수집
         # self.insert_data(self.col1, self.link_list)
         self.collect_res_info("https://www.mangoplate.com/restaurants/gQUKnpHqDvPM")
+
         # self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
         # self.collect_res_list()
         # self.insert_data(self.col1, self.res_list)
@@ -43,6 +45,9 @@ class ReviewCollector:
 
     def collect_data(self):
         # 백인준 (합칠거)
+
+        # 4. 리뷰 수집
+        info, review = collect_res_reviews(driver=self.driver, url)
         print()
 
     # 1. 맛집 베스트 XX곳 목록 정보 가져오기
@@ -195,52 +200,6 @@ class ReviewCollector:
         # print(infolist)
         info_list = {title.text: infolist}
         print(info_list)
-
-    # 4. 식당 별 리뷰정보 가져오기
-    # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
-    # 2) 가공 형태
-    # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), 리뷰내용(str)]}
-    def collect_res_reviews(self, url):
-        # 지예성
-        self.driver.get(url)
-        oldcount, newcount = None, 0
-        # 더보기 클릭
-        while True:
-            try:
-                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
-                if oldcount == newcount:
-                    # print("old:", oldcount, "new:", newcount)
-                    break
-                else:
-                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
-                    oldcount = len(reviews)
-                    # print("old:", oldcount)
-                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
-                    self.driver.execute_script("arguments[0].click();", btn)
-                    time.sleep(1)
-                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
-                    newcount = len(reviews)
-                    # print("new:", newcount)
-                    print()
-            except:
-                break
-        time.sleep(2)
-        i = 1
-        while True:
-            try:
-                selector = "body > main > article > div.column-wrapper > div.column-contents " \
-                           "> div > section.RestaurantReviewList " \
-                           "> ul > li:nth-child(" + str(i) + ") > a"
-                self.driver.find_element(By.CSS_SELECTOR, selector).send_keys(Keys.ENTER)  # 댓글 클릭
-                time.sleep(2)
-                self.driver.switch_to.window(self.driver.window_handles[1])
-                comment = self.driver.find_element(By.CLASS_NAME, "ReviewCard__ReviewText").text
-                print(comment)
-                self.driver.close()
-                self.driver.switch_to.window(self.driver.window_handles[0])
-                i += 1
-            except:
-                break
 
     # DB 연결
     def connect_db(self):
