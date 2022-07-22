@@ -134,11 +134,11 @@ class ReviewCollector:
     def collect_res_reviews(self):
         # 지예성
         t = 1
+        # 더보기 클릭
         while True:
             try:
                 btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
                 self.driver.execute_script("arguments[0].click();", btn)
-                # self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > div.RestaurantReviewList__MoreReviewButton").click() #더보기 클릭
                 time.sleep(1)
                 t += 1
                 if t == 10:
@@ -149,10 +149,10 @@ class ReviewCollector:
         i = 1
         while True:
             try:
-                self.driver.find_element(By.CSS_SELECTOR,
-                                         "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > ul > li:nth-child(" + str(
-                                             i) + ") > a").send_keys(
-                    Keys.ENTER)  # 댓글 클릭                    time.sleep(2)
+                selector = "body > main > article > div.column-wrapper > div.column-contents " \
+                           "> div > section.RestaurantReviewList " \
+                           "> ul > li:nth-child(" + str(i) + ") > a"
+                self.driver.find_element(By.CSS_SELECTOR, selector).send_keys(Keys.ENTER)  # 댓글 클릭
                 time.sleep(2)
                 self.driver.switch_to.window(self.driver.window_handles[1])
                 comment = self.driver.find_element(By.CLASS_NAME, "ReviewCard__ReviewText").text
