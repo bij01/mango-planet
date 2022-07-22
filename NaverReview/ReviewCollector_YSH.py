@@ -1,23 +1,19 @@
 import time
-
 from pymongo import mongo_client
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
+from urllib import request
+from selenium.common.exceptions import NoSuchElementException
 
 class ReviewCollector:
     def __init__(self):
-        self.connect_db()
+        #self.connect_db()
         self.open_browser()
-        self.collect_theme_list()
-<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
-        
-=======
-        # self.insert_data(self.col1, self.link_list)
+        #self.collect_theme_list()
+        self.collect_res_info("https://www.mangoplate.com/restaurants/eLq_Q72bscee")
         # self.collect_res_list()
-        # self.insert_data(self.col1, self.res_list)
->>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
+        # self.insert_data(self.col1, self.res_list
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -89,11 +85,7 @@ class ReviewCollector:
                 j += 1
             else:
                 break
-
-<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
-    '''    
-=======
->>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
+            
     def change_review_page(self):
         # btn1 맛있다, btn2 괜찮다, btn3 별로
         btn1 = self.driver.find_element(By.CSS_SELECTOR,
@@ -101,7 +93,7 @@ class ReviewCollector:
         btn2 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton')
         # 별로의 개수가 없으면 넘어가지 않음
-<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
+
         btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
 
         review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
@@ -110,8 +102,7 @@ class ReviewCollector:
             #btn1.click()
         else:
             pass
-    ''' 
-=======
+
         btn3 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton')
         review_cnt = self.driver.find_element(By.XPATH,
@@ -120,8 +111,8 @@ class ReviewCollector:
             btn1.click()
         else:
             pass
+        print()
 
->>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
@@ -140,8 +131,56 @@ class ReviewCollector:
     # 2) 가공 형태
     # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
     # -> menu_list = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
-    def collect_res_info(self):
+    def collect_res_info(self, url):
         # 권기민
+        self.driver.get(url)
+        title = self.driver.find_element(By.CSS_SELECTOR, '.restaurant_name') #식당이름
+        star_rivew = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/header/div[1]/span/strong')
+        evaluation = self.driver.find_element(By.CSS_SELECTOR, '.cnt.favorite')
+        info = self.driver.find_element(By.XPATH,'/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[1]/td')
+        index = info.text.index('지')
+        #print(info.text[0:index-1])
+        telephone_number = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[2]/td')
+        price_range = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[4]/td')
+        
+        try:
+            time.sleep(3)
+            meun = self.driver.find_element(By.CLASS_NAME, 'menu_td')
+            if meun.text != None:
+                print(meun.text)
+            else:
+                pass
+        except NoSuchElementException as ns:
+            print("메뉴가 없습니다.")
+        
+        menulist = meun.find_elements(By.CLASS_NAME, "Restaurant_Menu")
+        pricelist = meun.find_elements(By.CLASS_NAME, "Restaurant_MenuPrice")
+        #print(len(menulist))
+        lista = []
+        for x in menulist:
+            #print(x.text)
+            lista.append(x.text)
+        listb = []
+        for y in pricelist:
+            a = y.text.replace(',','')
+            b = a.replace('원','')
+            listb.append(b)
+        print(listb) 
+        
+        title1 = title.text
+        dic= {title1:{}}
+        for x in range(0, len(lista)):
+            k = lista[x]
+            v = listb[x]
+            dic[title1][k] = v
+        menu_list = dic
+        print(menu_list)
+        
+        infolist = ["별점: "+star_rivew.text+"","별점갯수: "+evaluation.text+"","주소: "+info.text[0:index-1]+"","전화번호:"+telephone_number.text+"","가격대:"+str(price_range.text)+""]
+        #print(infolist)
+        info_list = {title.text:infolist}
+        print(info_list)
+        
         # for title, link in res_list.items():
         #     print(title, link)
         #     driver.get(link)

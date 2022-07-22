@@ -142,9 +142,10 @@ class ReviewCollector:
             k = lista[x]
             v = listb[x]
             dic[title1][k] = v
-        print(dic)
+        menu_list = dic
+        print(menu_list)
         
-        infolist = ["별점: "+star_rivew.text+"","별점갯수: "+evaluation.text+"","주소: "+info.text[0:index-1]+"","전화번호:"+telephone_number.text+"","가격대:"+str(price_range.text)+""]
+        infolist = [star_rivew.text,evaluation.text,info.text[0:index-1],telephone_number.text,str(price_range.text)]
         #print(infolist)
         info_list = {title.text:infolist}
         print(info_list)
