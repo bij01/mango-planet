@@ -1,4 +1,4 @@
-#from urllib import request
+from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -163,6 +163,7 @@ class ReviewCollector:
                 break
         time.sleep(2)
         i = 1
+        comment_list = []
         while True:
             try:
                 self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > ul > li:nth-child("+str(i)+") > a").send_keys(Keys.ENTER) #댓글 클릭
@@ -171,15 +172,17 @@ class ReviewCollector:
                 self.driver.switch_to.window(self.driver.window_handles[1])
                 comment = self.driver.find_element(By.CLASS_NAME,"ReviewCard__ReviewText").text
                 comment = comment.replace('\n',"")
-                review_info_list = {restaurantname : comment}
-                print(review_info_list)
+                comment_list.append(comment)
+                #print(comment_list) #리스트에 댓글 쌓이는거 계속 보이는거
                 self.driver.close()
                 self.driver.switch_to.window(self.driver.window_handles[0])
                 i += 1
             except:
+                print(comment_list) #리스트에 댓글 다 쌓이고 브레이크 걸리기 전에 리스트 전체 보이는거
                 break
         reviewlist = [newcountA, newcountB, newcountC, newcountD]
-        review_list = {restaurantname : reviewlist}
-        print(review_list)
+        review_list = {restaurantname : comment_list}
+        print(reviewlist)
+        print(review_list.get('임페리얼트레저')[0])
 #    print(review_list)
 rc = ReviewCollector()
