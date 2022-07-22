@@ -166,19 +166,20 @@ class ReviewCollector:
             #print(text)
             #print(text[0])
             try:
-                int(text[0])
-                lastnum += 1
-                print(text, imglink)
-                try :
-                    print("이미지 다운로드 시도")
-                    urllib.request.urlretrieve(imglink,"C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs/"+text[3:].strip()+'.jpg')
-                    print("다운로드 성공")
-                except :
-                    print("다운로드 실패")
-                    continue
-                file_no = 0
+                 int(text[0])
+                 lastnum += 1
+                 print(text, imglink)
+                # try :
+                #     print("이미지 다운로드 시도")
+                #     urllib.request.urlretrieve(imglink,"C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs/"+text[3:].strip()+'.jpg')
+                #     print("다운로드 성공")
+                # except :
+                #     print("다운로드 실패")
+                #     continue
+                # file_no = 0
             except:
                 pass
+        
         info = self.driver.find_elements(By.CLASS_NAME, "info")
         i = -1
 
@@ -199,14 +200,16 @@ class ReviewCollector:
                 href = y.get_attribute('href')
                 listb.append(href)
         print(listb)
-
+        
+        
         dic = {}
         for x1 in range(0, len(lista)):
             k = lista[x1]
             v = listb[x1]
-            dic[k]=[v]
-        res_list = dic
-        print(res_list)
+            dic[k]=v
+            for k, v in dic.items():
+                new_dic = {k:v}
+            print(new_dic)
 
 
         # for title, link in self.link_list.items():
