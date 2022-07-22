@@ -1,21 +1,16 @@
-from urllib import request
+#from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
-
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
 
-
 class ReviewCollector:
     def __init__(self):
         self.open_browser()
-        self.collect_res_info("https://www.mangoplate.com/restaurants/eLq_Q72bscee")
         self.collect_res_reviews()
-
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -59,62 +54,11 @@ class ReviewCollector:
     # 2) 가공 형태
     # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대], ...}
     # -> menu_list = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
-    def collect_res_info(self, url):
+    def collect_res_info(self):
         # 권기민
-        self.driver.get(url)
-        title = self.driver.find_element(By.CSS_SELECTOR, '.restaurant_name') #식당이름
-        star_rivew = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/header/div[1]/span/strong')
-        evaluation = self.driver.find_element(By.CSS_SELECTOR, '.cnt.favorite')
-        info = self.driver.find_element(By.XPATH,'/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[1]/td')
-        index = info.text.index('지')
-        #print(info.text[0:index-1])
-        telephone_number = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[2]/td')
-        price_range = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[4]/td')
-        
-        try:
-            time.sleep(3)
-            meun = self.driver.find_element(By.CLASS_NAME, 'menu_td')
-            if meun.text != None:
-                print(meun.text)
-            else:
-                pass
-        except NoSuchElementException as ns:
-            print("메뉴가 없습니다.")
-        
-        menulist = meun.find_elements(By.CLASS_NAME, "Restaurant_Menu")
-        pricelist = meun.find_elements(By.CLASS_NAME, "Restaurant_MenuPrice")
-        #print(len(menulist))
-        lista = []
-        for x in menulist:
-            #print(x.text)
-            lista.append(x.text)
-        listb = []
-        for y in pricelist:
-            a = y.text.replace(',','')
-            b = a.replace('원','')
-            listb.append(b)
-        print(listb) 
-        
-        title1 = title.text
-        dic= {title1:{}}
-        for x in range(0, len(lista)):
-            k = lista[x]
-            v = listb[x]
-            dic[title1][k] = v
-        print(dic)
-        
-        infolist = ["별점: "+star_rivew.text+"","별점갯수: "+evaluation.text+"","주소: "+info.text[0:index-1]+"","전화번호:"+telephone_number.text+"","가격대:"+str(price_range.text)+""]
-        #print(infolist)
-        info_list = {title.text:infolist}
-        print(info_list)
-        '''
-        for title, link in res_list.items():
-            #print(title, link)
-            self.driver.get(link)
-            info_list = {title.text:infolist}
-            print(info_list)
-            #menu_list = [title]=(f"{}{}")
-        '''
+        # for title, link in res_list.items():
+        #     print(title, link)
+        #     driver.get(link)
         print()
 
     # 4. 식당 별 리뷰정보 가져오기
@@ -225,26 +169,17 @@ class ReviewCollector:
                 time.sleep(2)
                 self.driver.window_handles[0]
                 self.driver.switch_to.window(self.driver.window_handles[1])
-                name = self.driver.find_element(By.CLASS_NAME,"ReviewCard__UserName").text
                 comment = self.driver.find_element(By.CLASS_NAME,"ReviewCard__ReviewText").text
-                print("닉네임: ", name, "\n")
-                print(comment, "\n")
+                comment = comment.replace('\n',"")
+                review_info_list = {restaurantname : comment}
+                print(review_info_list)
                 self.driver.close()
                 self.driver.switch_to.window(self.driver.window_handles[0])
                 i += 1
             except:
                 break
-<<<<<<< HEAD
-        reviewlist = ["전체: ", newcountA, "맛있다: ", newcountB, "괜찮다: ", newcountC, "별로다: ", newcountD, ["닉네임: ", name, "리뷰: ", comment]]
+        reviewlist = [newcountA, newcountB, newcountC, newcountD]
         review_list = {restaurantname : reviewlist}
         print(review_list)
 #    print(review_list)
 rc = ReviewCollector()
-=======
-
-    def connect_db(self):
-        print()
-
-if __name__ == "__main__":
-    ReviewCollector()
->>>>>>> f4a9c28f2984a7f30e5fa6c15f399613c67ac598
