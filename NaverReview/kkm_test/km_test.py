@@ -1,17 +1,15 @@
 from urllib import request
-from matplotlib.pyplot import connect
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from pymongo import mongo_client
+import time
+from selenium.common.exceptions import NoSuchElementException
 
 
 class ReviewCollector:
     def __init__(self):
-        self.connect_db()
         self.open_browser()
-        self.collect_theme_list()
-        
+        self.collect_res_info("https://www.mangoplate.com/restaurants/eLq_Q72bscee")
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -33,13 +31,12 @@ class ReviewCollector:
     # 4) 가공 형태
     # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
     def collect_theme_list(self):
-        input("팝업창 닫고 ENTER")
         # 유승하
         click_cnt = 0
         i = 0
         k = 0
         j = 1
-        self.link_list = {}
+        link_list={}
         
         # 더보기 클릭 
         for click_cnt in range(16):
@@ -78,25 +75,13 @@ class ReviewCollector:
         # 타이틀 및 주소 딕셔너리에 담기 
         while True:
             if j <= 300:
-                self.link_list[Tli_add[i]] = (hli_add[k])
+                link_list[Tli_add[i]] = (hli_add[k])
                 i+=1; k+=1; j+=1
             else:
                 break
+        print(link_list['브라우니 맛집 베스트 10곳'])
 
-        '''       
-    def change_review_page(self):
-        btn1 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__RecommendFilterButton') # 맛있다
-        btn2 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton') # 괜찮다
-        # 별로의 개수가 없으면 넘어가지 않음
-        btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
-
-        review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
-        if str(review_cnt) == str(30): # 리뷰 개수(bb)와 30개 비교
-            pass
-            #btn1.click()
-        else:
-            pass
-        '''
+                    
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
@@ -105,21 +90,72 @@ class ReviewCollector:
     # -> res_list = {"식당이름1":"링크주소", "식당이름2":"링크주소", "식당이름3":"링크주소" ...}
     def collect_res_list(self):
         # 박종원
-        # for title, link in self.link_list.items():
+        # for title, link in link_list.items():
         #     print(title, link)
-        #     # self.driver.get(link)
+        #     driver.get(link)
         print()
 
     # 3. 식당 별 정보 가져오기
     # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
     # 2) 가공 형태
-    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
+    # -> info_list = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대], ...}
     # -> menu_list = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
-    def collect_res_info(self):
+    def collect_res_info(self, url):
         # 권기민
-        # for title, link in res_list.items():
-        #     print(title, link)
-        #     driver.get(link)
+        self.driver.get(url)
+        title = self.driver.find_element(By.CSS_SELECTOR, '.restaurant_name') #식당이름
+        star_rivew = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/header/div[1]/span/strong')
+        evaluation = self.driver.find_element(By.CSS_SELECTOR, '.cnt.favorite')
+        info = self.driver.find_element(By.XPATH,'/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[1]/td')
+        index = info.text.index('지')
+        #print(info.text[0:index-1])
+        telephone_number = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[2]/td')
+        price_range = self.driver.find_element(By.XPATH, '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[4]/td')
+        
+        try:
+            time.sleep(3)
+            meun = self.driver.find_element(By.CLASS_NAME, 'menu_td')
+            if meun.text != None:
+                print(meun.text)
+            else:
+                pass
+        except NoSuchElementException as ns:
+            print("메뉴가 없습니다.")
+        
+        menulist = meun.find_elements(By.CLASS_NAME, "Restaurant_Menu")
+        pricelist = meun.find_elements(By.CLASS_NAME, "Restaurant_MenuPrice")
+        #print(len(menulist))
+        lista = []
+        for x in menulist:
+            #print(x.text)
+            lista.append(x.text)
+        listb = []
+        for y in pricelist:
+            a = y.text.replace(',','')
+            b = a.replace('원','')
+            listb.append(b)
+        print(listb) 
+        
+        title1 = title.text
+        dic= {title1:{}}
+        for x in range(0, len(lista)):
+            k = lista[x]
+            v = listb[x]
+            dic[title1][k] = v
+        print(dic)
+        
+        infolist = ["별점: "+star_rivew.text+"","별점갯수: "+evaluation.text+"","주소: "+info.text[0:index-1]+"","전화번호:"+telephone_number.text+"","가격대:"+str(price_range.text)+""]
+        #print(infolist)
+        info_list = {title.text:infolist}
+        print(info_list)
+        '''
+        for title, link in res_list.items():
+            #print(title, link)
+            self.driver.get(link)
+            info_list = {title.text:infolist}
+            print(info_list)
+            #menu_list = [title]=(f"{}{}")
+        '''
         print()
 
     # 4. 식당 별 리뷰정보 가져오기
@@ -130,18 +166,8 @@ class ReviewCollector:
         # 지예성
         print()
 
-    # DB 연결
     def connect_db(self):
-        url = 'mongodb://localhost:27017'
-        client_m = mongo_client.MongoClient(url)
-        
-
-    # Collection(table) 데이터 삽입
-
-
-    # Collection 데이터 확인
-    #def check_data(self, col):
-    
+        print()
 
 if __name__ == "__main__":
     ReviewCollector()

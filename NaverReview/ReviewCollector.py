@@ -11,7 +11,7 @@ class ReviewCollector:
         self.connect_db()
         self.open_browser()
         # self.collect_theme_list()
-        self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
+        # self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
         # self.insert_data(self.col1, self.link_list)
         # self.collect_res_list()
         # self.insert_data(self.col1, self.res_list)
@@ -87,6 +87,7 @@ class ReviewCollector:
             else:
                 break
 
+
     def change_review_page(self):
         # btn1 맛있다, btn2 괜찮다, btn3 별로
         btn1 = self.driver.find_element(By.CSS_SELECTOR,
@@ -94,12 +95,12 @@ class ReviewCollector:
         btn2 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton')
         # 별로의 개수가 없으면 넘어가지 않음
-        btn3 = self.driver.find_element(By.CSS_SELECTOR,
-                                        '.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton')
-        review_cnt = self.driver.find_element(By.XPATH,
-                                              "/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
-        if str(review_cnt) == str(30):  # 리뷰 개수(bb)와 30개 비교
-            btn1.click()
+        btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
+
+        review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
+        if str(review_cnt) == str(30): # 리뷰 개수(bb)와 30개 비교
+            pass
+            #btn1.click()
         else:
             pass
 
