@@ -10,7 +10,8 @@ class ReviewCollector:
     def __init__(self):
         self.connect_db()
         self.open_browser()
-        self.collect_theme_list()
+        # self.collect_theme_list()
+        self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
         # self.insert_data(self.col1, self.link_list)
         # self.collect_res_list()
         # self.insert_data(self.col1, self.res_list)
@@ -131,18 +132,28 @@ class ReviewCollector:
     # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
     # 2) 가공 형태
     # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), 리뷰내용(str)]}
-    def collect_res_reviews(self):
+    def collect_res_reviews(self, url):
         # 지예성
-        t = 1
+        self.driver.get(url)
+        oldcount, newcount = None, 0
         # 더보기 클릭
         while True:
             try:
-                btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
-                self.driver.execute_script("arguments[0].click();", btn)
-                time.sleep(1)
-                t += 1
-                if t == 10:
+                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
+                if oldcount == newcount:
+                    # print("old:", oldcount, "new:", newcount)
                     break
+                else:
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    oldcount = len(reviews)
+                    # print("old:", oldcount)
+                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                    self.driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(1)
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    newcount = len(reviews)
+                    # print("new:", newcount)
+                    print()
             except:
                 break
         time.sleep(2)
@@ -162,7 +173,6 @@ class ReviewCollector:
                 i += 1
             except:
                 break
-        print()
 
     # DB 연결
     def connect_db(self):
