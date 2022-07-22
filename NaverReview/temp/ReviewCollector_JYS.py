@@ -2,21 +2,33 @@ from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+<<<<<<< HEAD:NaverReview/ReviewCollector.py
 import time
 from selenium.common.exceptions import NoSuchElementException
 
+=======
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+import time
+>>>>>>> 73a1f9cbdf345daae4f1c4a7f12644a76ba35006:NaverReview/temp/ReviewCollector_JYS.py
 
 class ReviewCollector:
     def __init__(self):
         self.open_browser()
+<<<<<<< HEAD:NaverReview/ReviewCollector.py
         self.collect_res_info("https://www.mangoplate.com/restaurants/eLq_Q72bscee")
+=======
+        self.collect_res_reviews()
+>>>>>>> 73a1f9cbdf345daae4f1c4a7f12644a76ba35006:NaverReview/temp/ReviewCollector_JYS.py
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
         self.driver = webdriver.Chrome(path)
         self.driver.implicitly_wait(3)
-        url = "https://www.mangoplate.com/top_lists"
+        url = "https://www.mangoplate.com/restaurants/1KoxMlQL0NZk"
         self.driver.get(url)
+        time.sleep(5)
 
     def collect_data(self):
         # 백인준 (합칠거)
@@ -32,56 +44,8 @@ class ReviewCollector:
     # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
     def collect_theme_list(self):
         # 유승하
-        click_cnt = 0
-        i = 0
-        k = 0
-        j = 1
-        link_list={}
-        
-        # 더보기 클릭 
-        for click_cnt in range(16):
-            if click_cnt < 16 :
-                self.driver.find_element(By.CLASS_NAME,'btn-more').click()
-                click_cnt += 1
-            elif click_cnt>=16:
-                break
-        
-        # 주소 뽑기 && 리스트 담기
-        href_li = 0
-        hli_add= [] # 주소를 리스트에 담기 
-        while True:
-            if href_li >= 300:
-                break
-            elif href_li < 300:
-                href_li +=1
-                hrefs = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li['+str(href_li)+']/a')
-                for x in hrefs:
-                    href = x.get_attribute('href')
-                    hli_add.append(href)
-        
-        # 타이틀 뽑기 && 리스트 담기
-        Titles_li = 0
-        Tli_add = [] # 타이틀 리스트
-        while True:
-            if Titles_li >= 300:
-                break
-            elif Titles_li < 300:
-                Titles_li +=1
-                Titles = self.driver.find_elements(By.XPATH,'/html/body/main/article/section/div/ul/li['+str(Titles_li)+']/a/figure/figcaption/div/span')
-                for x in Titles:
-                    # print(x.text)
-                    Tli_add.append(x.text)
-                    
-        # 타이틀 및 주소 딕셔너리에 담기 
-        while True:
-            if j <= 300:
-                link_list[Tli_add[i]] = (hli_add[k])
-                i+=1; k+=1; j+=1
-            else:
-                break
-        print(link_list['브라우니 맛집 베스트 10곳'])
+        print()
 
-                    
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
@@ -161,13 +125,46 @@ class ReviewCollector:
     # 4. 식당 별 리뷰정보 가져오기
     # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
     # 2) 가공 형태
-    # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), 리뷰내용(str)]}
+    # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), [리뷰내용(str)]]}
+#    review_list = {"식당이름", [1,2,3,4,["댓글1", ]]}
     def collect_res_reviews(self):
         # 지예성
-        print()
+        t = 1
+        while True:
+            try:
+                btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                self.driver.execute_script("arguments[0].click();", btn)
+                #self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > div.RestaurantReviewList__MoreReviewButton").click() #더보기 클릭
+                time.sleep(1)
+                t += 1
+                if t == 10:
+                    break
+            except:
+                break
+        time.sleep(2)
+        i = 1
+        while True:
+            try:
+                self.driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > ul > li:nth-child("+str(i)+") > a").send_keys(Keys.ENTER) #댓글 클릭                    time.sleep(2)
+                time.sleep(2)                
+                self.driver.window_handles[0]
+                self.driver.switch_to.window(self.driver.window_handles[1])
+                comment = self.driver.find_element(By.CLASS_NAME,"ReviewCard__ReviewText").text
+                print(comment)
+                self.driver.close()
+                self.driver.switch_to.window(self.driver.window_handles[0])
+                i += 1
+            except:
+                break
+        
 
+<<<<<<< HEAD:NaverReview/ReviewCollector.py
     def connect_db(self):
         print()
 
 if __name__ == "__main__":
     ReviewCollector()
+=======
+#    print(review_list)
+rc = ReviewCollector()
+>>>>>>> 73a1f9cbdf345daae4f1c4a7f12644a76ba35006:NaverReview/temp/ReviewCollector_JYS.py
