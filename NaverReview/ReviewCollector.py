@@ -10,10 +10,18 @@ class ReviewCollector:
     def __init__(self):
         #self.connect_db()
         self.open_browser()
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
         #self.collect_theme_list()
         self.collect_res_info("https://www.mangoplate.com/restaurants/eLq_Q72bscee")
         # self.collect_res_list()
         # self.insert_data(self.col1, self.res_list
+=======
+        # self.collect_theme_list()
+        # self.collect_res_reviews("https://www.mangoplate.com/restaurants/gL8RksQTNk")
+        # self.insert_data(self.col1, self.link_list)
+        # self.collect_res_list()
+        # self.insert_data(self.col1, self.res_list)
+>>>>>>> 674c1b46e78c48e3d101668fba06fc9188b4d047:NaverReview/ReviewCollector.py
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -85,7 +93,12 @@ class ReviewCollector:
                 j += 1
             else:
                 break
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
             
+=======
+
+
+>>>>>>> 674c1b46e78c48e3d101668fba06fc9188b4d047:NaverReview/ReviewCollector.py
     def change_review_page(self):
         # btn1 맛있다, btn2 괜찮다, btn3 별로
         btn1 = self.driver.find_element(By.CSS_SELECTOR,
@@ -93,7 +106,10 @@ class ReviewCollector:
         btn2 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton')
         # 별로의 개수가 없으면 넘어가지 않음
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
 
+=======
+>>>>>>> 674c1b46e78c48e3d101668fba06fc9188b4d047:NaverReview/ReviewCollector.py
         btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
 
         review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
@@ -102,6 +118,7 @@ class ReviewCollector:
             #btn1.click()
         else:
             pass
+<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
 
         btn3 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton')
@@ -112,6 +129,8 @@ class ReviewCollector:
         else:
             pass
         print()
+=======
+>>>>>>> 674c1b46e78c48e3d101668fba06fc9188b4d047:NaverReview/ReviewCollector.py
 
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
@@ -190,18 +209,28 @@ class ReviewCollector:
     # 1) 수집할 데이터: 식당이름, 리뷰갯수, (갯수)맛있다, 괜찮다, 별로, 리뷰내용
     # 2) 가공 형태
     # -> review_list = {"식당이름", [리뷰갯수(int), 맛있다(int), 괜찮다(int), 별로(int), 리뷰내용(str)]}
-    def collect_res_reviews(self):
+    def collect_res_reviews(self, url):
         # 지예성
-        t = 1
+        self.driver.get(url)
+        oldcount, newcount = None, 0
         # 더보기 클릭
         while True:
             try:
-                btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
-                self.driver.execute_script("arguments[0].click();", btn)
-                time.sleep(1)
-                t += 1
-                if t == 10:
+                # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
+                if oldcount == newcount:
+                    # print("old:", oldcount, "new:", newcount)
                     break
+                else:
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    oldcount = len(reviews)
+                    # print("old:", oldcount)
+                    btn = self.driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
+                    self.driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(1)
+                    reviews = self.driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
+                    newcount = len(reviews)
+                    # print("new:", newcount)
+                    print()
             except:
                 break
         time.sleep(2)
@@ -221,7 +250,6 @@ class ReviewCollector:
                 i += 1
             except:
                 break
-        print()
 
     # DB 연결
     def connect_db(self):

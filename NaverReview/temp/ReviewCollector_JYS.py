@@ -2,25 +2,20 @@ from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-<<<<<<< HEAD:NaverReview/ReviewCollector.py
-import time
 from selenium.common.exceptions import NoSuchElementException
 
-=======
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import time
->>>>>>> 73a1f9cbdf345daae4f1c4a7f12644a76ba35006:NaverReview/temp/ReviewCollector_JYS.py
+
 
 class ReviewCollector:
     def __init__(self):
         self.open_browser()
-<<<<<<< HEAD:NaverReview/ReviewCollector.py
         self.collect_res_info("https://www.mangoplate.com/restaurants/eLq_Q72bscee")
-=======
         self.collect_res_reviews()
->>>>>>> 73a1f9cbdf345daae4f1c4a7f12644a76ba35006:NaverReview/temp/ReviewCollector_JYS.py
+
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -156,15 +151,9 @@ class ReviewCollector:
                 i += 1
             except:
                 break
-        
 
-<<<<<<< HEAD:NaverReview/ReviewCollector.py
     def connect_db(self):
         print()
 
 if __name__ == "__main__":
     ReviewCollector()
-=======
-#    print(review_list)
-rc = ReviewCollector()
->>>>>>> 73a1f9cbdf345daae4f1c4a7f12644a76ba35006:NaverReview/temp/ReviewCollector_JYS.py
