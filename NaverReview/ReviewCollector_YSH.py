@@ -10,13 +10,7 @@ class ReviewCollector:
         self.connect_db()
         self.open_browser()
         self.collect_theme_list()
-<<<<<<< HEAD
         
-=======
-        self.insert_data(self.col1, self.link_list)
-        # self.collect_res_list()
-        # self.insert_data(self.col1, self.res_list)
->>>>>>> 5a337be3773341942e0d599fd4319e1a7b1fced3
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -88,24 +82,20 @@ class ReviewCollector:
             else:
                 break
 
-<<<<<<< HEAD
-                
-                
-                
+    '''    
     def change_review_page(self):
         btn1 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__RecommendFilterButton') # 맛있다
         btn2 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton') # 괜찮다
         # 별로의 개수가 없으면 넘어가지 않음
         btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
 
-        review_cnt = driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
+        review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
         if str(review_cnt) == str(30): # 리뷰 개수(bb)와 30개 비교
-            btn1.click()
+            pass
+            #btn1.click()
         else:
             pass
-        
-=======
->>>>>>> 5a337be3773341942e0d599fd4319e1a7b1fced3
+    ''' 
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
