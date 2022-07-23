@@ -1,13 +1,43 @@
-import matplotlib.pyplot as plt
-plt.rcParams['font.family'] = 'Hancom MalangMalang'
-plt.rc('font', size=20)
-plt.rc('')
+import threading
+import time
 
-colors = ["#FF2D00","#E023D6","#3840F2"]
-aaa = [27,35,25]
-ratio = (aaa[0],aaa[1],aaa[2])
-labels = ['맛있다', '괜찮다', '별로']
-explode = [0, 0.20, 0.10]
+def run(x, y):
+    for i in range(x, y):
+        time.sleep(1)
+        print(i)
 
-plt.pie(ratio, labels=labels, autopct='%.2f%%', startangle=260, counterclock=False, shadow=True, explode=explode, colors=colors,textprops={'color':"w"})
-plt.show()
+
+goal_num = 301
+goal_list = [0]
+for x in range(5):
+    if x == 0:
+        pass
+    else:
+        st_num = goal_num / x / x
+        # print(st_num)
+        goal_list.append(round(st_num) * x)
+        goal_list.sort()
+# print(goal_list)
+for x in range(5-1):
+    print(goal_list[x], goal_list[x+1])
+th_list = []
+for x in range(5-1):
+    th = threading.Thread(target=run, args=(goal_list[x], goal_list[x+1]), daemon=True)
+    th_list.append(th)
+print(th_list)
+
+th_list[0].start()
+th_list[1].start()
+th_list[2].start()
+th_list[3].start()
+
+th_list[0].join()
+th_list[1].join()
+th_list[2].join()
+th_list[3].join()
+
+
+
+
+
+

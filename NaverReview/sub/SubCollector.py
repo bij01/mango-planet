@@ -7,7 +7,7 @@ import time
 def collect_res_reviews(driver, url):
     # 지예성
     restaurantname = driver.find_element(By.CLASS_NAME,"restaurant_name").text
-    print(restaurantname)
+    # print(restaurantname)
 
     driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(2) > button").send_keys(Keys.ENTER)
     oldcountB, newcountB = None, 0
@@ -16,19 +16,19 @@ def collect_res_reviews(driver, url):
         try:
             # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
             if oldcountB == newcountB:
-                print("old:", oldcountB, "new:", newcountB)
+                # print("old:", oldcountB, "new:", newcountB)
                 break
             else:
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 oldcountB = len(reviews)
-                print("old:", oldcountB)
+                # print("old:", oldcountB)
                 btn = driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
                 driver.execute_script("arguments[0].click();", btn)
                 time.sleep(1)
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 newcountB = len(reviews)
-                print("new:", newcountB)
-                print()
+                # print("new:", newcountB)
+                # print()
         except:
             break
 
@@ -39,19 +39,19 @@ def collect_res_reviews(driver, url):
         try:
             # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
             if oldcountC == newcountC:
-                print("old:", oldcountC, "new:", newcountC)
+                # print("old:", oldcountC, "new:", newcountC)
                 break
             else:
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 oldcountC = len(reviews)
-                print("old:", oldcountC)
+                # print("old:", oldcountC)
                 btn = driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
                 driver.execute_script("arguments[0].click();", btn)
                 time.sleep(1)
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 newcountC = len(reviews)
-                print("new:", newcountC)
-                print()
+                # print("new:", newcountC)
+                # print()
         except:
             break
 
@@ -62,19 +62,19 @@ def collect_res_reviews(driver, url):
         try:
             # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
             if oldcountD == newcountD:
-                print("old:", oldcountD, "new:", newcountD)
+                # print("old:", oldcountD, "new:", newcountD)
                 break
             else:
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 oldcountD = len(reviews)
-                print("old:", oldcountD)
+                # print("old:", oldcountD)
                 btn = driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
                 driver.execute_script("arguments[0].click();", btn)
                 time.sleep(1)
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 newcountD = len(reviews)
-                print("new:", newcountD)
-                print()
+                # print("new:", newcountD)
+                # print()
         except:
             break
     driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(1) > button").send_keys(Keys.ENTER)
@@ -84,19 +84,19 @@ def collect_res_reviews(driver, url):
         try:
             # 더보기 버튼 클릭 전 리뷰 갯수와 클릭 후 리뷰 갯수를 비교하여 두 값이 동일할 경우 버튼 클릭을 멈춤
             if oldcountA == newcountA:
-                print("old:", oldcountA, "new:", newcountA)
+                # print("old:", oldcountA, "new:", newcountA)
                 break
             else:
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 oldcountA = len(reviews)
-                print("old:", oldcountA)
+                # print("old:", oldcountA)
                 btn = driver.find_element(By.CLASS_NAME, "RestaurantReviewList__MoreReviewButton")
                 driver.execute_script("arguments[0].click();", btn)
                 time.sleep(1)
                 reviews = driver.find_elements(By.CLASS_NAME, "RestaurantReviewItem__ReviewText")
                 newcountA = len(reviews)
-                print("new:", newcountA)
-                print()
+                # print("new:", newcountA)
+                # print()
         except:
             break
     time.sleep(2)
@@ -115,11 +115,11 @@ def collect_res_reviews(driver, url):
             driver.switch_to.window(driver.window_handles[0])
             i += 1
         except:
-            print(comment_list) #리스트에 댓글 다 쌓이고 브레이크 걸리기 전에 리스트 전체 보이는거
+            # print(comment_list) #리스트에 댓글 다 쌓이고 브레이크 걸리기 전에 리스트 전체 보이는거
             break
     review_info = {restaurantname: [newcountA, newcountB, newcountC, newcountD]}
     review_list = {restaurantname: comment_list}
-    print(review_info)
-    print(review_list)
+    # print(review_info)
+    # print(review_list)
     return [review_info, review_list]
     # print(review_list.get('임페리얼트레저')[0])
