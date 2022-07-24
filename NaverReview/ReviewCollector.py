@@ -21,7 +21,7 @@ class ReviewCollector:
         if start_num is None:
             pass
         else:
-            print("DATA 수집 시작")
+            # print("DATA 수집 시작")
             try:
                 self.collect_data()
             except:
@@ -39,7 +39,7 @@ class ReviewCollector:
 
     def collect_data(self):
         # 백인준
-        # 1. 테마별 식당 리스트 수집 및 데이터 입력
+        # 1. 테마별 식당 목록 수집 및 데이터 입력
         # self.collect_theme_list()
         # 2. 식당리스트 수집 및 데이터 입력
         if self.mode == 2:
@@ -64,15 +64,16 @@ class ReviewCollector:
                             # print("pass", x)
                             pass
                         else:
-                            print(f"식당 리스트 크롤링 중.. {x}/{count}")
+                            print(f"식당 목록 크롤링 중.. {x}/{count}")
                             self.collect_res_list(value)
+                            print(f"식당 목록 크롤링 종료 {x}/{count}")
                     if col == self.col2:
                         # 식당 목록 중에 지정된 범위내 에서만 데이터 수집
                         if x not in range(self.start_num, self.end_num):
                             # print("pass", x)
                             pass
                         else:
-                            print(f"식당 정보, 리뷰 크롤링 중.. {x}/{count}")
+                            print(f"식당 정보 & 리뷰 크롤링 중.. {x}/{count}")
                             self.collect_res_info(value)
                             info, review = collect_res_reviews(driver=self.driver, url=value)
                             if info in dm.check_data2(dm(), self.col5):
@@ -80,6 +81,7 @@ class ReviewCollector:
                             else:
                                 dm.insert_data(dm(), self.col5, info)
                                 dm.insert_data(dm(), self.col6, review)
+                            print(f"식당 정보 & 리뷰 크롤링 종료 {x}/{count}")
                     else:
                         pass
                     x += 1

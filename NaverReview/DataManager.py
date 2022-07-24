@@ -21,7 +21,7 @@ class DataManager:
         self.col4 = db["menu_list"]
         self.col5 = db["review_info_list"]
         self.col6 = db["review_list"]
-        print("DB 연결 성공")
+        # print("DB 연결 성공")
         return self.col1, self.col2, self.col3, self.col4, self.col5, self.col6
 
     # Collection(table) 데이터 삽입

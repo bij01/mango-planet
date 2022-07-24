@@ -8,6 +8,7 @@ def run(start, end, mode):
     x = ReviewCollector(start, end, mode=mode)
     x.close_db()
     x.driver.close()
+    print(f"DB & WebDriver Closed {start}/{end}")
 
 
 def first_run():
@@ -38,7 +39,7 @@ def run_thread(*args):
     for x in range(args[1]-1):
         th = threading.Thread(target=run, args=(target_list[x], target_list[x+1], args[0]), daemon=True)
         tlist.append(th)
-    if args[1] == 5:
+    if args[1] == 6:
         tlist[0].start()
         tlist[1].start()
         tlist[2].start()
@@ -49,32 +50,18 @@ def run_thread(*args):
         tlist[2].join()
         tlist[3].join()
         tlist[4].join()
-    elif args[1] == 10:
+    elif args[1] == 4:
         tlist[0].start()
         tlist[1].start()
         tlist[2].start()
-        tlist[3].start()
-        tlist[4].start()
-        tlist[5].start()
-        tlist[6].start()
-        tlist[7].start()
-        tlist[8].start()
-        tlist[9].start()
         tlist[0].join()
         tlist[1].join()
         tlist[2].join()
-        tlist[3].join()
-        tlist[4].join()
-        tlist[5].join()
-        tlist[6].join()
-        tlist[7].join()
-        tlist[8].join()
-        tlist[9].join()
     else:
         pass
 
 
-run_thread(2, 10, 0, 301)  # 모드, 쓰레드를 나눌 수(5 또는 10), 시작 번호, 끝 번호
+run_thread(3, 6, 0, 100)  # 모드, 쓰레드를 나눌 수(6-> 5쓰레드, 4-> 3쓰레드), 시작 번호, 끝 번호
 
 end_time = time.time()
 run_time = time.localtime(end_time - start_time)
