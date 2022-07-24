@@ -25,8 +25,8 @@ print('nchars :', len(doc))
 print('ntokens :', len(doc.split()))
 print('nmorphs :', len(set(pos)))
 print('\nTop 10 frequent morphemes: '); pprint(cnt.most_common(10))
-print('\nLocation of "좋아" in the document: ')
-concordance(u'좋아', doc, show=True)
+#print('\nLocation of "맛있다" in the document: ')
+#concordance(u'맛있다', doc, show=True)
 
 '''
 print('nchars  :', len(doc))
