@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import time
 
 
-def collect_res_reviews(driver, url):
+def collect_review(driver, url):
     # 지예성
     restaurantname = driver.find_element(By.CLASS_NAME,"restaurant_name").text
     # print(restaurantname)

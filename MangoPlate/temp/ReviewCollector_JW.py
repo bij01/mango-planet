@@ -154,9 +154,9 @@ class ReviewCollector:
         lastnum = 0
         items = self.driver.find_elements(By.CLASS_NAME, "restaurant-item")
         #print(lastnum)
-        if not os.path.isdir("C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs"):
+        if not os.path.isdir("C:/Users/Kosmo/Desktop/git/team5/MangoPlate/imgs"):
             print("폴더 생성 완료")
-            os.mkdir("C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs")
+            os.mkdir("C:/Users/Kosmo/Desktop/git/team5/MangoPlate/imgs")
         else:
             print("동일한 폴더 존재")
         for item in items:
@@ -171,7 +171,7 @@ class ReviewCollector:
                  print(text, imglink)
                 # try :
                 #     print("이미지 다운로드 시도")
-                #     urllib.request.urlretrieve(imglink,"C:/Users/Kosmo/Desktop/git/team5/NaverReview/imgs/"+text[3:].strip()+'.jpg')
+                #     urllib.request.urlretrieve(imglink,"C:/Users/Kosmo/Desktop/git/team5/MangoPlate/imgs/"+text[3:].strip()+'.jpg')
                 #     print("다운로드 성공")
                 # except :
                 #     print("다운로드 실패")

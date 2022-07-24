@@ -1,11 +1,11 @@
 import threading
-from ReviewCollector import ReviewCollector
+from MainCollector import MainCollector
 import time
 
 
 # 시작번호, 끝번호, 모드 설정(2 == 식당목록, 그외 == 식당정보, 리뷰)
 def run(start, end, mode):
-    x = ReviewCollector(start, end, mode=mode)
+    x = MainCollector(start, end, mode=mode)
     x.close_db()
     x.driver.close()
     print(f"DB & WebDriver Closed {start}/{end}")
@@ -13,7 +13,7 @@ def run(start, end, mode):
 
 def first_run():
     # 테마별 식당 리스트 링크 수집
-    firstrun = ReviewCollector(None, None, None)
+    firstrun = MainCollector(None, None, None)
     firstrun.collect_theme_list()
     firstrun.close_db()
     firstrun.driver.close()
