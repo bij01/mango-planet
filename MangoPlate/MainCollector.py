@@ -11,7 +11,8 @@ from collector.infomation import collect_infomation
 
 
 class MainCollector:
-    def __init__(self, start_num, end_num, mode):
+    def __init__(self, mode, start_num, end_num):
+        self.current = None
         self.col1, self.col2, self.col3, \
         self.col4, self.col5, self.col6 = dm.connect_db(dm())
         self.start_num = start_num
@@ -26,6 +27,9 @@ class MainCollector:
                 self.collect_data()
             except:
                 pass
+
+    def get_current_page(self):
+        return self.current
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -49,8 +53,8 @@ class MainCollector:
             self.repeat_crawling(self.col2)
 
     def repeat_crawling(self, col):
-        x = 0
-        count = 0
+        x = 0  # 현재 페이지
+        count = 0  # 전체 페이지
         for _ in col.find():
             count += 1
         for data in col.find():
@@ -66,7 +70,7 @@ class MainCollector:
                         else:
                             print(f"식당 목록 크롤링 중.. {x}/{count}")
                             self.collect_res_list(value)
-                            print(f"식당 목록 크롤링 종료 {x}/{count}")
+                            self.current = x
                     if col == self.col2:
                         # 식당 목록 중에 지정된 범위내 에서만 데이터 수집
                         if x not in range(self.start_num, self.end_num):
@@ -75,18 +79,20 @@ class MainCollector:
                         else:
                             print(f"식당 정보 & 리뷰 크롤링 중.. {x}/{count}")
                             info_dict, menu_dict = collect_infomation(self.driver, value)
-                            if info_dict in dm.check_data2(dm(), self.col3):
+                            if list(info_dict.values())[0] in dm.check_data2(dm(), self.col3):
+                                print(f"중복 데이터 패스 {x}, {info_dict}")
                                 pass
                             else:
                                 dm.insert_data(dm(), self.col3, info_dict)
                                 dm.insert_data(dm(), self.col4, menu_dict)
                             info, review = collect_review(self.driver, value)
-                            if info in dm.check_data2(dm(), self.col5):
+                            if list(info.values())[0] in dm.check_data2(dm(), self.col5):
+                                print(f"중복 데이터 패스 {x}, {info}")
                                 pass
                             else:
                                 dm.insert_data(dm(), self.col5, info)
                                 dm.insert_data(dm(), self.col6, review)
-                            print(f"식당 정보 & 리뷰 크롤링 종료 {x}/{count}")
+                            self.current = x
                     else:
                         pass
                     x += 1
