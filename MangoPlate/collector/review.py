@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import time
 
 
-def collect_res_reviews(driver, url):
+def collect_review(driver, url):
     # 지예성
     restaurantname = driver.find_element(By.CLASS_NAME,"restaurant_name").text
     # print(restaurantname)
@@ -110,7 +110,6 @@ def collect_res_reviews(driver, url):
             comment = driver.find_element(By.CLASS_NAME,"ReviewCard__ReviewText").text
             comment = comment.replace('\n',"")
             comment_list.append(comment)
-            #print(comment_list) #리스트에 댓글 쌓이는거 계속 보이는거
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
             i += 1
@@ -119,7 +118,4 @@ def collect_res_reviews(driver, url):
             break
     review_info = {restaurantname: [newcountA, newcountB, newcountC, newcountD]}
     review_list = {restaurantname: comment_list}
-    # print(review_info)
-    # print(review_list)
     return [review_info, review_list]
-    # print(review_list.get('임페리얼트레저')[0])

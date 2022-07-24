@@ -1,17 +1,18 @@
 import os
 import socket
-import time
 from urllib import request
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 from DataManager import DataManager as dm
-from sub.SubCollector import collect_res_reviews
+from collector.review import collect_review
+from collector.infomation import collect_infomation
 
 
-class ReviewCollector:
-    def __init__(self, start_num, end_num, mode):
+class MainCollector:
+    def __init__(self, mode, start_num, end_num):
+        self.current = None
         self.col1, self.col2, self.col3, \
         self.col4, self.col5, self.col6 = dm.connect_db(dm())
         self.start_num = start_num
@@ -21,11 +22,14 @@ class ReviewCollector:
         if start_num is None:
             pass
         else:
-            print("DATA 수집 시작")
+            # print("DATA 수집 시작")
             try:
                 self.collect_data()
             except:
                 pass
+
+    def get_current_page(self):
+        return self.current
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -39,7 +43,7 @@ class ReviewCollector:
 
     def collect_data(self):
         # 백인준
-        # 1. 테마별 식당 리스트 수집 및 데이터 입력
+        # 1. 테마별 식당 목록 수집 및 데이터 입력
         # self.collect_theme_list()
         # 2. 식당리스트 수집 및 데이터 입력
         if self.mode == 2:
@@ -49,8 +53,8 @@ class ReviewCollector:
             self.repeat_crawling(self.col2)
 
     def repeat_crawling(self, col):
-        x = 0
-        count = 0
+        x = 0  # 현재 페이지
+        count = 0  # 전체 페이지
         for _ in col.find():
             count += 1
         for data in col.find():
@@ -64,22 +68,31 @@ class ReviewCollector:
                             # print("pass", x)
                             pass
                         else:
-                            print(f"식당 리스트 크롤링 중.. {x}/{count}")
+                            print(f"식당 목록 크롤링 중.. {x}/{count}")
                             self.collect_res_list(value)
+                            self.current = x
                     if col == self.col2:
                         # 식당 목록 중에 지정된 범위내 에서만 데이터 수집
                         if x not in range(self.start_num, self.end_num):
                             # print("pass", x)
                             pass
                         else:
-                            print(f"식당 정보, 리뷰 크롤링 중.. {x}/{count}")
-                            self.collect_res_info(value)
-                            info, review = collect_res_reviews(driver=self.driver, url=value)
-                            if info in dm.check_data2(dm(), self.col5):
+                            print(f"식당 정보 & 리뷰 크롤링 중.. {x}/{count}")
+                            info_dict, menu_dict = collect_infomation(self.driver, value)
+                            if list(info_dict.values())[0] in dm.check_data2(dm(), self.col3):
+                                print(f"중복 데이터 패스 {x}, {info_dict}")
+                                pass
+                            else:
+                                dm.insert_data(dm(), self.col3, info_dict)
+                                dm.insert_data(dm(), self.col4, menu_dict)
+                            info, review = collect_review(self.driver, value)
+                            if list(info.values())[0] in dm.check_data2(dm(), self.col5):
+                                print(f"중복 데이터 패스 {x}, {info}")
                                 pass
                             else:
                                 dm.insert_data(dm(), self.col5, info)
                                 dm.insert_data(dm(), self.col6, review)
+                            self.current = x
                     else:
                         pass
                     x += 1
@@ -144,24 +157,6 @@ class ReviewCollector:
 
         dm.insert_data(dm(), self.col1, self.link_list)
         print("테마별 식당 리스트 수집 종료")
-
-    def change_review_page(self):
-        # btn1 맛있다, btn2 괜찮다, btn3 별로
-        btn1 = self.driver.find_element(By.CSS_SELECTOR,
-                                        '.RestaurantReviewList__FilterButton.RestaurantReviewList__RecommendFilterButton')
-        btn2 = self.driver.find_element(By.CSS_SELECTOR,
-                                        '.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton')
-        # 별로의 개수가 없으면 넘어가지 않음
-        btn3 = self.driver.find_element(By.CSS_SELECTOR,
-                                        '.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton')  # 별로
-
-        review_cnt = self.driver.find_element(By.XPATH,
-                                              "/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
-        if str(review_cnt) == str(30):  # 리뷰 개수(bb)와 30개 비교
-            pass
-            # btn1.click()
-        else:
-            pass
 
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
@@ -252,60 +247,4 @@ class ReviewCollector:
                     new_dic = {k: v}
                     dm.insert_data(dm(), self.col2, new_dic)
 
-    # 3. 식당 별 정보 가져오기
-    # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
-    # 2) 제공 형태
-    # -> info_dict = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
-    # -> menu_dict = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
-    def collect_res_info(self, url):
-        # 권기민
-        self.driver.get(url)
-        title = self.driver.find_element(By.CSS_SELECTOR, '.restaurant_name')  # 식당이름
-        star_review = self.driver.find_element(By.XPATH,
-                                               '/html/body/main/article/div[1]/div[1]/div/section[1]/header/div[1]/span/strong')
-        evaluation = self.driver.find_element(By.CSS_SELECTOR, '.cnt.favorite')
-        info = self.driver.find_element(By.XPATH,
-                                        '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[1]/td')
-        index = info.text.index('지')
-        # print(info.text[0:index-1])
-        telephone_number = self.driver.find_element(By.XPATH,
-                                                    '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[2]/td')
-        price_range = self.driver.find_element(By.XPATH,
-                                               '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[4]/td')
-        try:
-            time.sleep(3)
-            menu = self.driver.find_element(By.CLASS_NAME, 'menu_td')
-            menulist = menu.find_elements(By.CLASS_NAME, "Restaurant_Menu")
-            lista = []
-            for x in menulist:
-                # print(x.text)
-                lista.append(x.text)
-            pricelist = menu.find_elements(By.CLASS_NAME, "Restaurant_MenuPrice")
-            # print(len(menulist))
 
-            listb = []
-            for y in pricelist:
-                a = y.text.replace(',', '')
-                b = a.replace('원', '')
-                listb.append(b)
-            # print(listb)
-
-            dic = {title.text: {}}
-            for x in range(0, len(lista)):
-                k = lista[x]
-                v = listb[x]
-                dic[title.text][k] = v
-            menu_dict = dic
-            # print(menu_dict)
-        except:
-            menu_dict = {title.text: []}
-        info_list = [star_review.text, evaluation.text.replace(",", ""), info.text[0:index - 1],
-                     telephone_number.text,
-                     str(price_range.text)]
-        info_dict = {title.text: info_list}
-
-        if title.text in dm.check_data2(dm(), self.col3):
-            pass
-        else:
-            dm.insert_data(dm(), self.col3, info_dict)
-            dm.insert_data(dm(), self.col4, menu_dict)

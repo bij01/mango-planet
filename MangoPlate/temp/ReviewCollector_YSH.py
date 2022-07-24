@@ -11,13 +11,6 @@ class ReviewCollector:
         self.connect_db()
         self.open_browser()
         self.collect_theme_list()
-<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
-        
-=======
-        # self.insert_data(self.col1, self.link_list)
-        # self.collect_res_list()
-        # self.insert_data(self.col1, self.res_list)
->>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
 
     def open_browser(self):
         path = "c:/python/chromedriver.exe"
@@ -90,10 +83,7 @@ class ReviewCollector:
             else:
                 break
 
-<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
-    '''    
-=======
->>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
+
     def change_review_page(self):
         # btn1 맛있다, btn2 괜찮다, btn3 별로
         btn1 = self.driver.find_element(By.CSS_SELECTOR,
@@ -101,7 +91,7 @@ class ReviewCollector:
         btn2 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__OkFilterButton')
         # 별로의 개수가 없으면 넘어가지 않음
-<<<<<<< HEAD:NaverReview/ReviewCollector_YSH.py
+
         btn3 = self.driver.find_element(By.CSS_SELECTOR,'.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton') #별로
 
         review_cnt = self.driver.find_element(By.XPATH,"/html/body/main/article/div[1]/div[1]/div/section[3]/header/h2/span[4]")
@@ -110,8 +100,7 @@ class ReviewCollector:
             #btn1.click()
         else:
             pass
-    ''' 
-=======
+
         btn3 = self.driver.find_element(By.CSS_SELECTOR,
                                         '.RestaurantReviewList__FilterButton.RestaurantReviewList__NotRecommendButton')
         review_cnt = self.driver.find_element(By.XPATH,
@@ -121,7 +110,6 @@ class ReviewCollector:
         else:
             pass
 
->>>>>>> aecea0acd1ea738593597469bc72ea3fca945af6:NaverReview/ReviewCollector.py
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
