@@ -6,6 +6,7 @@ import time
 
 def collect_review(driver, url):
     # 지예성
+    driver.implicitly_wait(5)
     restaurantname = driver.find_element(By.CLASS_NAME,"restaurant_name").text
     # print(restaurantname)
 
