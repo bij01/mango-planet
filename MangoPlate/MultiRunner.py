@@ -23,7 +23,6 @@ def first_run():
 start_time = time.time()
 
 
-# first_run()  # 테마별로 분류된 링크 수집(처음 한번만 실행)
 # 식당 목록 또는 식당 정보와 리뷰 수집
 def run_thread(*args):
     # 모드(2, else), 쓰레드를 나눌 수, 시작 번호, 끝 번호
@@ -62,8 +61,10 @@ def run_thread(*args):
     else:
         pass
 
+
+# first_run()  # 테마별로 분류된 링크 수집(처음 한번만 실행)
 # 프로그램 설정
-run_thread(3, 5, 500, 510)  # 모드, 쓰레드를 나눌 수, 시작 번호, 끝 번호
+run_thread(2, 5, 0, 300)  # 모드, 쓰레드를 나눌 수, 시작 번호, 끝 번호
 
 # 프로그램 작동 시간 표시
 end_time = time.time()

@@ -12,7 +12,7 @@ from collector.infomation import collect_infomation
 
 class MainCollector:
     def __init__(self, mode, start_num, end_num):
-        self.current = None
+        self.current = 0
         self.col1, self.col2, self.col3, \
         self.col4, self.col5, self.col6 = dm.connect_db(dm())
         self.start_num = start_num
@@ -53,55 +53,51 @@ class MainCollector:
             self.repeat_crawling(self.col2)
 
     def repeat_crawling(self, col):
-        x = 0  # 현재 페이지
         count = 0  # 전체 페이지
         for _ in col.find():
             count += 1
-        for data in col.find():
-            for key, value in data.items():
-                if key == "_id":
+        linklist = dm.check_data1(dm(), col)
+        for x in range(0, len(dm.check_data1(dm(), col))):
+            if col == self.col1:
+                # 테마별 식당 링크 목록 중에 지정된 범위내 에서만 데이터 수집
+                if x not in range(self.start_num, self.end_num):
+                    # print("pass", x)
                     pass
                 else:
-                    if col == self.col1:
-                        # 테마별 식당 링크 목록 중에 지정된 범위내 에서만 데이터 수집
-                        if x not in range(self.start_num, self.end_num):
-                            # print("pass", x)
+                    print(f"식당 목록 크롤링 중.. {x}/{count}")
+                    self.collect_res_list(linklist[x])
+                    self.current = x
+            if col == self.col2:
+                # 식당 목록 중에 지정된 범위내 에서만 데이터 수집
+                if x not in range(self.start_num, self.end_num):
+                    # print("pass", x)
+                    pass
+                else:
+                    print(f"식당 정보 & 리뷰 크롤링 중.. {x}/{count}")
+                    info_dict, menu_dict = collect_infomation(self.driver, linklist[x])
+                    for k, v in info_dict.items():
+                        if k in dm.check_data2(dm(), self.col3):
+                            print(f"중복 데이터 패스 {x}, {info_dict}")
                             pass
                         else:
-                            print(f"식당 목록 크롤링 중.. {x}/{count}")
-                            self.collect_res_list(value)
-                            self.current = x
-                    if col == self.col2:
-                        # 식당 목록 중에 지정된 범위내 에서만 데이터 수집
-                        if x not in range(self.start_num, self.end_num):
-                            # print("pass", x)
+                            dm.insert_data(dm(), self.col3, info_dict)
+                            dm.insert_data(dm(), self.col4, menu_dict)
+                    info, review = collect_review(self.driver, linklist[x])
+                    for k, v in info.items():
+                        if k in dm.check_data2(dm(), self.col5):
+                            print(f"중복 데이터 패스 {x}, {info}")
                             pass
                         else:
-                            print(f"식당 정보 & 리뷰 크롤링 중.. {x}/{count}")
-                            info_dict, menu_dict = collect_infomation(self.driver, value)
-                            if list(info_dict.values())[0] in dm.check_data2(dm(), self.col3):
-                                print(f"중복 데이터 패스 {x}, {info_dict}")
-                                pass
-                            else:
-                                dm.insert_data(dm(), self.col3, info_dict)
-                                dm.insert_data(dm(), self.col4, menu_dict)
-                            info, review = collect_review(self.driver, value)
-                            if list(info.values())[0] in dm.check_data2(dm(), self.col5):
-                                print(f"중복 데이터 패스 {x}, {info}")
-                                pass
-                            else:
-                                dm.insert_data(dm(), self.col5, info)
-                                dm.insert_data(dm(), self.col6, review)
-                            self.current = x
-                    else:
-                        pass
-                    x += 1
+                            dm.insert_data(dm(), self.col5, info)
+                            dm.insert_data(dm(), self.col6, review)
+                    self.current = x
+            else:
+                pass
 
     # 1. 맛집 베스트 XX곳 목록 정보 가져오기
     # 1) 수집할 데이터: 타이틀, 타이틀링크
     # 2) 목표데이터: 300개
-    # 3) 제공 형태
-    # -> link_list = {"타이틀1":"링크주소", "타이틀2":"링크주소", "타이틀3":"링크주소" ...}
+    # -> link_list = {title:"테마이름", link:"링크주소"}
     def collect_theme_list(self):
         # 유승하
         input("팝업창 닫고 ENTER")
@@ -148,21 +144,23 @@ class MainCollector:
         # 타이틀 및 주소 딕셔너리에 담기
         while True:
             if j <= 300:
-                self.link_list[Tli_add[i]] = (hli_add[k])
+                if Tli_add[i] in dm.check_data2(dm(), self.col1):
+                    pass
+                else:
+                    self.link_list = {"title": Tli_add[i], "link": hli_add[k]}
+                    dm.insert_data(dm(), self.col1, self.link_list)
                 i += 1
                 k += 1
                 j += 1
             else:
                 break
 
-        dm.insert_data(dm(), self.col1, self.link_list)
         print("테마별 식당 리스트 수집 종료")
 
     # 2. 맛집리스트 별 식당정보 가져오기
     # 1) 수집할 데이터: 식당목록, 식당상세페이지 링크, 사진(식당이름+.jpg)
     # 2) 요구사항: 사진은 xx 맛집 베스트 폴더안에 저장
-    # 3) 제공 형태
-    # -> res_list = {"식당이름":"링크주소"}
+    # -> res_list = {name:"식당이름", link:"링크주소"}
     def collect_res_list(self, url):
         # 박종원
         self.driver.get(url)
@@ -244,7 +242,7 @@ class MainCollector:
                 if v in dm.check_data2(dm(), self.col2):
                     pass
                 else:
-                    new_dic = {k: v}
+                    new_dic = {"name": k, "link": v}
                     dm.insert_data(dm(), self.col2, new_dic)
 
 
