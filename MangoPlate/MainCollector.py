@@ -57,7 +57,7 @@ class MainCollector:
         for _ in col.find():
             count += 1
         linklist = dm.check_data1(dm(), col)
-        for x in range(0, len(dm.check_data1(dm(), col))):
+        for x in range(0, len(linklist)):
             if col == self.col1:
                 # 테마별 식당 링크 목록 중에 지정된 범위내 에서만 데이터 수집
                 if x not in range(self.start_num, self.end_num):
@@ -73,23 +73,33 @@ class MainCollector:
                     # print("pass", x)
                     pass
                 else:
-                    print(f"식당 정보 & 리뷰 크롤링 중.. {x}/{count}")
-                    info_dict, menu_dict = collect_infomation(self.driver, linklist[x])
-                    for k, v in info_dict.items():
-                        if k in dm.check_data2(dm(), self.col3):
-                            print(f"중복 데이터 패스 {x}, {info_dict}")
-                            pass
-                        else:
-                            dm.insert_data(dm(), self.col3, info_dict)
-                            dm.insert_data(dm(), self.col4, menu_dict)
-                    info, review = collect_review(self.driver, linklist[x])
-                    for k, v in info.items():
-                        if k in dm.check_data2(dm(), self.col5):
-                            print(f"중복 데이터 패스 {x}, {info}")
-                            pass
-                        else:
-                            dm.insert_data(dm(), self.col5, info)
-                            dm.insert_data(dm(), self.col6, review)
+                    print(f"식당 정보 & 댓글 크롤링 중.. {x}/{count}")
+                    # 식당 데이터 수집
+                    try:
+                        info_dict, menu_dict = collect_infomation(self.driver, linklist[x])
+                        for k, v in info_dict.items():
+                            if k == "name":
+                                if v in dm.check_data2(dm(), self.col3):
+                                    print(f"중복 데이터 패스 {x}, {v}")
+                                    pass
+                                else:
+                                    dm.insert_data(dm(), self.col3, info_dict)
+                                    dm.insert_data(dm(), self.col4, menu_dict)
+                    except:
+                        print(f"식당 데이터 수집 중 에러 {x}/{count}, 링크:{linklist[x]}")
+                    # 댓글 데이터 수집
+                    try:
+                        info, review = collect_review(self.driver, linklist[x])
+                        for k, v in info.items():
+                            if k == "name":
+                                if v in dm.check_data2(dm(), self.col3):
+                                    print(f"중복 데이터 패스 {x}, {v}")
+                                    pass
+                                else:
+                                    dm.insert_data(dm(), self.col5, info)
+                                    dm.insert_data(dm(), self.col6, review)
+                    except:
+                        print(f"댓글 데이터 수집 중 에러 {x}/{count}, 링크:{linklist[x]}")
                     self.current = x
             else:
                 pass

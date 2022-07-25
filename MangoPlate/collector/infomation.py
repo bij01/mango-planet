@@ -4,8 +4,8 @@ import time
 # 3. 식당 별 정보 가져오기
 # 1) 수집할 데이터: 식당이름, 주소, 전화번호, 음식 종류, 가격대, 메뉴, 메뉴가격
 # 2) 제공 형태
-# -> info_dict = {"식당이름":[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
-# -> menu_dict = {"식당이름":{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
+# -> info_dict = {"name:식당이름", info:[별점, 별점개수, 주소, 전화번호, 음식종류, 가격대]}
+# -> menu_dict = {"name:식당이름", menu:{"메뉴1":가격(int), "메뉴2":가격(int), "메뉴3":가격(int)}, ...]}
 def collect_infomation(driver, url):
     # 권기민
     driver.get(url)
@@ -16,13 +16,12 @@ def collect_infomation(driver, url):
     info = driver.find_element(By.XPATH,
                                     '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[1]/td')
     index = info.text.index('지')
-    # print(info.text[0:index-1])
     telephone_number = driver.find_element(By.XPATH,
                                                 '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[2]/td')
     price_range = driver.find_element(By.XPATH,
                                            '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[4]/td')
     try:
-        time.sleep(2)
+        time.sleep(1)
         menu = driver.find_element(By.CLASS_NAME, 'menu_td')
         menulist = menu.find_elements(By.CLASS_NAME, "Restaurant_Menu")
         lista = []
@@ -37,19 +36,20 @@ def collect_infomation(driver, url):
             a = y.text.replace(',', '')
             b = a.replace('원', '')
             listb.append(b)
-        # print(listb)
-
-        dic = {title.text: {}}
+        menudic = {}
         for x in range(0, len(lista)):
             k = lista[x]
             v = listb[x]
-            dic[title.text][k] = v
-        menu_dict = dic
+            menudic[k] = v
+        menu_dict = {"name": title.text, "menu": menudic}
         # print(menu_dict)
     except:
-        menu_dict = {title.text: []}
-    info_list = [star_review.text, evaluation.text.replace(",", ""), info.text[0:index - 1],
-                 telephone_number.text,
-                 str(price_range.text)]
-    info_dict = {title.text: info_list}
+        menu_dict = {"name": title.text, "menu": {}}
+    try:
+        info_list = [star_review.text, evaluation.text.replace(",", ""), info.text[0:index - 1],
+                     telephone_number.text,
+                     str(price_range.text)]
+        info_dict = {"name": title.text, "info": info_list}
+    except:
+        info_dict = {"name": title.text, "info": []}
     return info_dict, menu_dict

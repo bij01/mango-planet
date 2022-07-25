@@ -46,8 +46,8 @@
 # nlist.sort()
 # print(nlist)
 
-st = 600
-ed = 610
+st = 0
+ed = 1000
 
 target_list = []
 tlist = []

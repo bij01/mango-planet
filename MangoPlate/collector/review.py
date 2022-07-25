@@ -116,6 +116,6 @@ def collect_review(driver, url):
         except:
             # print(comment_list) #리스트에 댓글 다 쌓이고 브레이크 걸리기 전에 리스트 전체 보이는거
             break
-    review_info = {restaurantname: [newcountA, newcountB, newcountC, newcountD]}
-    review_list = {restaurantname: comment_list}
+    review_info = {"name": restaurantname, "count": [newcountA, newcountB, newcountC, newcountD]}
+    review_list = {"name": restaurantname, "comment": comment_list}
     return [review_info, review_list]

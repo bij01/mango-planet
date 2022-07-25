@@ -8,8 +8,8 @@ import numpy as np
 
 class DataManager:
     def __init__(self):
-        url = "mongodb://192.168.0.138:27017/"
-        # url = "mongodb://localhost:27017/"
+        # url = "mongodb://192.168.0.138:27017/"
+        url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
 
     # DB 연결
@@ -51,14 +51,14 @@ class DataManager:
         return link_list
 
     def check_data2(self, col):
-        db_list = []
+        name_list = []
         for data in col.find():
             for k, v in data.items():
-                if k == "_id":
-                    pass
+                if k == "name":
+                    name_list.append(v)
                 else:
-                    db_list.append(v)
-        return db_list
+                    pass
+        return name_list
 
     def drop_data(self, col):
         col.drop()
@@ -87,5 +87,8 @@ class DataManager:
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
+
+    name = dm.check_data2(col3)
+    print(name)
     # dm.drop_all()
     dm.close_db()
