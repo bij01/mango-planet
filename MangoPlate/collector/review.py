@@ -10,6 +10,7 @@ def collect_review(driver, url):
     restaurantname = driver.find_element(By.CLASS_NAME,"restaurant_name").text
     # print(restaurantname)
 
+    # 맛있다 클릭
     driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(2) > button").send_keys(Keys.ENTER)
     oldcountB, newcountB = None, 0
     # 더보기 클릭
@@ -32,7 +33,7 @@ def collect_review(driver, url):
                 # print()
         except:
             break
-
+    # 괜찮다 클릭
     driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(3) > button").send_keys(Keys.ENTER)
     oldcountC, newcountC = None, 0
     # 더보기 클릭
@@ -55,7 +56,7 @@ def collect_review(driver, url):
                 # print()
         except:
             break
-
+    # 별로 클릭
     driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(4) > button").send_keys(Keys.ENTER)
     oldcountD, newcountD = None, 0
     # 더보기 클릭
@@ -78,8 +79,11 @@ def collect_review(driver, url):
                 # print()
         except:
             break
+
+    # 전체리뷰 클릭
     driver.find_element(By.CSS_SELECTOR, "body > main > article > div.column-wrapper > div.column-contents > div > section.RestaurantReviewList > header > ul > li:nth-child(1) > button").send_keys(Keys.ENTER)
     oldcountA, newcountA = None, 0
+
     # 더보기 클릭
     while True:
         try:

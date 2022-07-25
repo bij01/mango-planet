@@ -60,6 +60,23 @@ class DataManager:
                     pass
         return name_list
 
+    def return_reply(self):
+        rlist = []
+        nlist = []
+        for data in col6.find():
+            for k, v in data.items():
+                if k == "_id":
+                    pass
+                else:
+                    rlist.append(v)
+        for x in range(0, len(rlist)):
+            if x+2 > len(rlist):
+                pass
+            else:
+                if len(rlist[x+1]) >= 100:
+                    print(rlist[x], rlist[x+1])
+        return nlist
+
     def drop_data(self, col):
         col.drop()
 
@@ -87,8 +104,7 @@ class DataManager:
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
+    dm.return_reply()
 
-    name = dm.check_data2(col3)
-    print(name)
     # dm.drop_all()
     dm.close_db()
