@@ -84,6 +84,10 @@ class MainCollector:
                                     pass
                                 else:
                                     dm.insert_data(dm(), self.col3, info_dict)
+                                if v in dm.check_data2(dm(), self.col4):
+                                    print(f"중복 데이터 패스 {x}, {v}")
+                                    pass
+                                else:
                                     dm.insert_data(dm(), self.col4, menu_dict)
                     except:
                         print(f"식당 데이터 수집 중 에러 {x}/{count}, 링크:{linklist[x]}")
@@ -92,11 +96,15 @@ class MainCollector:
                         info, review = collect_review(self.driver, linklist[x])
                         for k, v in info.items():
                             if k == "name":
-                                if v in dm.check_data2(dm(), self.col3):
+                                if v in dm.check_data2(dm(), self.col5):
                                     print(f"중복 데이터 패스 {x}, {v}")
                                     pass
                                 else:
                                     dm.insert_data(dm(), self.col5, info)
+                                if v in dm.check_data2(dm(), self.col6):
+                                    print(f"중복 데이터 패스 {x}, {v}")
+                                    pass
+                                else:
                                     dm.insert_data(dm(), self.col6, review)
                     except:
                         print(f"댓글 데이터 수집 중 에러 {x}/{count}, 링크:{linklist[x]}")

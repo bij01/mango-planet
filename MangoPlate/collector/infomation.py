@@ -9,11 +9,20 @@ import time
 def collect_infomation(driver, url):
     # 권기민
     driver.get(url)
+<<<<<<< HEAD
     driver.implicitly_wait(30)
     time.sleep(10)
+=======
+    time.sleep(5)
+    driver.implicitly_wait(30)
+>>>>>>> 6c618deff19ef568fecc02358b214036457da852
     title = driver.find_element(By.CSS_SELECTOR, '.restaurant_name')  # 식당이름
-    star_review = driver.find_element(By.XPATH,
-                                           '/html/body/main/article/div[1]/div[1]/div/section[1]/header/div[1]/span/strong')
+    try:
+        star_review = driver.find_element(By.XPATH,
+                                               '/html/body/main/article/div[1]/div[1]/div/section[1]/header/div[1]/span/strong')
+        star = star_review.text
+    except:
+        star = 0
     evaluation = driver.find_element(By.CSS_SELECTOR, '.cnt.favorite')
     info = driver.find_element(By.XPATH,
                                     '/html/body/main/article/div[1]/div[1]/div/section[1]/table/tbody/tr[1]/td')
@@ -48,7 +57,7 @@ def collect_infomation(driver, url):
     except:
         menu_dict = {"name": title.text, "menu": {}}
     try:
-        info_list = [star_review.text, evaluation.text.replace(",", ""), info.text[0:index - 1],
+        info_list = [star, evaluation.text.replace(",", ""), info.text[0:index - 1],
                      telephone_number.text,
                      str(price_range.text)]
         info_dict = {"name": title.text, "info": info_list}
