@@ -9,8 +9,8 @@ import time
 def collect_infomation(driver, url):
     # 권기민
     driver.get(url)
+    time.sleep(5)
     driver.implicitly_wait(30)
-    time.sleep(3)
     title = driver.find_element(By.CSS_SELECTOR, '.restaurant_name')  # 식당이름
     try:
         star_review = driver.find_element(By.XPATH,
