@@ -2,6 +2,8 @@ from pymongo import mongo_client
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
+from konlpy.tag import Okt
+from collections import Counter
 
 # 모든 도표는 파일로 저장
 
@@ -99,13 +101,26 @@ class DataManager:
             else:
                 if len(rlist[x+1]) >= 100:
                     #print(rlist[x], rlist[x+1])
-                    nlist.append(rlist[x])
-                    clist.append(rlist[x+1])
+                    nlist.append(rlist[x]) # 식당이름
+                    clist.append(rlist[x+1]) # 댓글수
         return nlist, clist
 
     def show_word_chart(self):
         nlist, clist = self.return_reply()
-        print(nlist[0], clist[0])
+        print(nlist, len(clist[0]))
+    
+        okt = Okt()
+        noun = okt.nouns(str(clist[0]))
+        for i,x in enumerate(noun):
+            if len(x)<2:
+                noun.pop(i)
+
+        count = Counter(noun)
+
+        noun_list = count.most_common(5)
+
+        for x in noun_list:
+            print(x)
 
 if __name__ == "__main__":
     dm = DataManager()
