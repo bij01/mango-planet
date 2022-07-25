@@ -8,8 +8,8 @@ import numpy as np
 
 class DataManager:
     def __init__(self):
-        url = "mongodb://192.168.0.138:27017/"
-        # url = "mongodb://localhost:27017/"
+        # url = "mongodb://192.168.0.138:27017/"
+        url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
 
     # DB 연결

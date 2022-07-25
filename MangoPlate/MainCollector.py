@@ -1,5 +1,6 @@
 import os
 import socket
+import time
 from urllib import request
 
 from selenium import webdriver
@@ -23,10 +24,7 @@ class MainCollector:
             pass
         else:
             # print("DATA 수집 시작")
-            try:
-                self.collect_data()
-            except:
-                pass
+            self.collect_data()
 
     def get_current_page(self):
         return self.current
@@ -67,7 +65,7 @@ class MainCollector:
                     print(f"식당 목록 크롤링 중.. {x}/{count}")
                     self.collect_res_list(linklist[x])
                     self.current = x
-            if col == self.col2:
+            elif col == self.col2:
                 # 식당 목록 중에 지정된 범위내 에서만 데이터 수집
                 if x not in range(self.start_num, self.end_num):
                     # print("pass", x)
@@ -75,39 +73,34 @@ class MainCollector:
                 else:
                     print(f"식당 정보 & 댓글 크롤링 중.. {x}/{count}")
                     # 식당 데이터 수집
-                    try:
-                        info_dict, menu_dict = collect_infomation(self.driver, linklist[x])
-                        for k, v in info_dict.items():
-                            if k == "name":
-                                if v in dm.check_data2(dm(), self.col3):
-                                    print(f"중복 데이터 패스 {x}, {v}")
-                                    pass
-                                else:
-                                    dm.insert_data(dm(), self.col3, info_dict)
-                                if v in dm.check_data2(dm(), self.col4):
-                                    print(f"중복 데이터 패스 {x}, {v}")
-                                    pass
-                                else:
-                                    dm.insert_data(dm(), self.col4, menu_dict)
-                    except:
-                        print(f"식당 데이터 수집 중 에러 {x}/{count}, 링크:{linklist[x]}")
+                    info_dict, menu_dict = collect_infomation(self.driver, linklist[x])
+                    for k, v in info_dict.copy().items():
+                        if k == "name":
+                            if v in dm.check_data2(dm(), self.col3):
+                                print(f"중복 데이터 패스 {x}, {v}")
+                                pass
+                            else:
+                                dm.insert_data(dm(), self.col3, info_dict)
+                            if v in dm.check_data2(dm(), self.col4):
+                                print(f"중복 데이터 패스 {x}, {v}")
+                                pass
+                            else:
+                                dm.insert_data(dm(), self.col4, menu_dict)
+
                     # 댓글 데이터 수집
-                    try:
-                        info, review = collect_review(self.driver, linklist[x])
-                        for k, v in info.items():
-                            if k == "name":
-                                if v in dm.check_data2(dm(), self.col5):
-                                    print(f"중복 데이터 패스 {x}, {v}")
-                                    pass
-                                else:
-                                    dm.insert_data(dm(), self.col5, info)
-                                if v in dm.check_data2(dm(), self.col6):
-                                    print(f"중복 데이터 패스 {x}, {v}")
-                                    pass
-                                else:
-                                    dm.insert_data(dm(), self.col6, review)
-                    except:
-                        print(f"댓글 데이터 수집 중 에러 {x}/{count}, 링크:{linklist[x]}")
+                    info, review = collect_review(self.driver, linklist[x])
+                    for k, v in info.copy().items():
+                        if k == "name":
+                            if v in dm.check_data2(dm(), self.col5):
+                                print(f"중복 데이터 패스 {x}, {v}")
+                                pass
+                            else:
+                                dm.insert_data(dm(), self.col5, info)
+                            if v in dm.check_data2(dm(), self.col6):
+                                print(f"중복 데이터 패스 {x}, {v}")
+                                pass
+                            else:
+                                dm.insert_data(dm(), self.col6, review)
                     self.current = x
             else:
                 pass
