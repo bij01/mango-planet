@@ -258,7 +258,7 @@ class DataManager:
             plt.title(nlist[i])
             plt.bar(x_list, y_list, width=0.5, color=colors, edgecolor='black')
             plt.savefig("imgs/chart/review/" + nlist[i] + ".png", format='png', dpi=300, facecolor="white")
-            plt.close()
+            plt.clf()
         print("차트 생성 완료")
 
 
@@ -267,10 +267,10 @@ if __name__ == "__main__":
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
 
     dm.make_folders()  # imgs 폴더 만들기(서브 폴더 포함)
-    save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
-    dm.save_price_range_chart()  # 가격별 차트 (1장)
-    dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
-    dm.save_review_chart(col5)  # 식당별 맛평가 차트 (여러장)
+    # save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
+    # dm.save_price_range_chart()  # 가격별 차트 (1장)
+    # dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
+    # dm.save_review_chart(col5)  # 식당별 맛평가 차트 (여러장)
     dm.show_word_chart()  # 댓글이 n개 이상인 식당의 댓글내용 분석 차트 (여러장)
 
     dm.close_db()

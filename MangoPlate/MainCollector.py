@@ -248,7 +248,7 @@ class MainCollector:
             dic[k] = v
             for k, v in dic.items():
                 # 중복 식당 링크일 경우 패스
-                if v in dm.check_data2(dm(), self.col2):
+                if v in dm.check_data1(dm(), self.col2):
                     pass
                 else:
                     new_dic = {"name": k, "link": v}
