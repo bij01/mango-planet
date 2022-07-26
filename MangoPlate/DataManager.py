@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from collector.longname_chart import save_longname_chart
 from matplotlib import font_manager, rc
+from konlpy.tag import Okt
+from collections import Counter
 import os
 
 # 모든 도표는 파일로 저장
@@ -95,6 +97,14 @@ class DataManager:
         self.col5.drop()
         self.col6.drop()
 
+    def make_folders(self):
+        path1 = "imgs/chart/taste/"
+        path2 = "imgs/chart/review/"
+        if not os.path.exists(path1):
+            os.makedirs(path1)
+        if not os.path.exists(path2):
+            os.makedirs(path2)
+
     # 지역별(시단위) 맛집리스트 갯수 도표(bar chart)
     def show_localres_bchart(self):
         # x 축: 지역별 식당 갯수, y축: 지역명
@@ -148,17 +158,22 @@ class DataManager:
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
     def save_review_chart(self, col):
-        pimg_path = "imgs/chart/taste/"
-        count = 0
-        print("도표 생성 중 입니다 잠시 기다려주세요")
-        if not os.path.exists(pimg_path):
-            # print("해당경로에 폴더가 존재하지 않음 : 폴더 생성")
-            os.makedirs(pimg_path)
+        totalcount = 0
         for data in col.find():
             for k, v in data.items():
                 if k == "_id":
                     pass
                 else:
+                    totalcount += 1
+        pimg_path = "imgs/chart/taste/"
+        count = 0
+        print("도표 생성 중 입니다 잠시만 기다려주세요")
+        for data in col.find():
+            for k, v in data.items():
+                if k == "_id":
+                    pass
+                else:
+                    print(f"도표 생성 중.. {count + 1}/{totalcount}")
                     count += 1
                     if k == "name":
                         img_name = v
@@ -204,15 +219,39 @@ class DataManager:
 
     def show_word_chart(self):
         nlist, clist = self.return_reply()
-        print(nlist[0], clist[0])
+        print("차트 생성 중 입니다 잠시만 기다려주세요")
+        for i in range(0, len(nlist)):
+            print(f"차트 생성 중.. {i+1}/{len(nlist)+1}")
+            # print(i,"시작")
+            okt = Okt()
+            noun = okt.nouns(str(clist[i]))
+            for j, m in enumerate(noun):
+                if len(m) < 2:
+                    noun.pop(j)
+
+            count = Counter(noun)
+            noun_list = count.most_common(5)
+            colors = ['red', 'orange', 'purple', 'blue', 'green']
+            x_list = []  # 검색된 글자
+            y_list = []  # 숫자
+            for x, y in noun_list:
+                x_list.append(x)
+                y_list.append(y)
+            plt.title(nlist[i])
+            plt.bar(x_list, y_list, width=0.5, color=colors, edgecolor='black')
+            plt.savefig("imgs/chart/review/" + nlist[i] + ".png", format='png', dpi=300, facecolor="white")
+            plt.clf()
+        print("차트 생성 완료")
 
 
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
-    # dm.show_word_chart()
-    # save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
-    # dm.save_price_range_chart()  # 가격별 차트 (1장)
-    # dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
+    dm.make_folders()  # imgs 폴더 만들기(서브 폴더 포함)
+    save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
+    dm.save_price_range_chart()  # 가격별 차트 (1장)
+    dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
     dm.save_review_chart(col5)  # 식당별 맛평가 차트 (여러장)
+    dm.show_word_chart()  # 댓글이 n개 이상인 식당의 댓글내용 분석 차트 (여러장)
+
     dm.close_db()
