@@ -9,7 +9,6 @@ from DataManager import DataManager as dm
 from collector.review import collect_review
 from collector.infomation import collect_infomation
 
-
 class MainCollector:
     def __init__(self, mode, start_num, end_num):
         self.current = 0
