@@ -9,11 +9,16 @@ import time
 def collect_infomation(driver, url):
     # 권기민
     driver.get(url)
+<<<<<<< HEAD
     time.sleep(10)
     time.sleep(10)
     driver.implicitly_wait(30)
     time.sleep(10)
     time.sleep(5)
+=======
+    driver.implicitly_wait(30)
+    time.sleep(10)
+>>>>>>> a41cbaf5d1de7f5f35c8eb9df73c446f071377d2
     driver.implicitly_wait(30)
     title = driver.find_element(By.CSS_SELECTOR, '.restaurant_name')  # 식당이름
     try:
