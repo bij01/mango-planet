@@ -71,3 +71,5 @@ def save_longname_chart():
     plt.title("식당 이름 길이")
     plt.tight_layout()
     plt.savefig('imgs/chart/longname_top5.png', dpi=300, facecolor="#FFFFFF")
+    plt.close()
+

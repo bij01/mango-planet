@@ -126,7 +126,7 @@ class DataManager:
         #print(s)
         plt.barh(y, s)
         plt.savefig(path+"count_local.png", format='png', dpi=300, facecolor="white")
-        # plt.show()
+        plt.close()
 
     # 가격별 가게 분포도
     def save_price_range_chart(self):
@@ -154,7 +154,7 @@ class DataManager:
         #print(s)
         plt.bar(y, s)
         plt.savefig(path+"price_range.png", format='png', dpi=300, facecolor="white")
-        # plt.show()
+        plt.close()
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
     def save_review_chart(self, col):
@@ -191,7 +191,7 @@ class DataManager:
                             autotext.set_fontsize('14')
                         plt.title(title, fontsize=20, pad=15)
                         plt.savefig(pimg_path+img_name+".png", format='png', dpi=300, facecolor="white")
-                        plt.clf()
+                        plt.close()
         print("도표 생성 완료")
 
     def close_db(self):
@@ -221,7 +221,7 @@ class DataManager:
         nlist, clist = self.return_reply()
         print("차트 생성 중 입니다 잠시만 기다려주세요")
         for i in range(0, len(nlist)):
-            print(f"차트 생성 중.. {i+1}/{len(nlist)+1}")
+            print(f"차트 생성 중.. {i+1}/{len(nlist)}")
             # print(i,"시작")
             okt = Okt()
             noun = okt.nouns(str(clist[i]))
@@ -240,13 +240,14 @@ class DataManager:
             plt.title(nlist[i])
             plt.bar(x_list, y_list, width=0.5, color=colors, edgecolor='black')
             plt.savefig("imgs/chart/review/" + nlist[i] + ".png", format='png', dpi=300, facecolor="white")
-            plt.clf()
+            plt.close()
         print("차트 생성 완료")
 
 
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
+    
     dm.make_folders()  # imgs 폴더 만들기(서브 폴더 포함)
     save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
     dm.save_price_range_chart()  # 가격별 차트 (1장)
