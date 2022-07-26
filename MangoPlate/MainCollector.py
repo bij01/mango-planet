@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from DataManager import DataManager as dm
 from collector.review import collect_review
-from collector.infomation import collect_infomation
+from collector.information import collect_infomation
 
 
 class MainCollector:
