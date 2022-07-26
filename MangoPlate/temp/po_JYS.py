@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from konlpy.tag import Okt
 from collections import Counter
+from matplotlib import font_manager, rc
 
 # 모든 도표는 파일로 저장
 
@@ -13,7 +14,9 @@ class DataManager:
         url = "mongodb://192.168.0.138:27017/"
         # url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
-
+        font_path = "C:/Windows/Fonts/Hancom Gothic Regular.ttf"
+        font = font_manager.FontProperties(fname=font_path).get_name()
+        rc('font', family=font)
     # DB 연결
     def connect_db(self):
         db = self.mgclient["restaurants"]
@@ -99,7 +102,7 @@ class DataManager:
             if x+2 > len(rlist):
                 pass
             else:
-                if len(rlist[x+1]) >= 100:
+                if len(rlist[x+1]) >= 150:
                     #print(rlist[x], rlist[x+1])
                     nlist.append(rlist[x]) # 식당이름
                     clist.append(rlist[x+1]) # 댓글수
@@ -107,20 +110,32 @@ class DataManager:
 
     def show_word_chart(self):
         nlist, clist = self.return_reply()
-        print(nlist, len(clist[0]))
-    
-        okt = Okt()
-        noun = okt.nouns(str(clist[0]))
-        for i,x in enumerate(noun):
-            if len(x)<2:
-                noun.pop(i)
+        print(len(nlist))
 
-        count = Counter(noun)
+        for i in range(0, len(nlist)):
+            #print(i,"시작")
+            okt = Okt()
+            noun = okt.nouns(str(clist[i]))
+            for j,m in enumerate(noun):
+                if len(m)<2:
+                    noun.pop(j)
 
-        noun_list = count.most_common(5)
+            count = Counter(noun)
+            noun_list = count.most_common(5)
 
-        for x in noun_list:
-            print(x)
+            #print(i,"중간")
+            x_list = [] # 검색된 글자
+            y_list = [] # 숫자
+            for x, y in noun_list:
+                x_list.append(x)
+                y_list.append(y)
+            #print(x_list) #검사
+            #print(y_list) #검사
+            plt.title(nlist[i])
+            plt.bar(x_list, y_list, width=0.5) #color=
+            plt.savefig("C:\\Users\\Kosmo\\Desktop\\JJ\\"+nlist[i]+".png", format='png', dpi=300, facecolor="white")
+            plt.clf()
+            #plt.show()   
 
 if __name__ == "__main__":
     dm = DataManager()
