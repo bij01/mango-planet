@@ -1,12 +1,14 @@
-from pymongo import mongo_client
-from matplotlib import pyplot as plt
-import pandas as pd
-import numpy as np
-from collector.longname_chart import save_longname_chart
-from matplotlib import font_manager, rc
-from konlpy.tag import Okt
-from collections import Counter
 import os
+from collections import Counter
+
+import seaborn as sns
+from konlpy.tag import Okt
+from matplotlib import font_manager, rc
+from matplotlib import pyplot as plt
+from pymongo import mongo_client
+
+from collector.longname_chart import save_longname_chart
+
 
 # 모든 도표는 파일로 저장
 
@@ -15,12 +17,13 @@ class DataManager:
     def __init__(self):
         url = "mongodb://192.168.0.138:27017/"
         # url = "mongodb://localhost:27017/"
+
         self.mgclient = mongo_client.MongoClient(url)
         # 도표 한글 깨짐 방지
         font_path = "C:/windows/Fonts/malgun.ttf"
         font_manager.FontProperties(fname=font_path).get_name()
         rc('font', family='Malgun Gothic', size=10)
-        
+
     # DB 연결
     def connect_db(self):
         db = self.mgclient["restaurants"]
@@ -79,11 +82,11 @@ class DataManager:
                 else:
                     rlist.append(v)
         for x in range(0, len(rlist)):
-            if x+2 > len(rlist):
+            if x + 2 > len(rlist):
                 pass
             else:
-                if len(rlist[x+1]) >= 100:
-                    print(rlist[x], rlist[x+1])
+                if len(rlist[x + 1]) >= 100:
+                    print(rlist[x], rlist[x + 1])
         return nlist
 
     def drop_data(self, col):
@@ -110,29 +113,40 @@ class DataManager:
         # x 축: 지역별 식당 갯수, y축: 지역명
         path = "imgs/chart/"
         data_c = list()
+        # colors = ["red", "green", "blue", "yellow", "pink", "orange", "cyan", "hotpink", "black", "magenta"]
         for x in self.col3.find():
             data = x['info']
             a = data[2]
             b = a.split()
             c = b[0]
             data_c.append(c)
-            #print(c)
+            # print(c)
+
         s = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        y = [ '서울특별시', '인천광역시', '광주광역시', '대전광역시', '부산광역시', '울산광역시', '대구광역시', '제주특별자치도', '경기도', '충청남도', '충청북도', '전라남도', '전라북도', '경상북도', '경상남도', '강원도']
+        y = ['서울특별시', '경기도', '제주특별자치도', '강원도', '부산광역시', '전라남도', '인천광역시', '대전광역시', '경상북도', '충청남도', '경상남도', '광주광역시',
+             '대구광역시', '전라북도', '충청북도', '울산광역시']
+
         for x in data_c:
-            for j in range(0,16):
+            for j in range(0, 16):
                 if x == y[j]:
-                    s[j] = s[j]+1
-        #print(s)
-        plt.barh(y, s)
-        plt.savefig(path+"count_local.png", format='png', dpi=300, facecolor="white")
+                    s[j] = s[j] + 1
+        # print(s)
+
+        s_squared = list()
+        for i in range(0, len(s)):
+            s_squared.append(s[i] ** (1 / 2))
+        colors = sns.color_palette('autumn', len(y))
+        plt.barh(y, s_squared, color=colors)
+        plt.title('지역별 맛집 분포도', loc='center')
+        plt.savefig(path + "count_local.png", format='png', dpi=300, facecolor="white")
         plt.close()
 
     # 가격별 가게 분포도
     def save_price_range_chart(self):
         path = "imgs/chart/"
         data_a = list()
-        exlist = ["주차공간없음", "무료주차", "유료주차","감자송편","식당","12:00","11:00","멍게젓비빔밥","선어사시미","발렛","특수부위","한우특수부위(160g)"]
+        exlist = ["주차공간없음", "무료주차", "유료주차", "감자송편", "식당", "12:00", "11:00", "멍게젓비빔밥", "선어사시미", "발렛", "특수부위",
+                  "한우특수부위(160g)"]
         for x in self.col3.find():
             data = x['info']
             price_range = data[4]
@@ -144,16 +158,18 @@ class DataManager:
                     pass
                 else:
                     data_a.append(price)
-                    #print(price)
+                    # print(price)
         s = [0, 0, 0, 0, 0]
-        y = ["만원", "만원-2만원", "2만원-3만원", "3만원-4만원", "4만원"]
+        y = ["만원", "만원-2만원", "2만원-3만원", "4만원", "3만원-4만원"]
         for x in data_a:
-            for j in range(0,5):
+            for j in range(0, 5):
                 if x == y[j]:
-                    s[j] = s[j]+1
-        #print(s)
-        plt.bar(y, s)
-        plt.savefig(path+"price_range.png", format='png', dpi=300, facecolor="white")
+                    s[j] = s[j] + 1
+
+        colors = sns.color_palette('autumn', len(y))
+        plt.bar(y, s, color=colors, width=0.6)
+        plt.title('맛집리스트 별 평균 가격대', loc='center')
+        plt.savefig(path + "price_range.png", format='png', dpi=300, facecolor="white")
         plt.close()
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
@@ -182,15 +198,17 @@ class DataManager:
                         ratio = [v[1], v[2], v[3]]
                         labels = ['맛있다', '괜찮다', '별로']
                         colors = ['#ff9999', '#ffc000', '#8fd9b6']
-                        wedgeprops={'width': 0.7, 'edgecolor': 'w', 'linewidth': 4}
+                        wedgeprops = {'width': 0.7, 'edgecolor': 'w', 'linewidth': 4}
                         explode = [0, 0.10, 0.07]
-                        _, _, autotexts = plt.pie(ratio, autopct='%.1f%%', shadow=True, startangle=260, pctdistance=1.2, counterclock=False, colors=colors, wedgeprops=wedgeprops, explode=explode, radius=1.0)
+                        _, _, autotexts = plt.pie(ratio, autopct='%.1f%%', shadow=True, startangle=260, pctdistance=1.2,
+                                                  counterclock=False, colors=colors, wedgeprops=wedgeprops,
+                                                  explode=explode, radius=1.0)
                         plt.legend(labels, loc='center left', bbox_to_anchor=(1, 1))
                         for autotext in autotexts:
                             autotext.set_color('black')
                             autotext.set_fontsize('14')
                         plt.title(title, fontsize=20, pad=15)
-                        plt.savefig(pimg_path+img_name+".png", format='png', dpi=300, facecolor="white")
+                        plt.savefig(pimg_path + img_name + ".png", format='png', dpi=300, facecolor="white")
                         plt.close()
         print("도표 생성 완료")
 
@@ -208,20 +226,20 @@ class DataManager:
                 else:
                     rlist.append(v)
         for x in range(0, len(rlist)):
-            if x+2 > len(rlist):
+            if x + 2 > len(rlist):
                 pass
             else:
-                if len(rlist[x+1]) >= 100:
-                    #print(rlist[x], rlist[x+1])
+                if len(rlist[x + 1]) >= 100:
+                    # print(rlist[x], rlist[x+1])
                     nlist.append(rlist[x])
-                    clist.append(rlist[x+1])
+                    clist.append(rlist[x + 1])
         return nlist, clist
 
     def show_word_chart(self):
         nlist, clist = self.return_reply()
         print("차트 생성 중 입니다 잠시만 기다려주세요")
         for i in range(0, len(nlist)):
-            print(f"차트 생성 중.. {i+1}/{len(nlist)}")
+            print(f"차트 생성 중.. {i + 1}/{len(nlist)}")
             # print(i,"시작")
             okt = Okt()
             noun = okt.nouns(str(clist[i]))
@@ -247,7 +265,7 @@ class DataManager:
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
-    
+
     dm.make_folders()  # imgs 폴더 만들기(서브 폴더 포함)
     save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
     dm.save_price_range_chart()  # 가격별 차트 (1장)
