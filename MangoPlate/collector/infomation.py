@@ -9,9 +9,21 @@ import time
 def collect_infomation(driver, url):
     # 권기민
     driver.get(url)
+<<<<<<< HEAD
     driver.implicitly_wait(30)
+=======
+    
+    time.sleep(10)
     time.sleep(10)
     driver.implicitly_wait(30)
+    time.sleep(10)
+    time.sleep(5)
+
+    driver.implicitly_wait(30)
+    time.sleep(10)
+
+    driver.implicitly_wait(30)
+>>>>>>> a18af59d938f530d0259aceddee1d5aee5e4903d
     title = driver.find_element(By.CSS_SELECTOR, '.restaurant_name')  # 식당이름
     try:
         star_review = driver.find_element(By.XPATH,

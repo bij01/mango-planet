@@ -3,7 +3,6 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
 from matplotlib import font_manager, rc
-import time
 import os
 # 모든 도표는 파일로 저장
 
@@ -13,7 +12,10 @@ class DataManager:
         url = "mongodb://192.168.0.138:27017/"
         # url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
-        
+        # 도표 한글 깨짐 방지
+        font_path = "C:/Windows/Fonts/MalangmalangB.TTF"
+        font = font_manager.FontProperties(fname=font_path).get_name()
+        rc('font', family=font)
     # DB 연결
     def connect_db(self):
         db = self.mgclient["restaurants"]
@@ -81,9 +83,6 @@ class DataManager:
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
     def show_review_pchart(self,col):
         pimg_path = "C:/Users/Kosmo/Desktop/Test/"
-        font_path = "C:/Windows/Fonts/NGULIM.TTF"
-        font = font_manager.FontProperties(fname=font_path).get_name()
-        rc('font', family=font)
         count = 0
         for data in col.find():
             for k, v in data.items():
@@ -104,9 +103,13 @@ class DataManager:
                         for autotext in autotexts:
                             autotext.set_color('black')
                             autotext.set_fontsize('14')
-                        plt.savefig(pimg_path+img_name+".png",format='png',dpi=300, facecolor="white")
-                        plt.clf()
-                        #plt.show()              
+                        if not os.path.exists(pimg_path):
+                            print("")
+                            os.makedirs(pimg_path)
+                        else:
+                            plt.savefig(pimg_path+img_name+".png",format='png',dpi=300, facecolor="white")
+                            plt.clf()
+                                      
         #def close_db(self):
         #    self.mgclient.close()
 
