@@ -11,13 +11,13 @@ import os
 
 class DataManager:
     def __init__(self):
-        # url = "mongodb://192.168.0.138:27017/"
-        url = "mongodb://localhost:27017/"
+        url = "mongodb://192.168.0.138:27017/"
+        # url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
         # 도표 한글 깨짐 방지
-        font_path = "C:/Windows/Fonts/MalangmalangB.TTF"
-        font = font_manager.FontProperties(fname=font_path).get_name()
-        rc('font', family=font)
+        font_path = "C:/windows/Fonts/malgun.ttf"
+        font_manager.FontProperties(fname=font_path).get_name()
+        rc('font', family='Malgun Gothic', size=10)
         
     # DB 연결
     def connect_db(self):
@@ -98,7 +98,7 @@ class DataManager:
     # 지역별(시단위) 맛집리스트 갯수 도표(bar chart)
     def show_localres_bchart(self):
         # x 축: 지역별 식당 갯수, y축: 지역명
-        path = "C:/Users/Kosmo/Desktop/Test/"
+        path = "imgs/chart/"
         data_c = list()
         for x in self.col3.find():
             data = x['info']
@@ -107,21 +107,20 @@ class DataManager:
             c = b[0]
             data_c.append(c)
             #print(c)
-        s = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        y = [ '서울특별시','인천광역시', '광주광역시', '대전광역시', '부산광역시', '울산광역시', '대구광역시', '제주특별자치도', '경기도', '충청남도', '충청북도', '전라남도', '전라북도', '경상북도', '경상남도', '강원도']
+        s = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        y = [ '서울특별시', '인천광역시', '광주광역시', '대전광역시', '부산광역시', '울산광역시', '대구광역시', '제주특별자치도', '경기도', '충청남도', '충청북도', '전라남도', '전라북도', '경상북도', '경상남도', '강원도']
         for x in data_c:
             for j in range(0,16):
                 if x == y[j]:
                     s[j] = s[j]+1
         #print(s)
-        plt.barh(y,s)
-        plt.savefig(path+"test.png",format='png',dpi=300, facecolor="white")
-        plt.show()
-        print()
-        
-    def show_price_range(self):
-        # 가격별 가게 분포도
-        path = "C:/Users/Kosmo/Desktop/Test/"
+        plt.barh(y, s)
+        plt.savefig(path+"count_local.png", format='png', dpi=300, facecolor="white")
+        # plt.show()
+
+    # 가격별 가게 분포도
+    def save_price_range_chart(self):
+        path = "imgs/chart/"
         data_a = list()
         exlist = ["주차공간없음", "무료주차", "유료주차","감자송편","식당","12:00","11:00","멍게젓비빔밥","선어사시미","발렛","특수부위","한우특수부위(160g)"]
         for x in self.col3.find():
@@ -136,22 +135,25 @@ class DataManager:
                 else:
                     data_a.append(price)
                     #print(price)
-        s = [0,0,0,0,0]
-        y = ["만원","만원-2만원","2만원-3만원","3만원-4만원","4만원"]
+        s = [0, 0, 0, 0, 0]
+        y = ["만원", "만원-2만원", "2만원-3만원", "3만원-4만원", "4만원"]
         for x in data_a:
             for j in range(0,5):
                 if x == y[j]:
                     s[j] = s[j]+1
         #print(s)
-        plt.bar(y,s)
-        plt.savefig(path+"test.png",format='png',dpi=300, facecolor="white")
-        plt.show()
-        print()
+        plt.bar(y, s)
+        plt.savefig(path+"price_range.png", format='png', dpi=300, facecolor="white")
+        # plt.show()
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
-    def show_review_pchart(self, col):
+    def save_review_chart(self, col):
         pimg_path = "imgs/chart/taste/"
         count = 0
+        print("도표 생성 중 입니다 잠시 기다려주세요")
+        if not os.path.exists(pimg_path):
+            # print("해당경로에 폴더가 존재하지 않음 : 폴더 생성")
+            os.makedirs(pimg_path)
         for data in col.find():
             for k, v in data.items():
                 if k == "_id":
@@ -160,23 +162,22 @@ class DataManager:
                     count += 1
                     if k == "name":
                         img_name = v
+                        title = v
                     if k == "count":
                         ratio = [v[1], v[2], v[3]]
                         labels = ['맛있다', '괜찮다', '별로']
                         colors = ['#ff9999', '#ffc000', '#8fd9b6']
                         wedgeprops={'width': 0.7, 'edgecolor': 'w', 'linewidth': 4}
                         explode = [0, 0.10, 0.07]
-                        _,_, autotexts = plt.pie(ratio, autopct='%.1f%%',shadow=True, startangle=260, pctdistance=1.2, counterclock=False, colors=colors, wedgeprops=wedgeprops, explode=explode, radius=1.0)
-                        plt.legend(labels, loc='center left', bbox_to_anchor=(0.9,0.9))
+                        _, _, autotexts = plt.pie(ratio, autopct='%.1f%%', shadow=True, startangle=260, pctdistance=1.2, counterclock=False, colors=colors, wedgeprops=wedgeprops, explode=explode, radius=1.0)
+                        plt.legend(labels, loc='center left', bbox_to_anchor=(1, 1))
                         for autotext in autotexts:
                             autotext.set_color('black')
                             autotext.set_fontsize('14')
-                        if not os.path.exists(pimg_path):
-                            print("해당경로에 폴더가 존재하지 않음 : 폴더 생성")
-                            os.makedirs(pimg_path)
-                        else:
-                            plt.savefig(pimg_path+img_name+".png", format='png', dpi=300, facecolor="white")
-                            plt.clf()
+                        plt.title(title, fontsize=20, pad=15)
+                        plt.savefig(pimg_path+img_name+".png", format='png', dpi=300, facecolor="white")
+                        plt.clf()
+        print("도표 생성 완료")
 
     def close_db(self):
         self.mgclient.close()
@@ -210,9 +211,8 @@ if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
     # dm.show_word_chart()
-    dm.show_word_chart()
-    dm.show_review_pchart(col5)
-    # dm.check_data(col6)
-    save_longname_chart()  # 이름이 긴 식당 TOP5
-    # dm.drop_all()
+    # save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
+    # dm.save_price_range_chart()  # 가격별 차트 (1장)
+    # dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
+    dm.save_review_chart(col5)  # 식당별 맛평가 차트 (여러장)
     dm.close_db()
