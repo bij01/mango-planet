@@ -14,12 +14,24 @@ def collect_infomation(driver, url):
 =======
 <<<<<<< HEAD
     driver.implicitly_wait(30)
-    time.sleep(10)
 =======
+<<<<<<< HEAD
     time.sleep(5)
 >>>>>>> ec3614542c0f2f8150a25fcdad49c3ba9ea0895c
+=======
+    
+    time.sleep(10)
+    time.sleep(10)
+>>>>>>> 57d61a74f78a71ba527e85251271093799ba68a9
     driver.implicitly_wait(30)
->>>>>>> 6c618deff19ef568fecc02358b214036457da852
+    time.sleep(10)
+    time.sleep(5)
+
+    driver.implicitly_wait(30)
+    time.sleep(10)
+
+    driver.implicitly_wait(30)
+>>>>>>> a18af59d938f530d0259aceddee1d5aee5e4903d
     title = driver.find_element(By.CSS_SELECTOR, '.restaurant_name')  # 식당이름
     try:
         star_review = driver.find_element(By.XPATH,
