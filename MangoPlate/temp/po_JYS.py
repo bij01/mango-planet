@@ -102,7 +102,7 @@ class DataManager:
             if x+2 > len(rlist):
                 pass
             else:
-                if len(rlist[x+1]) >= 100:
+                if len(rlist[x+1]) >= 150:
                     #print(rlist[x], rlist[x+1])
                     nlist.append(rlist[x]) # 식당이름
                     clist.append(rlist[x+1]) # 댓글수
@@ -110,29 +110,32 @@ class DataManager:
 
     def show_word_chart(self):
         nlist, clist = self.return_reply()
-        print(nlist[0], len(clist[0]))
-    
-        okt = Okt()
-        noun = okt.nouns(str(clist[0]))
-        for i,x in enumerate(noun):
-            if len(x)<2:
-                noun.pop(i)
+        print(len(nlist))
 
-        count = Counter(noun)
+        for i in range(0, len(nlist)):
+            #print(i,"시작")
+            okt = Okt()
+            noun = okt.nouns(str(clist[i]))
+            for j,m in enumerate(noun):
+                if len(m)<2:
+                    noun.pop(j)
 
-        noun_list = count.most_common(5)
+            count = Counter(noun)
+            noun_list = count.most_common(5)
 
-       
-        x_list = [] # 검색된 글자
-        y_list = [] # 숫자
-        for x, y in noun_list:
-            x_list.append(x)
-            y_list.append(y)
-        #print(x_list) #검사
-        #print(y_list) #검사
-        plt.bar(x_list, y_list)
-        plt.savefig("C:\\Users\\Kosmo\\Desktop\\JJ\\test.png", format='png', dpi=300, facecolor="white")
-        #plt.show()   
+            #print(i,"중간")
+            x_list = [] # 검색된 글자
+            y_list = [] # 숫자
+            for x, y in noun_list:
+                x_list.append(x)
+                y_list.append(y)
+            #print(x_list) #검사
+            #print(y_list) #검사
+            plt.title(nlist[i])
+            plt.bar(x_list, y_list, width=0.5) #color=
+            plt.savefig("C:\\Users\\Kosmo\\Desktop\\JJ\\"+nlist[i]+".png", format='png', dpi=300, facecolor="white")
+            plt.clf()
+            #plt.show()   
 
 if __name__ == "__main__":
     dm = DataManager()
