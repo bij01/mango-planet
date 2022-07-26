@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from konlpy.tag import Okt
 from collections import Counter
+from matplotlib import font_manager, rc
 
 # 모든 도표는 파일로 저장
 
@@ -13,7 +14,9 @@ class DataManager:
         url = "mongodb://192.168.0.138:27017/"
         # url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
-
+        font_path = "C:/Windows/Fonts/Hancom Gothic Regular.ttf"
+        font = font_manager.FontProperties(fname=font_path).get_name()
+        rc('font', family=font)
     # DB 연결
     def connect_db(self):
         db = self.mgclient["restaurants"]
@@ -107,7 +110,7 @@ class DataManager:
 
     def show_word_chart(self):
         nlist, clist = self.return_reply()
-        print(nlist, len(clist[0]))
+        print(nlist[0], len(clist[0]))
     
         okt = Okt()
         noun = okt.nouns(str(clist[0]))
@@ -119,8 +122,17 @@ class DataManager:
 
         noun_list = count.most_common(5)
 
-        for x in noun_list:
-            print(x)
+       
+        x_list = [] # 검색된 글자
+        y_list = [] # 숫자
+        for x, y in noun_list:
+            x_list.append(x)
+            y_list.append(y)
+        #print(x_list) #검사
+        #print(y_list) #검사
+        plt.bar(x_list, y_list)
+        plt.savefig("C:\\Users\\Kosmo\\Desktop\\JJ\\test.png", format='png', dpi=300, facecolor="white")
+        #plt.show()   
 
 if __name__ == "__main__":
     dm = DataManager()
