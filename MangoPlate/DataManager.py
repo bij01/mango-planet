@@ -1,18 +1,22 @@
+from cProfile import label
+from itertools import cycle
+from tkinter import S
 from pymongo import mongo_client
 from matplotlib import pyplot as plt
+from matplotlib import font_manager, rc
 import pandas as pd
 import numpy as np
 from collector.longname_chart import save_longname_chart
-from matplotlib import font_manager, rc
 import os
+import seaborn as sns
 
 # 모든 도표는 파일로 저장
 
 
 class DataManager:
     def __init__(self):
-        # url = "mongodb://192.168.0.138:27017/"
-        url = "mongodb://localhost:27017/"
+        url = "mongodb://192.168.0.138:27017/"
+        #url = "mongodb://localhost:27017/"
         self.mgclient = mongo_client.MongoClient(url)
         # 도표 한글 깨짐 방지
         font_path = "C:/Windows/Fonts/MalangmalangB.TTF"
@@ -83,6 +87,7 @@ class DataManager:
         # x 축: 지역별 식당 갯수, y축: 지역명
         path = "C:/Users/Kosmo/Desktop/Test/"
         data_c = list()
+        #colors = ["red", "green", "blue", "yellow", "pink", "orange", "cyan", "hotpink", "black", "magenta"]
         for x in self.col3.find():
             data = x['info']
             a = data[2]
@@ -91,16 +96,20 @@ class DataManager:
             data_c.append(c)
             #print(c)
         s = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        y = [ '서울특별시','인천광역시', '광주광역시', '대전광역시', '부산광역시', '울산광역시', '대구광역시', '제주특별자치도', '경기도', '충청남도', '충청북도', '전라남도', '전라북도', '경상북도', '경상남도', '강원도']
+        y = [ '서울특별시','경기도','제주특별자치도','강원도','부산광역시','전라남도','인천광역시','대전광역시','경상북도','충청남도','경상남도','광주광역시','대구광역시','전라북도','충청북도','울산광역시']
         for x in data_c:
             for j in range(0,16):
                 if x == y[j]:
                     s[j] = s[j]+1
         #print(s)
-        plt.barh(y,s)
-        plt.savefig(path+"test.png",format='png',dpi=300, facecolor="white")
-        plt.show()
-        print()
+        s_squared = list()
+        for i in range(0, len(s)):
+            s_squared.append(s[i]**(1/2))
+        colors=sns.color_palette('autumn',len(y))
+        plt.barh(y,s_squared, color = colors )
+        plt.savefig(path+"localres_bchart.png",format='png',dpi=300, facecolor="white")
+        plt.title('지역별 맛집 분포도', loc='center')
+        
         
     def show_price_range(self):
         # 가격별 가게 분포도
@@ -120,16 +129,19 @@ class DataManager:
                     data_a.append(price)
                     #print(price)
         s = [0,0,0,0,0]
-        y = ["만원","만원-2만원","2만원-3만원","3만원-4만원","4만원"]
+        y = ["만원","만원-2만원","2만원-3만원","4만원","3만원-4만원"]
         for x in data_a:
             for j in range(0,5):
                 if x == y[j]:
                     s[j] = s[j]+1
-        #print(s)
-        plt.bar(y,s)
-        plt.savefig(path+"test.png",format='png',dpi=300, facecolor="white")
-        plt.show()
-        print()
+                    
+        colors=sns.color_palette('autumn',len(y))
+        plt.bar(y,s,color=colors, width =0.6)
+        plt.savefig(path+"price_range.png",format='png',dpi=300, facecolor="white")
+        plt.title('맛집리스트 별 평균 가격대', loc='center')
+        plt.xlabel('평균 가격대', labelpad = 10)
+        plt.ylabel('가격에 속하는 맛집 갯수', labelpad=10)
+        
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
     def show_review_pchart(self, col):
@@ -194,6 +206,8 @@ if __name__ == "__main__":
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
     # dm.show_word_chart()
     dm.show_word_chart()
+    dm.show_localres_bchart()
+    dm.show_price_range()
     dm.show_review_pchart(col5)
     # dm.check_data(col6)
     save_longname_chart()  # 이름이 긴 식당 TOP5
