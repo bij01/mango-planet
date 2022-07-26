@@ -1,11 +1,9 @@
 import os
 import socket
-import time
-from urllib import request
 
+from urllib import request
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
 from DataManager import DataManager as dm
 from collector.review import collect_review
 from collector.infomation import collect_infomation

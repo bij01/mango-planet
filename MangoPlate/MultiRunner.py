@@ -99,8 +99,6 @@ def show_runtime():
 # 프로그램 설정
 run_thread(3, 5, 0, 1000)  # 모드, 쓰레드를 나눌 수, 시작 번호, 끝 번호
 
-
 # 프로그램 작동 시간 출력
 end_time = time.time()
 show_runtime()
-
