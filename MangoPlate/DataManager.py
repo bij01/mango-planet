@@ -83,12 +83,35 @@ class DataManager:
     def close_db(self):
         self.mgclient.close()
 
+    def return_reply(self):
+        rlist = []
+        nlist = []
+        clist = []
+        for data in col6.find():
+            for k, v in data.items():
+                if k == "_id":
+                    pass
+                else:
+                    rlist.append(v)
+        for x in range(0, len(rlist)):
+            if x+2 > len(rlist):
+                pass
+            else:
+                if len(rlist[x+1]) >= 100:
+                    #print(rlist[x], rlist[x+1])
+                    nlist.append(rlist[x])
+                    clist.append(rlist[x+1])
+        return nlist, clist
+
+    def show_word_chart(self):
+        nlist, clist = self.return_reply()
+        print(nlist[0], clist[0])
 
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
-
-    name = dm.check_data2(col3)
-    print(name)
+    dm.show_word_chart()
+    # dm.check_data(col6)
+    
     # dm.drop_all()
     dm.close_db()
