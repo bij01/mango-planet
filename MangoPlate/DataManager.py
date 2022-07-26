@@ -137,6 +137,7 @@ class DataManager:
             s_squared.append(s[i] ** (1 / 2))
         colors = sns.color_palette('autumn', len(y))
         plt.barh(y, s_squared, color=colors)
+        plt.xticks([0, 20, 49], [0, s[1], s[0]])
         plt.title('지역별 맛집 분포도', loc='center')
         plt.savefig(path + "count_local.png", format='png', dpi=300, facecolor="white")
         plt.close()
@@ -269,8 +270,8 @@ if __name__ == "__main__":
     dm.make_folders()  # imgs 폴더 만들기(서브 폴더 포함)
     # save_longname_chart()  # 이름이 긴 식당 TOP5 (1장)
     # dm.save_price_range_chart()  # 가격별 차트 (1장)
-    # dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
+    dm.show_localres_bchart()  # 지역별 식당 분포 차트 (1장)
     # dm.save_review_chart(col5)  # 식당별 맛평가 차트 (여러장)
-    dm.show_word_chart()  # 댓글이 n개 이상인 식당의 댓글내용 분석 차트 (여러장)
+    # dm.show_word_chart()  # 댓글이 n개 이상인 식당의 댓글내용 분석 차트 (여러장)
 
     dm.close_db()
