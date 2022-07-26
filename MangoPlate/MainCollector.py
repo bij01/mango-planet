@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from DataManager import DataManager as dm
 from collector.review import collect_review
-from collector.infomation import collect_infomation
+from collector.information import collect_infomation
 
 
 class MainCollector:
@@ -248,7 +248,7 @@ class MainCollector:
             dic[k] = v
             for k, v in dic.items():
                 # 중복 식당 링크일 경우 패스
-                if v in dm.check_data2(dm(), self.col2):
+                if v in dm.check_data1(dm(), self.col2):
                     pass
                 else:
                     new_dic = {"name": k, "link": v}
