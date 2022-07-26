@@ -26,12 +26,12 @@ def collect_review(driver, url):
 
     # 리뷰 카운트 리턴
     def count_review(num):
-        if review_count[int(num)-1] == 0:
-            return 0
+        oldcount, newcount = -1, 0
+        if int(review_count[int(num)-1]) == 0:
+            return newcount
         else:
             # 댓글 세부창 클릭
             driver.find_element(By.CSS_SELECTOR, css_url(num)).send_keys(Keys.ENTER)
-            oldcount, newcount = -1, 0
             # 더보기 클릭
             while True:
                 try:
@@ -50,9 +50,13 @@ def collect_review(driver, url):
                     break
             return newcount
 
-    review_info = {"name": name, "count": [count_review("1"), count_review("2"), count_review("3"), count_review("4")]}
-    # 전체 리뷰 보기
-    count_review("1")
+    good = count_review("2")
+    soso = count_review("3")
+    notgood = count_review("4")
+    total = count_review("1")
+
+    review_info = {"name": name, "count": [total, good, soso, notgood]}
+    # 전체 리뷰 수집
     i = 1
     comment_list = []
     while True:
@@ -83,7 +87,7 @@ def test():
     driver.implicitly_wait(3)
     url = "https://www.mangoplate.com/top_lists"
     driver.get(url)
-    test_url = "https://www.mangoplate.com/restaurants/n4N6o-A4zE"
+    test_url = "https://www.mangoplate.com/restaurants/23yYn1YCt-HR"
     rinfo, rlist = collect_review(driver, test_url)
     print(rinfo)
 
