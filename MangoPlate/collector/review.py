@@ -74,7 +74,6 @@ def collect_review(driver, url):
             driver.switch_to.window(driver.window_handles[0])
             i += 1
         except:
-            # print(comment_list)  # 리스트에 댓글 다 쌓이고 브레이크 걸리기 전에 리스트 전체 보이는거
             break
 
     review_list = {"name": name, "comment": comment_list}
