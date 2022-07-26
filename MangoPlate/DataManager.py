@@ -2,6 +2,7 @@ from pymongo import mongo_client
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
+from collector.longname_chart import save_longname_chart
 
 # 모든 도표는 파일로 저장
 
@@ -107,11 +108,12 @@ class DataManager:
         nlist, clist = self.return_reply()
         print(nlist[0], clist[0])
 
+
 if __name__ == "__main__":
     dm = DataManager()
     col1, col2, col3, col4, col5, col6 = dm.connect_db()
-    dm.show_word_chart()
+    # dm.show_word_chart()
     # dm.check_data(col6)
-    
+    save_longname_chart()  # 이름이 긴 식당 TOP5
     # dm.drop_all()
     dm.close_db()
