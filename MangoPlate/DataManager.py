@@ -97,7 +97,55 @@ class DataManager:
 
     # 지역별(시단위) 맛집리스트 갯수 도표(bar chart)
     def show_localres_bchart(self):
-        # x 축: 지역명, y축: 지역별 식당 갯수
+        # x 축: 지역별 식당 갯수, y축: 지역명
+        path = "C:/Users/Kosmo/Desktop/Test/"
+        data_c = list()
+        for x in self.col3.find():
+            data = x['info']
+            a = data[2]
+            b = a.split()
+            c = b[0]
+            data_c.append(c)
+            #print(c)
+        s = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        y = [ '서울특별시','인천광역시', '광주광역시', '대전광역시', '부산광역시', '울산광역시', '대구광역시', '제주특별자치도', '경기도', '충청남도', '충청북도', '전라남도', '전라북도', '경상북도', '경상남도', '강원도']
+        for x in data_c:
+            for j in range(0,16):
+                if x == y[j]:
+                    s[j] = s[j]+1
+        #print(s)
+        plt.barh(y,s)
+        plt.savefig(path+"test.png",format='png',dpi=300, facecolor="white")
+        plt.show()
+        print()
+        
+    def show_price_range(self):
+        # 가격별 가게 분포도
+        path = "C:/Users/Kosmo/Desktop/Test/"
+        data_a = list()
+        exlist = ["주차공간없음", "무료주차", "유료주차","감자송편","식당","12:00","11:00","멍게젓비빔밥","선어사시미","발렛","특수부위","한우특수부위(160g)"]
+        for x in self.col3.find():
+            data = x['info']
+            price_range = data[4]
+            if len(price_range) == 0:
+                pass
+            else:
+                price = price_range.split()[0]
+                if price in exlist:
+                    pass
+                else:
+                    data_a.append(price)
+                    #print(price)
+        s = [0,0,0,0,0]
+        y = ["만원","만원-2만원","2만원-3만원","3만원-4만원","4만원"]
+        for x in data_a:
+            for j in range(0,5):
+                if x == y[j]:
+                    s[j] = s[j]+1
+        #print(s)
+        plt.bar(y,s)
+        plt.savefig(path+"test.png",format='png',dpi=300, facecolor="white")
+        plt.show()
         print()
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
