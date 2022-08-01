@@ -10,21 +10,26 @@ def connect_db():
 
 def check_data(col):
     count = 0
-    for data in col.find():
+    data_list = []
+    for data in col.find().sort("_id"):
         for k, v in data.items():
             if k == "_id":
                 pass
             else:
                 count += 1
                 # print(k, v)
+                data_list.append({k: v})
+    return data_list, count
     # print(count)
 
 
 def index(request):
     db, client = connect_db()
     col = db["link_list"]
-    check_data(col)
+    data_list, count = check_data(col)
+    print(data_list[0]['title'])
     context = {
-
+        'data_list': data_list,
+        'count': count,
     }
     return render(request, "index.html", context)
