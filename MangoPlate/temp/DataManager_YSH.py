@@ -28,57 +28,6 @@ class DataManager:
         # print("DB 연결 성공")
         return self.col1, self.col2, self.col3, self.col4, self.col5, self.col6
 
-    # Collection(table) 데이터 삽입
-    def insert_data(self, col, dic):
-        col.insert_one(dic)
-
-    # Collection 데이터 확인
-    def check_data(self, col):
-        count = 0
-        for data in col.find():
-            for k, v in data.items():
-                if k == "_id":
-                    pass
-                else:
-                    count += 1
-                    print(k, v)
-        print(count)
-
-    def check_data1(self, col):
-        link_list = []
-        for data in col.find():
-            for k, v in data.items():
-                if k == "link":
-                    link_list.append(v)
-                else:
-                    pass
-        return link_list
-
-    def check_data2(self, col):
-        name_list = []
-        for data in col.find():
-            for k, v in data.items():
-                if k == "name":
-                    name_list.append(v)
-                else:
-                    pass
-        return name_list
-    
-    def drop_data(self, col):
-        col.drop()
-
-    def drop_all(self):
-        # self.col1.drop()
-        self.col2.drop()
-        self.col3.drop()
-        self.col4.drop()
-        self.col5.drop()
-        self.col6.drop()
-
-    # 지역별(시단위) 맛집리스트 갯수 도표(bar chart)
-    def show_localres_bchart(self):
-        # x 축: 지역명, y축: 지역별 식당 갯수
-        print()
 
     # 식당별 맛평가(맛있다, 괜찮다, 별로) 원형 도표(pie chart)
     def show_review_pchart(self,col):
