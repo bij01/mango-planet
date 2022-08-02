@@ -25,11 +25,17 @@ def check_data(col):
 
 def index(request):
     db, client = connect_db()
-    col = db["link_list"]
+    col = db["info_list"]
     data_list, count = check_data(col)
-    print(data_list[0]['title'])
     context = {
         'data_list': data_list,
         'count': count,
     }
     return render(request, "index.html", context)
+
+
+def detail(request):
+    context = {
+
+    }
+    return render(request, "detail.html", context)
