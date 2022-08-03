@@ -4,47 +4,122 @@
     .image {
         height: 100%;
         width: 100%;
-        max-height: 200px;
+        max-height: 250px;
     }
     .info {
-        max-width: 800px;
+        max-width: 1000px;
+        min-height: 650px;
+        place-content: center;
     }
+
     canvas { 
-        height: 250px;
-        max-height: 250px;
+        height: 180px;
+        max-height: 180px;
     }
     .card-text, badge {
         font-size: 0.8rem;
         margin-bottom: 10px;
+    }
+    .center {
+        text-align: -webkit-center;
+    }
+    .left {
+        text-align: -webkit-left;
+    }
+    .point {
+        font-size: 2rem;
+        color: darkorange;
+    }
+    .favorite {
+        background-image: url("/static/imgs/favorite0.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 30px;
+        height: 30px !important;
+    }
+    
+    .favorite-clicked {
+        background-image: url("/static/imgs/favorite1.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 30px;
+        height: 30px !important;
+    }
+    
+    .title {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        max-width: 800px;
+    }
+    .chart {
+        margin-top: 10% !important;
+    }
+    
+    .img-middle {
+        place-self: center;
+    }
+    .res-img {
+        background-image: url("/static/imgs/restaurant/생각보다맛있는집.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        min-height: 280px;
+        background-clip: content-box;
     }
 </style>
 {% endblock %}
 {% block main %}
 {% load static %}
 <div class="container-fluid px-4">
-    <h1 class="mt-4">생각보다맛있는집</h1>
-    <ol class="breadcrumb m-0 mx-2 mb-2">
-        <li class="breadcrumb-item active">Restaurant Information</li>
-    </ol>
-    <div class="row col-sm-8 col-md-12 m-0 mb-5 info px-2 border border-secondary">
-        <div class="col-md-4 px-0">
-          <img src="{% static '/imgs/restaurant/생각보다맛있는집.jpg' %}" class="img rounded-start image" alt="...">
-        </div>
-        <div class="col-md-4 px-3">
+    <h3 class="title my-4"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>생각보다맛있는집 <span class="point mx-2">4.0</span>
+        
+    </h3>
+
+    <div class="row col-sm-8 col-md-12 m-0 info border border-secondary">
+        <div class="row px-0">
+            <div class="col-md-4 p-2 res-img">
+
+            </div>
+            <div class="col-md-8 px-2 py-2 left">
             <p class="badge bg-secondary mb-1">주소</p> 
             <p class="card-text">서울특별시 관악구 관악로 152 서량빌딩</p>
             <p class="badge bg-secondary mb-1">가격대</p> 
             <p class="card-text">만원미만</p>
             <p class="badge bg-secondary mb-1">전화</p> 
             <p class="card-text text-muted">02-877-5717</p>
+            <p class="badge bg-secondary mb-1">메뉴</p> 
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="card-text">아메리카노</span>
+                    <span class="card-text text-muted">10,000원</span>
+                </div>
+                <div class="col-md-4">
+                    <span class="card-text">하노이쌀국수 (M)</span>
+                    <span class="card-text text-muted">8,000원</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="card-text">하노이쌀국수 (M)</span> 
+                    <span class="card-text text-muted">15,000원</span>
+                </div>
+                <div class="col-md-4">
+                    <span class="card-text">하노이쌀국수 (M)</span>
+                    <span class="card-text text-muted">9,000원</span>
+                </div>
+                <div class="col-md-4">
+                    <span class="card-text">하노이쌀국수 (M)</span>
+                    <span class="card-text text-muted">5,000원</span>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4 px-0">
-            <img src="{% static '/imgs/map.png' %}" class="img rounded-start image" alt="...">
         </div>
-    </div>
-    <div class="row col-sm-8 col-md-12 m-0 mb-5 info">
-        <div class="col-md-6">
-            <div class="card mb-4">
+        <div class="row px-0">
+            <div class="col-md-4 px-2 chart">
+                <img src="{% static '/imgs/map.png' %}" class="img rounded-start image" alt="...">
+            </div>
+            <div class="col-md-4 px-2 chart">
+            <div class="card">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-1"></i>
                     Bar Chart Example
@@ -52,18 +127,22 @@
                 <div class="card-body"><canvas id="myBarChart" width="100%" height="100%"></canvas></div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-pie me-1"></i>
-                    Pie Chart Example
+            </div>
+            <div class="col-md-4 px-2 chart">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-pie me-1"></i>
+                        Pie Chart Example
+                    </div>
+                    <div class="card-body"><canvas id="myPieChart" width="100%" height="100%"></canvas></div>
+                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div>
-                <div class="card-body"><canvas id="myPieChart" width="100%" height="100%"></canvas></div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
         </div>
     </div>
+
+    
+
 </div>
 {% endblock %}
 {% block script %}
@@ -72,4 +151,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 <script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
 <script src="{% static 'assets/demo/chart-pie-demo.js' %}"></script>
+<script>
+    function click_favorite(e){
+        if ($(e).hasClass('favorite')){
+            $(e).removeClass('favorite');
+            $(e).addClass('favorite-clicked');
+        } else {
+            $(e).removeClass('favorite-clicked');
+            $(e).addClass('favorite');
+        }
+    }
+</script>
 {% endblock %}
