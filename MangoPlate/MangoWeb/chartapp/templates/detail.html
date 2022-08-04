@@ -23,30 +23,32 @@
         background-repeat: no-repeat;
         width: 250px !important;
         height: 530px !important;
-    }
-    
-    .con-center {
-        place-content: center;
+        margin-top: 5% !important;
     }
 
     canvas { 
         height: 180px;
         max-height: 180px;
     }
+    
     .card-text, badge {
         font-size: 0.8rem;
         margin-bottom: 10px;
     }
+    
     .center {
         text-align: -webkit-center;
     }
+    
     .left {
         text-align: -webkit-left;
     }
+    
     .point {
         font-size: 2rem;
         color: darkorange;
     }
+    
     .favorite {
         background-image: url("/static/imgs/favorite0.png");
         background-size: cover;
@@ -69,6 +71,7 @@
         justify-content: flex-start;
         max-width: 800px;
     }
+    
     .chart {
         margin-top: 5% !important;
     }
@@ -76,6 +79,7 @@
     .img-middle {
         place-self: center;
     }
+    
     .res-img {
         background-image: url("/static/imgs/restaurant/생각보다맛있는집.jpg");
         background-size: cover;
@@ -104,13 +108,14 @@
         }
     }
 </style>
+<title>망고플래닛 - 식당정보</title>
 {% endblock %}
 {% block main %}
 {% load static %}
 <div class="container-fluid px-4">
     
-    <div class="row con-center my-4">
-        <div class="row col-sm-10 col-md-9 m-0 info border border-secondary">
+    <div class="row con-center my-2">
+        <div class="row col-sm-10 col-md-9 m-0 info">
             <h3 class="title my-4"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>생각보다맛있는집 <span class="point mx-2">4.0</span>
         
             </h3>
@@ -178,7 +183,7 @@
                 </div>
             </div>
         </div>
-        <div class="row col-sm-0 col-md-2 ms-5 border border-secondary banner">
+        <div class="row col-sm-0 col-md-2 ms-5 banner">
         </div>
     </div>
 

@@ -39,3 +39,10 @@ def detail(request):
 
     }
     return render(request, "detail.html", context)
+
+
+def favors(request):
+    context = {
+        
+    }
+    return render(request, "favors.html", context)
