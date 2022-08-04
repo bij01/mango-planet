@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("chartapp.urls"), name="chartapp"),
+    path('member/', include("member.urls"), name="chartapp"),
 ]
