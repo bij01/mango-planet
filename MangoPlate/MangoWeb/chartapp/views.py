@@ -18,7 +18,7 @@ def check_data(col):
             else:
                 count += 1
                 # print(k, v)
-                data_list.append({k: v})
+                # data_list.append({k: v})
     return data_list, count
     # print(count)
 
