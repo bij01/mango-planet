@@ -2,23 +2,58 @@
 <html lang="en">
     <head>
         {% load static %}
+        <style type="text/css">
+            html {
+                height: 100vh;
+            }
+            body {
+                height: 100vh;
+            }
+            .topbg {
+                background-color: #0f5836 !important;
+            }
+            .menubg {
+                background-color: #416049 !important;
+            }
+            .footbg {
+                background-color: #0d3a25 !important;
+            }
+            .sub-title {
+                font-size: 1rem;
+                margin-left: 10px;
+                color: gray;
+            }
+            .con-center {
+                place-content: center;
+            }
+            .card-height {
+                max-height: 120px !important;
+            }
+            @media(max-width:768px){
+                .card-height {
+                    max-height: 400px !important;
+                }
+            }
+            @media(max-width:576px){
+                
+            }
+        </style>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         {% block head %}
-        <title>망고플래닛</title>
+        <title>망고플래닛 - 인덱스</title>
         {% endblock %}
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="{% static '/css/styles.css' %}" rel="stylesheet" />
-        <link href="{% static '/css/index.css' %}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark topbg">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="{% url 'chart:index' %}"><span><img class="me-3 mb-1" src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24">망고플래닛</span></a>
+            <a class="navbar-brand ps-3" href="{% url 'index' %}"><span><img class="me-3 mb-1" src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24">망고 플래닛</span></a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -33,7 +68,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'chart:favors' %}">즐겨찾기</a></li>
+                        <li><a class="dropdown-item" href="{% url 'favors' %}">즐겨찾기</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="{% url 'member:login' %}">로그인</a></li>
                     </ul>
@@ -46,16 +81,16 @@
                     <div class="sb-sidenav-menu menubg">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">list</div>
-                            <a class="nav-link enlarge" href="{% url 'chart:index' %}">
+                            <a class="nav-link" href="{% url 'index' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 식당목록
                             </a>
-                            <a class="nav-link enlarge" href="{% url 'chart:detail' %}">
+                            <a class="nav-link" href="{% url 'detail' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 식당정보(임시)
                             </a>
                             <div class="sb-sidenav-menu-heading">Member Only</div>
-                            <a class="nav-link enlarge" href="{% url 'chart:favors' %}">
+                            <a class="nav-link" href="{% url 'favors' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 즐겨찾기
                             </a>
@@ -75,17 +110,17 @@
                             <div class="row col-md-12 m-0">
                                 <h3 class="mt-4 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
                                 <div class="row g-3 m-0 mb-3">
-                                    {% for i in '01234567'|make_list %}
+                                    {% for name, addr in data_list %}
                                     <div class="col-6">
                                         <div class="row p-0 mx-0 border card-height">
                                             <div class="col-md-4 px-0">
                                                 <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid rounded-start card-height" alt="..." style="height:100%">
                                             </div>
-                                            <div class="col-md-8">
+                                            <div class="col-md-8">             
                                                 <div class="card-body px-2 py-1 align-middle">
                                                     <h5 class="card-title m-0 pt-2 pb-1
-                                                               ">Card title</h5>
-                                                    <p class="card-text py-1">This is a wider card with supporting text</p>
+                                                               ">{{name}}</h5>
+                                                    <p class="card-text py-1">{{addr}}</p>
                                                 </div>
                                             </div>
                                         </div>
