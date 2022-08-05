@@ -11,16 +11,13 @@ def connect_db():
 def check_data(col):
     count = 0
     data_list = []
+
     for data in col.find().sort("_id"):
-        for k, v in data.items():
-            if k == "_id":
-                pass
-            else:
-                count += 1
-                # print(k, v)
-                # data_list.append({k: v})
+        name = data.get("name")
+        addr = data.get("info")[2]
+        data_list.append({"name": name, "addr": addr})
+        count += 1
     return data_list, count
-    # print(count)
 
 
 def index(request):

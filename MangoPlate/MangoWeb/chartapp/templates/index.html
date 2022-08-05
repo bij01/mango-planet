@@ -29,6 +29,10 @@
             .card-height {
                 max-height: 120px !important;
             }
+            .enlarge:hover {
+                font-size: large;
+                font-weight: bold;
+            }
             @media(max-width:768px){
                 .card-height {
                     max-height: 400px !important;
@@ -44,7 +48,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         {% block head %}
-        <title>망고플래닛 - 인덱스</title>
+        <title>망고플래닛</title>
         {% endblock %}
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="{% static '/css/styles.css' %}" rel="stylesheet" />
@@ -53,7 +57,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark topbg">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="{% url 'index' %}"><span><img class="me-3 mb-1" src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24">망고 플래닛</span></a>
+            <a class="navbar-brand ps-3" href="{% url 'chart:index' %}"><span><img class="me-3 mb-1" src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24">망고플래닛</span></a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -68,7 +72,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'favors' %}">즐겨찾기</a></li>
+                        <li><a class="dropdown-item" href="{% url 'chart:favors' %}">즐겨찾기</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="{% url 'member:register' %}">로그인</a></li>
                     </ul>
@@ -81,16 +85,16 @@
                     <div class="sb-sidenav-menu menubg">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">list</div>
-                            <a class="nav-link" href="{% url 'index' %}">
+                            <a class="nav-link enlarge" href="{% url 'chart:index' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 식당목록
                             </a>
-                            <a class="nav-link" href="{% url 'detail' %}">
+                            <a class="nav-link enlarge" href="{% url 'chart:detail' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 식당정보(임시)
                             </a>
                             <div class="sb-sidenav-menu-heading">Member Only</div>
-                            <a class="nav-link" href="{% url 'favors' %}">
+                            <a class="nav-link enlarge" href="{% url 'chart:favors' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 즐겨찾기
                             </a>

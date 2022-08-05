@@ -11,7 +11,11 @@ def register(request):
             email = form.cleaned_data['email']
             pwd = form.cleaned_data['pwd']
             print(name, email, pwd)
-            return HttpResponseRedirect('/')
+            pwd2 = request.POST["password2"]
+            print(pwd2)
+            if pwd == pwd2:
+                print("가입 승인")
+                return HttpResponseRedirect('/')
     else:
         form = RegisterForm()
     return render(request, "register.html", {'form': form})
