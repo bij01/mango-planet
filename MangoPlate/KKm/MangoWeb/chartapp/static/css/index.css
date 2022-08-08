@@ -1,0 +1,43 @@
+<style type="text/css">
+    html {
+        height: 100vh;
+    }
+    body {
+        height: 100vh;
+    }
+    .topbg {
+        background-color: #0f5836 !important;
+    }
+    .menubg {
+        background-color: #416049 !important;
+    }
+    .footbg {
+        background-color: #0d3a25 !important;
+    }
+    .sub-title {
+        font-size: 1rem;
+        margin-left: 10px;
+        color: gray;
+    }
+    .con-center {
+        place-content: center;
+    }
+    .card-height {
+        max-height: 120px !important;
+    }
+    .enlarge:hover {
+        font-size: large;
+        font-weight: bold;
+    }
+    .sb-sidenav-toggled #layoutSidenav #layoutSidenav_content:before {
+        opacity: 0.6 !important;
+    }
+    @media(max-width:768px){
+        .card-height {
+            max-height: 400px !important;
+        }
+    }
+    @media(max-width:576px){
+
+    }
+</style>
