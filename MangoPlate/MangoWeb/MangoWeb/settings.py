@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chartapp.apps.ChartappConfig',
     'member.apps.MemberConfig',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

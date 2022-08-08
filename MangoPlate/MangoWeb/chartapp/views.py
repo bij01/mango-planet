@@ -7,6 +7,8 @@ def connect_db():
     db = client['restaurants']
     return db, client
 
+def test(request):
+    return render(request, "test.html")
 
 def check_data(col):
     count = 0
@@ -57,9 +59,13 @@ def index(request):
 
 def detail(request):
     db, client = connect_db()
+    res_name = "왕스덕"
     col6 = db["review_info_list"]
     col7 = db["location_list"]
     data_list, count, review_rate = check_data2(col6, col7)
+
+    menu_list = db["menu_list"].find_one({"name": res_name})["menu"]
+
     context = {
         'data_list1': data_list[0]["Y"],
         'data_list2': data_list[0]["X"],
@@ -67,6 +73,7 @@ def detail(request):
         'review_rate2': review_rate[2]["S"],
         'review_rate3': review_rate[2]["B"],
         'res_name': data_list[0]["name"],
+        'menu_list': menu_list,
     }
     return render(request, 'detail.html', context)
 
