@@ -10,10 +10,18 @@
         {% block head %}
         <title>망고플래닛</title>
         {% endblock %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="{% static '/css/styles.css' %}" rel="stylesheet" />
         <link href="{% static '/css/index.css' %}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <style>
+            * {
+              font-family: 'Do Hyeon', sans-serif;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark topbg">
@@ -33,9 +41,15 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'chart:favors' %}">즐겨찾기</a></li>
+                        {% if request.session.email %}
                         <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="{% url 'chart:favors' %}">즐겨찾기</a></li>
+                        <li><a class="dropdown-item" href="{% url 'member:logout' %}">로그아웃</a></li>
+                        {% else %}
                         <li><a class="dropdown-item" href="{% url 'member:login' %}">로그인</a></li>
+                        {% endif %}
+                        
+                        
                     </ul>
                 </li>
             </ul>
@@ -62,8 +76,13 @@
                         </div>
                     </div>
                     <div class="sb-sidenav-footer footbg">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        <div class="small">
+                        {% if request.session.email %}
+                        환영합니다 {{ request.session.name }} 님
+                        {{ request.session.email}}
+                        {% else %}
+                        {% endif %}
+                        </div>
                     </div>
                 </nav>
             </div>
