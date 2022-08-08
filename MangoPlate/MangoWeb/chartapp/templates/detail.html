@@ -19,16 +19,16 @@
     .banner {
         min-height: 530px;
         background-image: url("/static/imgs/banner1.png");
-        background-size: cover;
+        background-size: contain;
         background-repeat: no-repeat;
-        width: 250px !important;
+        width: 230px !important;
         height: 530px !important;
         margin-top: 5% !important;
     }
 
     canvas { 
-        height: 180px;
-        max-height: 180px;
+        height: 200px;
+        max-height: 240px;
     }
     
     .card-text, badge {
@@ -81,11 +81,16 @@
     }
     
     .res-img {
-        background-image: url("/static/imgs/restaurant/생각보다맛있는집.jpg");
+        background-image: url("/static/imgs/restaurant/미영이네식당.jpg")
+            , url("/static/imgs/no-image.png");
         background-size: cover;
         background-repeat: no-repeat;
         min-height: 280px;
         background-clip: content-box;
+        border-radius: 13px;
+    }
+    .map {
+        min-height: 255px;
     }
     @media(max-width:768px){
         .info {
@@ -113,72 +118,58 @@
 {% block main %}
 {% load static %}
 <div class="container-fluid px-4">
-    
+
     <div class="row con-center my-2">
         <div class="row col-sm-10 col-md-9 m-0 info">
-            <h3 class="title my-4"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>생각보다맛있는집 <span class="point mx-2">4.0</span>
-        
+            <h3 class="title my-2"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>{{ name }}<span class="point mx-2">{{ star }}</span>
             </h3>
             <div class="row px-0">
                 <div class="col-md-4 p-2 res-img">
-
                 </div>
+                
                 <div class="col-md-8 px-2 py-2 left">
                 <p class="badge bg-secondary mb-1">주소</p> 
-                <p class="card-text">서울특별시 관악구 관악로 152 서량빌딩</p>
+                <p class="card-text">{{ addr }}</p>
                 <p class="badge bg-secondary mb-1">가격대</p> 
-                <p class="card-text">만원미만</p>
+                <p class="card-text">{{ price }}</p>
                 <p class="badge bg-secondary mb-1">전화</p> 
-                <p class="card-text text-muted">02-877-5717</p>
+                <p class="card-text text-muted">{{ tel }}</p>
                 <p class="badge bg-secondary mb-1">메뉴</p> 
                 <div class="row">
+                    {% load humanize %}
+                    {% for menu, price in menu_list.items %}
                     <div class="col-md-4">
-                        <span class="card-text">아메리카노</span>
-                        <span class="card-text text-muted">10,000원</span>
+                        <span class="card-text">{{ menu }}</span>
+                        <span class="card-text text-muted">{{ price|intcomma }}원</span>
                     </div>
-                    <div class="col-md-4">
-                        <span class="card-text">하노이쌀국수 (M)</span>
-                        <span class="card-text text-muted">8,000원</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <span class="card-text">하노이쌀국수 (M)</span> 
-                        <span class="card-text text-muted">15,000원</span>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="card-text">하노이쌀국수 (M)</span>
-                        <span class="card-text text-muted">9,000원</span>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="card-text">하노이쌀국수 (M)</span>
-                        <span class="card-text text-muted">5,000원</span>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             </div>
             <div class="row px-0">
                 <div class="col-md-4 px-2 chart">
-                    <img src="{% static '/imgs/map.png' %}" class="img rounded-start image" alt="...">
+                    <div id="map" class="map border rounded"><canvas id ="mymap" width=100% height=100%></canvas></div>
                 </div>
                 <div class="col-md-4 px-2 chart">
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-chart-bar me-1"></i>
-                        Bar Chart Example
+                        인기 단어 TOP5
                     </div>
-                    <div class="card-body"><canvas id="myBarChart" width="100%" height="100%"></canvas></div>
-                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                    <div class="card-body">
+                        <canvas id="myBarChart" width="100%" height="100%"></canvas>
+                    </div>
                 </div>
                 </div>
                 <div class="col-md-4 px-2 chart">
                     <div class="card">
                         <div class="card-header">
                             <i class="fas fa-chart-pie me-1"></i>
-                            Pie Chart Example
+                            좋아요 비율
                         </div>
-                        <div class="card-body"><canvas id="myPieChart" width="100%" height="100%"></canvas></div>
-                        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                        <div class="card-body">
+                            <canvas id="myPieChart" width="100%" height="100%"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -187,7 +178,7 @@
         </div>
     </div>
 
-    
+
 
 </div>
 {% endblock %}
@@ -196,10 +187,9 @@
 <script src="{% static '/js/scripts.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
 <script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
-<script src="{% static 'assets/demo/chart-pie-demo.js' %}"></script>
 <script>
     // window.addEventListener('resize', change_size);
-    
+
     function change_size(){
         $('.banner').attr('style', 'height:' + $('.info').innerHeight() +'px !important');
     }
@@ -212,5 +202,38 @@
             $(e).addClass('favorite');
         }
     }
+</script>
+<script>
+Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+
+var G = {{ review_rate1 }}
+var S = {{ review_rate2 }}
+var B = {{ review_rate3 }}
+var ctx = document.getElementById("myPieChart");
+var myPieChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: ["맛있다", "괜찮다", "별로"],
+    datasets: [{
+      data: [G,S,B],
+      backgroundColor: ['#f85a44', '#ffc107', '#007bff' ],
+    }],
+  },
+});
+</script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f2a8bbc9cc398b24e54b7af1fb65329b"></script>
+<script>
+    var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng({{ data_list1 }}, {{ data_list2 }}),
+        level: 2
+    }
+    var map = new kakao.maps.Map(container, options);
+    var markerPosiotion = new kakao.maps.LatLng({{ data_list1 }},{{ data_list2 }});
+    var marker = new kakao.maps.Marker({
+        position: markerPosiotion
+    })
+    marker.setMap(map);
 </script>
 {% endblock %}

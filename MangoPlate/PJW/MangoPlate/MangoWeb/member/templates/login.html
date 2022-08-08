@@ -210,10 +210,7 @@
                 font-size: 14px;
               }
         
-              .wrapper {
-                background: #39459b;
-                border: 10px solid #95c6db;
-              }
+
         
               .form-container {
                 width: 100%;
@@ -228,8 +225,7 @@
     </head>
     <body>
         <div class="wrapper">
-            <div class="form-container">
-              
+            <div class="form-container" >
                 <form name="f" action="{% url "member:login_ok" %}" method="POST">
                   {% csrf_token %}
                     <h3>Durian&nbsp;Plate</h3>
@@ -244,12 +240,16 @@
                         <span>Password</span>
                         <span class="border"></span>
                       </div>
+                      <div>
+                        <button type="submit" onclick="location.href='{% url "member:login_ok" %}'">로&nbsp;그&nbsp;인</button>
+                      </div>
                       
-                      <button type="submit" onclick="location.href='{% url "member:login_ok" %}'">로&nbsp;그&nbsp;인</button>
-                      <button type="submit1" onclick="location.href='{% url "member:register"%}'">가&nbsp;입&nbsp;하&nbsp;기</button>
-                      <button type="submit" onclick="location.href='{% url "index" %}'">취&nbsp;&nbsp;&nbsp;소</button>
+                        
+                     
                     </form>
+                    <button type="submit1" onclick="location.href='{% url "member:register"%}'">가&nbsp;입&nbsp;하&nbsp;기</button>
                   </div>
+                
                 </div>
               
         
