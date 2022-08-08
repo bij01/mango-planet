@@ -8,6 +8,7 @@ from .forms import RegisterForm
 from django.contrib import auth
 from django.template import loader
 
+
 def login(request):
     return render(request, "login.html")
 
@@ -68,11 +69,20 @@ def register(request):
                 
                 if Member.objects.filter(email=request.POST['email']).exists():  
                     print("이메일중복")
-                    return render(request, "login.html")
+                    message = "1"
+                    context = {
+                        "msg": message,
+                    }
+                
+                    return render(request, "register.html", context)
                 else:
                     user = Member(name=name, email=email, pwd=pwd, rdate=DateTime)
                     user.save()
-                    return render(request, "login.html")
+                    # 여기 추가함
+                    request.session['email'] = email
+                    request.session['name'] = name
+                    
+                    return render(request, "register_ok.html")
                 # try:
                 #     Member.objects.get(primarykey=email)
                 #     print('email', '이미 가입된 이메일입니다.')
@@ -83,3 +93,5 @@ def register(request):
         form = RegisterForm()
     return render(request, "register.html", {'form': form})
 
+def register_ok(request):
+    return render(request, "register_ok.html")
