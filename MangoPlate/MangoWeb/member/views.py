@@ -2,8 +2,10 @@ from django.shortcuts import render, HttpResponseRedirect
 from .forms import RegisterForm
 from django.contrib import auth
 
+
 def login(request):
     return render(request, "login.html")
+
 
 def register(request):
     if request.method == "POST":
@@ -14,7 +16,11 @@ def register(request):
             pwd = form.cleaned_data['pwd']
             pwd2 = request.POST["password2"]
             if pwd == pwd2:
+<<<<<<< HEAD
                 print(name, email, pwd)
+=======
+                # print(name, email, pwd)
+>>>>>>> d3f78f4e68b609f8ce984cf6aee60c090b54ad61
                 return HttpResponseRedirect('/')
     else:
         form = RegisterForm()
