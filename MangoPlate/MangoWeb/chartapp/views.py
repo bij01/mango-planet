@@ -74,6 +74,10 @@ def index(request):
 
 
 def detail(request):
+    res_name = request.GET.get("res_name")
+    request.session["res_name"] = res_name
+    print(res_name)
+
     db, client = connect_db()
     res_name = "왕스덕"
     col1 = db["info_list"]
