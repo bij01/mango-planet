@@ -73,13 +73,13 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def detail(request):
+def detail(request, name):
     res_name = request.GET.get("res_name")
     request.session["res_name"] = res_name
     print(res_name)
 
     db, client = connect_db()
-    res_name = "왕스덕"
+    res_name = name
     col1 = db["info_list"]
     col2 = db["menu_list"]
     location, review_rate = check_data2(res_name)

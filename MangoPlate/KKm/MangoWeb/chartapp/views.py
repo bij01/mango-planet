@@ -15,7 +15,7 @@ def check_data(col):
     for data in col.find().sort("_id"):
         name = data.get("name")
         addr = data.get("info")[2]
-        data_list.append({"name": name, "addr": addr})
+        data_list.append([name, addr])
         count += 1
     return data_list, count
 
@@ -37,10 +37,10 @@ def index(request):
     db, client = connect_db()
     col = db["info_list"]
     col2 = db["menu_list"]
-    info_list, count = check_data(col)
+    data_list, count = check_data(col)
     menu_list, count2 = check_data2(col2)
     context = {
-        'info_list': info_list,
+        'data_list': data_list,
         'menu_list': menu_list,
         'count': count,
         'count2': count2,
@@ -48,26 +48,27 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def detail(request):
+def detail(request, name):
     db, client = connect_db()
     col = db["info_list"]
     col2 = db["menu_list"]
-    info_list, count = check_data(col)
+    data_list, count = check_data(col)
     menu_list, count2 = check_data2(col2)
-    target_name = col.find({'name':'미영이네식당'})[0]
+    target_name = col.find({'name':'<str:name>'})
+    print(target_name)
     target_menu = col2.find({'name':"미영이네식당"})[0]
-    print(target_menu['menu'])
-    target_menu1 = list(dict.keys(target_menu['menu']))
-    target_price1 = list(dict.values(target_menu['menu']))
+    #target_menu1 = list(dict.keys(target_menu['menu']))
+    #target_price1 = list(dict.values(target_menu['menu']))
     #print(target_price1[0])
     context = {
-        'target_name': target_name['name'],
-        'target_star': target_name['info'][0],
-        'target_veiw': target_name['info'][1],
-        'target_addr': target_name['info'][2],
-        'target_tel': target_name['info'][3],
-        'target_price': target_name['info'][4],
-        'target_menu': target_menu['menu'],
+        #'target_name': target_name['name'],
+        'name': name,
+        # 'target_star': target_name['info'][0],
+        # 'target_veiw': target_name['info'][1],
+        # 'target_addr': target_name['info'][2],
+        # 'target_tel': target_name['info'][3],
+        # 'target_price': target_name['info'][4],
+         'target_menu': target_menu['menu'],
         }
     return render(request, "detail.html", context)
 

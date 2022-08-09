@@ -96,6 +96,7 @@
                                 <div class="row g-3 m-0 mb-2">
                                     {% for name, addr in data_list %}
                                     <div class="col-6">
+                                        <a href="detail/{{name}}" style="text-decoration:none; color:black;">
                                         <div class="row p-0 mx-0 border card-height">
                                             <div class="col-md-4 px-0">
                                                 <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid rounded-start card-height" alt="..." style="height:100%">
@@ -108,6 +109,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        </a>
                                     </div>
                                     {% endfor %}
                                 </div>
