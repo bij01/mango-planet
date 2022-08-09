@@ -67,8 +67,8 @@ def index(request):
     col2 = db["menu_list"]
     data_list, count = check_data(col)
     menu_list, count2 = check_data1(col2)
-    page = request.GET.get('page')  # 페이지
-    paginator = Paginator(data_list, 10)  # 페이지당 10개씩 보여주기
+    page = request.GET.get('page') # 페이지
+    paginator = Paginator(data_list, 12) # 페이지당 12개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {
         'data_list': data_list,
