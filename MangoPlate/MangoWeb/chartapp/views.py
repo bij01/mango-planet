@@ -74,6 +74,7 @@ def index(request):
     return render(request, "index.html", context)
 
 
+
 def detail(request):
     db, client = connect_db()
     # 즐겨찾기 추가
@@ -119,6 +120,7 @@ def detail(request):
             col.update_one(filter={"email": email}, update={"$set": {"list": favor_list}})
         # END
     res_name = "큰돈가"
+
     col1 = db["info_list"]
     col2 = db["menu_list"]
     location, review_rate = check_data2(res_name)
@@ -136,6 +138,7 @@ def detail(request):
         'view': target['info'][1],
         'addr': target['info'][2],
         'tel': target['info'][3],
+        'price': target['info'][4],
         'menu_list': menu_list,
     }
     return render(request, "detail.html", context)

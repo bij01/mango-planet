@@ -105,6 +105,7 @@
                         <div class="row g-3 m-0 mb-2">
                             {% for name, addr in data_list %}
                             <div class="col-6 col-lg-4">
+                                <a href="detail/{{name}}" style="text-decoration:none; color:black;">
                                 <div class="row p-0 mx-0 border card-height">
                                     <div class="col-md-4 px-0">
                                         <img src="{% get_static_prefix %}imgs/restaurant/{{name}}.jpg"
@@ -112,10 +113,10 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body px-2 py-1 align-middle">
-                                            <h5 class="card-title m-0 pt-2 pb-1
-                                                               ">{{name}}</h5>
+                                            <h5 class="card-title m-0 pt-2 pb-1 ">{{name}}</h5>
                                             <p class="card-text py-1">{{addr}}</p>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
