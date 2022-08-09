@@ -75,12 +75,50 @@ def index(request):
 
 
 def detail(request):
-    res_name = request.GET.get("res_name")
-    request.session["res_name"] = res_name
-    print(res_name)
-
     db, client = connect_db()
-    res_name = "왕스덕"
+    # 즐겨찾기 추가
+    res_name = request.GET.get("res_name")
+    col = db["favor_list"]
+    if res_name is not None:
+        request.session["res_name"] = res_name
+        email = request.session.get("email")
+        req_len = len(res_name.split("-"))
+        res_name = res_name.split("-")[0]
+        # 즐겨찾기 클릭 했을 경우
+        if req_len == 1:
+            favor_list = []
+            favor = col.find_one({"email": email})
+            # DB에 해당 유저의 즐겨찾기 목록이 비어 있지 않을 경우
+            if favor is not None:
+                print("db 업데이트")
+                print(favor["list"])
+                if res_name is not None:
+                    try:
+                        favor["list"].remove(res_name)
+                    except:
+                        pass
+                favor_list += favor["list"]
+                favor_list.append(res_name)
+                col.update_one(filter={"email": email}, update={"$set": {"list": favor_list}})
+            # DB에 해당 유저의 즐겨찾기 목록이 비어 있을 경우
+            else:
+                print("db 추가")
+                favor_list.append(res_name)
+                col.insert_one({"email": email, "list": favor_list})
+        # 즐겨찾기 해제 했을 경우
+        else:
+            print("db 제거")
+            favor = col.find_one({"email": email})
+            favor_list = favor["list"]
+            print("res_name", res_name)
+            try:
+                favor["list"].remove(res_name)
+            except:
+                pass
+            print(favor_list)
+            col.update_one(filter={"email": email}, update={"$set": {"list": favor_list}})
+        # END
+    res_name = "큰돈가"
     col1 = db["info_list"]
     col2 = db["menu_list"]
     location, review_rate = check_data2(res_name)
