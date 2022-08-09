@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from pymongo import MongoClient
+from django.core.paginator import Paginator 
 
 
 def connect_db():
@@ -7,8 +8,6 @@ def connect_db():
     db = client['restaurants']
     return db, client
 
-def test(request):
-    return render(request, "test.html")
 
 def check_data(col):
     count = 0
@@ -18,8 +17,9 @@ def check_data(col):
         addr = data.get("info")[2]
         count += 1  
         data_list.append([name,addr])
+    
     return data_list, count
-    #print(count)
+
 
 def check_data1(col2):
     count2 = 0
@@ -28,12 +28,10 @@ def check_data1(col2):
         name = data.get("name")
         menu = data.get("menu")
         if menu != {}:
-            menu_list.append({"name":name, "menu":menu})
+            menu_list.append({"name": name, "menu": menu})
         else:
-            menu_list.append({"name":name, "menu":"None"})
-    #print(menu_list2)
+            menu_list.append({"name": name, "menu": "None"})
     return menu_list, count2
-    # print(count)
 
 
 def check_data2(res_name):
@@ -57,18 +55,21 @@ def check_data2(res_name):
     return location, review_rate
 
 
-
 def index(request):
     db, client = connect_db()
     col = db["info_list"]
     col2 = db["menu_list"]
     data_list, count = check_data(col)
     menu_list, count2 = check_data1(col2)
+    page = request.GET.get('page')  # 페이지
+    paginator = Paginator(data_list, 12)  # 페이지당 12개씩 보여주기
+    page_obj = paginator.get_page(page)
     context = {
         'data_list': data_list,
         'menu_list': menu_list,
         'count': count,
         'count2': count2,
+        'data_list': page_obj,
     }
     return render(request, "index.html", context)
 
