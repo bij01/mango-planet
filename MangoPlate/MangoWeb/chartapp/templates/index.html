@@ -94,17 +94,17 @@
                             <div class="row col-md-12 col-lg-10 m-0">
                                 <h3 class="mt-3 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
                                 <div class="row g-3 m-0 mb-2">
-                                    {% for i in '0123456789'|make_list %}
+                                    {% for name, addr in data_list %}
                                     <div class="col-6">
                                         <div class="row p-0 mx-0 border card-height">
                                             <div class="col-md-4 px-0">
                                                 <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid rounded-start card-height" alt="..." style="height:100%">
                                             </div>
-                                            <div class="col-md-8">
+                                            <div class="col-md-8">             
                                                 <div class="card-body px-2 py-1 align-middle">
                                                     <h5 class="card-title m-0 pt-2 pb-1
-                                                               ">Card title</h5>
-                                                    <p class="card-text py-1">This is a wider card with supporting text</p>
+                                                               ">{{name}}</h5>
+                                                    <p class="card-text py-1">{{addr}}</p>
                                                 </div>
                                             </div>
                                         </div>
