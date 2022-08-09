@@ -194,12 +194,17 @@
         $('.banner').attr('style', 'height:' + $('.info').innerHeight() +'px !important');
     }
     function click_favorite(e){
+        var request = new XMLHttpRequest();
         if ($(e).hasClass('favorite')){
             $(e).removeClass('favorite');
             $(e).addClass('favorite-clicked');
+            request.open("GET", "?res_name=왕스덕");
+            request.send();
         } else {
             $(e).removeClass('favorite-clicked');
             $(e).addClass('favorite');
+            request.open("GET", "?res_name=None");
+            request.send();
         }
     }
 </script>
