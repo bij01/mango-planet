@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from pymongo import MongoClient
 
+from django.utils import timezone
+from django.core.paginator import Paginator 
 
 def connect_db():
     client = MongoClient(host='192.168.0.138', port=27017)
@@ -18,6 +20,7 @@ def check_data(col):
         addr = data.get("info")[2]
         count += 1  
         data_list.append([name,addr])
+    
     return data_list, count
     #print(count)
 
@@ -64,11 +67,15 @@ def index(request):
     col2 = db["menu_list"]
     data_list, count = check_data(col)
     menu_list, count2 = check_data1(col2)
+    page = request.GET.get('page')  # 페이지
+    paginator = Paginator(data_list, 10)  # 페이지당 10개씩 보여주기
+    page_obj = paginator.get_page(page)
     context = {
         'data_list': data_list,
         'menu_list': menu_list,
         'count': count,
         'count2': count2,
+        'data_list': page_obj,
     }
     return render(request, "index.html", context)
 
