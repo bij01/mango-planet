@@ -98,6 +98,7 @@ def detail(request, name):
         'view': target['info'][1],
         'addr': target['info'][2],
         'tel': target['info'][3],
+        'price': target['info'][4],
         'menu_list': menu_list,
     }
     return render(request, "detail.html", context)
