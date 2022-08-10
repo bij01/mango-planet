@@ -121,7 +121,7 @@
 
     <div class="row con-center my-2">
         <div class="row col-sm-10 col-md-9 m-0 info">
-            <h3 class="title my-2"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>{{ name }}<span class="point mx-2">{{ star }}</span>
+            <h3 class="title my-2"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>{{ name }}<span class="point mx-2">{% if star == 0 %}{% else %}{{ star }}{% endif %}</span>
             </h3>
             <div class="row px-0">
                 <div class="col-md-4 p-2 res-img">

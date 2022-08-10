@@ -94,7 +94,7 @@
     <div id="layoutSidenav_content">
         <main>
             {% block main %}
-            <div class="container-fluid px-4 h-90">
+            <div class="container-fluid p-0 h-90">
                 <div class="row con-center mx-2">
                     <div class="row m-0">
                         <h3 class="mt-3 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
@@ -104,7 +104,7 @@
                                 <a href="detail/{{name}}" class="row p-0 mx-0 border card-height link-none">
                                     <div class="col-md-4 px-0">
                                         <img src="{% get_static_prefix %}imgs/restaurant/{{name}}.jpg"
-                                             class="img-fluid rounded-start card-height" alt="..." style="height:100%">
+                                             class="img-fluid rounded-start card-height" alt="..." style="height:100%" onerror="this.src='/static/imgs/no-image.png'">
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body px-2 py-1 align-middle">
@@ -131,17 +131,17 @@
                             {% endif %}
                             <!-- 페이지리스트 -->
                             {% for page_number in data_list.paginator.page_range %}
-                            {% if page_number >= data_list.number|add:-3 and page_number <= data_list.number|add:3 %}
-                            {% if page_number == data_list.number %}
-                            <li class="page-item active" aria-current="page">
-                                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                            </li>
-                            {% else %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                            </li>
-                            {% endif %}
-                            {% endif %}
+                                {% if page_number >= data_list.number|add:-3 and page_number <= data_list.number|add:3 %}
+                                    {% if page_number == data_list.number %}
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    </li>
+                                    {% endif %}
+                                {% endif %}
                             {% endfor %}
                             <!-- 다음페이지 -->
                             {% if data_list.has_next %}

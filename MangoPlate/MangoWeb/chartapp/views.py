@@ -12,7 +12,7 @@ def connect_db():
 def check_data(col):
     count = 0
     data_list = []
-    for data in col.find().sort("_id"):
+    for data in col.find().sort("info"):
         name = data.get("name")
         addr = data.get("info")[2]
         count += 1  
@@ -59,20 +59,18 @@ def index(request):
     db, client = connect_db()
     col = db["info_list"]
     col2 = db["menu_list"]
-    data_list, count = check_data(col)
+    info_list, count = check_data(col)
     menu_list, count2 = check_data1(col2)
     page = request.GET.get('page')  # 페이지
-    paginator = Paginator(data_list, 12)  # 페이지당 12개씩 보여주기
+    paginator = Paginator(info_list, 12)  # 페이지당 12개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {
-        'data_list': data_list,
         'menu_list': menu_list,
         'count': count,
         'count2': count2,
         'data_list': page_obj,
     }
     return render(request, "index.html", context)
-
 
 
 def detail(request, name):
