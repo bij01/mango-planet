@@ -12,7 +12,7 @@ def connect_db():
 def check_data(col):
     count = 0
     data_list = []
-    for data in col.find().sort("info"):
+    for data in col.find().sort("_id"):
         name = data.get("name")
         addr = data.get("info")[2]
         count += 1  
@@ -38,19 +38,23 @@ def check_data2(res_name):
     db, client = connect_db()
     col6 = db["review_info_list"]
     col7 = db["location_info"]
-
-    data1 = col6.find_one({"name": res_name})
-    name = data1["name"]
-    g_1 = data1["count"][1]
-    g_2 = data1["count"][2]
-    g_3 = data1["count"][3]
-    review_rate = {"name": name, "G": g_1, "S": g_2, "B": g_3}
-
-    data = col7.find_one({"name": res_name})
-    name = data.get("name")
-    addr_x = data.get("loc")["X"]
-    addr_y = data.get('loc')["Y"]
-    location = {"name": name, "X": addr_x, "Y": addr_y}
+    try:
+        data1 = col6.find_one({"name": res_name})
+        name = data1["name"]
+        g_1 = data1["count"][1]
+        g_2 = data1["count"][2]
+        g_3 = data1["count"][3]
+        review_rate = {"name": name, "G": g_1, "S": g_2, "B": g_3}
+    except:
+        review_rate = {"name": res_name, "G": 0, "S": 0, "B": 0}
+    try:
+        data = col7.find_one({"name": res_name})
+        name = data.get("name")
+        addr_x = data.get("loc")["X"]
+        addr_y = data.get('loc')["Y"]
+        location = {"name": name, "X": addr_x, "Y": addr_y}
+    except:
+        location = {"name": res_name, "X": 0, "Y": 0}
 
     return location, review_rate
 
@@ -62,7 +66,7 @@ def index(request):
     info_list, count = check_data(col)
     menu_list, count2 = check_data1(col2)
     page = request.GET.get('page')  # 페이지
-    paginator = Paginator(info_list, 12)  # 페이지당 12개씩 보여주기
+    paginator = Paginator(info_list, 15)  # 페이지당 12개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {
         'menu_list': menu_list,
