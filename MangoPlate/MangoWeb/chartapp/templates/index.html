@@ -27,10 +27,11 @@
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark topbg">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="{% url 'chart:index' %}"><span><img class="me-3 mb-1"
-                                                                           src="{% static '/imgs/logo.png' %}"
-                                                                           alt="logo" width="30"
-                                                                           height="24">망고플래닛</span></a>
+    <a class="navbar-brand ps-3" href="{% url 'chart:index' %}">
+        <span><img class="me-3 mb-1" src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24"/>
+            망고플래닛
+        </span>
+    </a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
             class="fas fa-bars"></i></button>
@@ -94,11 +95,11 @@
     <div id="layoutSidenav_content">
         <main>
             {% block main %}
-            <div class="container-fluid p-0 h-90">
+            <div class="container-fluid p-0 col-xl-10">
                 <div class="row con-center mx-2">
                     <div class="row m-0">
-                        <h3 class="mt-3 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
-                        <div class="row g-3 m-0 mb-2">
+                        <h3 class="mt-4 mb-0 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
+                        <div class="row g-3 m-0">
                             {% for name, addr in data_list %}
                             <div class="col-6 col-lg-4">
                                 <a href="detail/{{name}}" class="row p-0 mx-0 border card-height link-none">
