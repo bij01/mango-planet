@@ -129,7 +129,9 @@
                 <p class="card-text">{{ price }}</p>
                 <p class="badge bg-secondary mb-1">전화</p> 
                 <p class="card-text text-muted">{{ tel }}</p>
-                <p class="badge bg-secondary mb-1">메뉴</p> 
+                    {% if menu_list %}<p class="badge bg-secondary mb-1">메뉴</p>
+                    {% else %}
+                    {% endif %}
                 <div class="row">
                     {% load humanize %}
                     {% for menu, price in menu_list.items %}

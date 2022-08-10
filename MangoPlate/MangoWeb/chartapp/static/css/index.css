@@ -60,6 +60,8 @@ main {
         max-height: 400px !important;
     }
 }
-@media(max-width:576px){
-
+@media(max-width:375px){
+    .sub-title {
+        display: none;
+    }
 }
