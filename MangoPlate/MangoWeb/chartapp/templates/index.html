@@ -73,10 +73,6 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         식당목록
                     </a>
-                    <a class="nav-link enlarge" href="{% url 'chart:detail' %}">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        식당정보(임시)
-                    </a>
                     <div class="sb-sidenav-menu-heading">Member Only</div>
                     <a class="nav-link enlarge" href="{% url 'chart:favors' %}">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -105,20 +101,19 @@
                         <div class="row g-3 m-0 mb-2">
                             {% for name, addr in data_list %}
                             <div class="col-6 col-lg-4">
-                                <a href="detail/{{name}}" style="text-decoration:none; color:black;">
-                                <div class="row p-0 mx-0 border card-height">
+                                <a href="detail/{{name}}" class="row p-0 mx-0 border card-height link-none">
                                     <div class="col-md-4 px-0">
                                         <img src="{% get_static_prefix %}imgs/restaurant/{{name}}.jpg"
                                              class="img-fluid rounded-start card-height" alt="..." style="height:100%">
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body px-2 py-1 align-middle">
-                                            <h5 class="card-title m-0 pt-2 pb-1 ">{{name}}</h5>
+                                            <h5 class="card-title m-0 pt-2 pb-1
+                                                               ">{{name}}</h5>
                                             <p class="card-text py-1">{{addr}}</p>
                                         </div>
-                                        </a>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                             {% endfor %}
                         </div>

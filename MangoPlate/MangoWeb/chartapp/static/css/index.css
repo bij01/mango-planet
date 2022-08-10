@@ -34,6 +34,13 @@ main {
 .card-height {
     max-height: 120px !important;
 }
+.link-none {
+    text-decoration: none;
+    color: black;
+}
+.link-none:hover {
+    color: black;
+}
 .enlarge:hover {
     font-size: large;
     font-weight: bold;

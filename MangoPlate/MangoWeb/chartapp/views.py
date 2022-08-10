@@ -119,7 +119,7 @@ def detail(request, name):
             print(favor_list)
             col.update_one(filter={"email": email}, update={"$set": {"list": favor_list}})
         # END
-    res_name = "큰돈가"
+    res_name = name
 
     col1 = db["info_list"]
     col2 = db["menu_list"]
