@@ -12,6 +12,9 @@ main {
     display: flex;
     align-items: flex-start;
 }
+.size9 {
+    font-size: 0.9rem;
+}
 .topbg {
     background-color: #0f5836 !important;
 }

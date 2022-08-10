@@ -90,7 +90,13 @@
             <div class="container-fluid p-0 col-xl-10">
                 <div class="row con-center mx-2">
                     <div class="row m-0">
-                        <h3 class="mt-4 mb-0 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
+                        <ul class="pagination justify-content-center m-0 p-3 pb-0">
+                            <h3 class="mt-4 mb-0 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
+                            <!-- 총 페이지 수 -->
+                            <li class="page-item disabled ms-auto mt-auto size9">
+                                <span>총: {{data_list.paginator.num_pages}} 페이지 / {{data_list.paginator.count}} 데이터</span>
+                            </li>
+                        </ul>
                         <div class="row g-3 m-0">
                             {% for name, addr in data_list %}
                             <div class="col-6 col-lg-4">
@@ -150,10 +156,7 @@
                                 <a class="page-link" tabindex="-1" aria-disabled="true" href="#">>></a>
                             </li>
                             {% endif %}
-                            <!-- 총 페이지 수 -->
-                            <li class="page-item disabled ms-auto">
-                                <div class="page-link">총: {{data_list.paginator.num_pages}} 페이지 / {{data_list.paginator.count}} 데이터</div>
-                            </li>
+
                         </ul>
                         <!-- 페이징처리 끝 -->
                     </div>
