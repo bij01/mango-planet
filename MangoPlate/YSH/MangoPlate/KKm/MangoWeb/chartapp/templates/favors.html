@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+{% block head %}
+<style type="text/css">
+
+</style>
+<title>망고플래닛 - 즐겨찾기</title>
+{% endblock %}
+{% block main %}
+<div class="container-fluid px-4">
+    <div class="row con-center my-4 mx-2">
+        <div class="row col-md-12 m-0">
+            <h3 class="mt-4 ms-2">즐겨찾기<span class="sub-title">Favorite List</span></h3>
+            <div class="row g-3 m-0 mb-3">
+                {% for i in '01234567'|make_list %}
+                <div class="col-6">
+                    <div class="row p-0 mx-0 border card-height">
+                        <div class="col-md-4 px-0">
+                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid rounded-start card-height" alt="..." style="height:100%">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body px-2 py-1 align-middle">
+                                <h5 class="card-title m-0 pt-2 pb-1
+                                           ">Card title</h5>
+                                <p class="card-text py-1">This is a wider card with supporting text</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center mx-2">
+                    <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

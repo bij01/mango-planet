@@ -25,11 +25,6 @@
         height: 530px !important;
         margin-top: 5% !important;
     }
-
-    canvas { 
-        height: 200px;
-        max-height: 240px;
-    }
     
     .card-text, badge {
         font-size: 0.8rem;
@@ -81,7 +76,7 @@
     }
     
     .res-img {
-        background-image: url("/static/imgs/restaurant/미영이네식당.jpg")
+        background-image: url("/static/imgs/restaurant/{{name}}.jpg")
             , url("/static/imgs/no-image.png");
         background-size: cover;
         background-repeat: no-repeat;
@@ -121,7 +116,7 @@
 
     <div class="row con-center my-2">
         <div class="row col-sm-10 col-md-9 m-0 info">
-            <h3 class="title my-2"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>{{ name }}<span class="point mx-2">{{ star }}</span>
+            <h3 class="title my-2"><button class="btn favorite me-2" onclick="click_favorite(this)"></button>{{ name }}<span class="point mx-2">{% if star == 0 %}{% else %}{{ star }}{% endif %}</span>
             </h3>
             <div class="row px-0">
                 <div class="col-md-4 p-2 res-img">
@@ -134,7 +129,9 @@
                 <p class="card-text">{{ price }}</p>
                 <p class="badge bg-secondary mb-1">전화</p> 
                 <p class="card-text text-muted">{{ tel }}</p>
-                <p class="badge bg-secondary mb-1">메뉴</p> 
+                    {% if menu_list %}<p class="badge bg-secondary mb-1">메뉴</p>
+                    {% else %}
+                    {% endif %}
                 <div class="row">
                     {% load humanize %}
                     {% for menu, price in menu_list.items %}
@@ -147,9 +144,12 @@
             </div>
             </div>
             <div class="row px-0">
+                {% if data_list1 == 0 %}
+                {% else %}
                 <div class="col-md-4 px-2 chart">
-                    <div id="map" class="map border rounded"><canvas id ="mymap" width=100% height=100%></canvas></div>
+                    <div id="map" class="map border rounded h-100"><canvas id ="mymap" width=100% height=100%></canvas></div>
                 </div>
+                {% endif %}
                 <div class="col-md-4 px-2 chart">
                 <div class="card">
                     <div class="card-header">
@@ -157,10 +157,12 @@
                         인기 단어 TOP5
                     </div>
                     <div class="card-body">
-                        <canvas id="myBarChart" width="100%" height="100%"></canvas>
+                        <canvas id="myBarChart" width="100%" height="90%"></canvas>
                     </div>
                 </div>
                 </div>
+                {% if review_rate1 == 0 %}
+                {% else %}
                 <div class="col-md-4 px-2 chart">
                     <div class="card">
                         <div class="card-header">
@@ -168,10 +170,11 @@
                             좋아요 비율
                         </div>
                         <div class="card-body">
-                            <canvas id="myPieChart" width="100%" height="100%"></canvas>
+                            <canvas id="myPieChart" width="100%" height="90%"></canvas>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="row col-sm-0 col-md-2 ms-5 banner">
@@ -194,12 +197,17 @@
         $('.banner').attr('style', 'height:' + $('.info').innerHeight() +'px !important');
     }
     function click_favorite(e){
+        var request = new XMLHttpRequest();
         if ($(e).hasClass('favorite')){
             $(e).removeClass('favorite');
             $(e).addClass('favorite-clicked');
+            request.open("GET", "?res_name={{name}}");
+            request.send();
         } else {
             $(e).removeClass('favorite-clicked');
             $(e).addClass('favorite');
+            request.open("GET", "?res_name={{name}}-rm");
+            request.send();
         }
     }
 </script>

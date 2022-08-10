@@ -1,0 +1,6 @@
+Views.py => 
+
+detail에서 사용하기 위한 Check_data2 생성
+detail 완성
+
+detail.html 수정 및 완성
