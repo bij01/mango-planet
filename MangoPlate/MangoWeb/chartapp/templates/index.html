@@ -17,12 +17,6 @@
     <link href="{% static '/css/styles.css' %}" rel="stylesheet"/>
     <link href="{% static '/css/index.css' %}" rel="stylesheet"/>
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-    <style>
-            * {
-              font-family: 'Do Hyeon', sans-serif;
-            }
-
-    </style>
 </head>
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark topbg">
@@ -58,8 +52,6 @@
                 {% else %}
                 <li><a class="dropdown-item" href="{% url 'member:login' %}">로그인</a></li>
                 {% endif %}
-
-
             </ul>
         </li>
     </ul>
@@ -102,7 +94,7 @@
                         <div class="row g-3 m-0">
                             {% for name, addr in data_list %}
                             <div class="col-6 col-lg-4">
-                                <a href="detail/{{name}}" class="row p-0 mx-0 border card-height link-none">
+                                <a href="detail/{{name}}" class="row p-0 mx-0 border h-100 link-none">
                                     <div class="col-md-4 px-0">
                                         <img src="{% get_static_prefix %}imgs/restaurant/{{name}}.jpg"
                                              class="img-fluid rounded-start card-height" alt="..." style="height:100%" onerror="this.src='/static/imgs/no-image.png'">
@@ -119,11 +111,15 @@
                             {% endfor %}
                         </div>
                         <!-- 페이징처리 시작 -->
-                        <ul class="pagination justify-content-center m-0 py-3">
+                        <ul class="pagination justify-content-center m-0 p-3">
                             <!-- 이전페이지 -->
                             {% if data_list.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ data_list.previous_page_number }}"><<</a>
+                                {% if data_list.previous_page_number|add:-2 < 1 %}
+                                <a class="page-link" href="?page=1"><<</a>
+                                {% else %}
+                                <a class="page-link" href="?page={{ data_list.previous_page_number|add:-2 }}"><<</a>
+                                {% endif %}
                             </li>
                             {% else %}
                             <li class="page-item disabled">
@@ -132,28 +128,32 @@
                             {% endif %}
                             <!-- 페이지리스트 -->
                             {% for page_number in data_list.paginator.page_range %}
-                                {% if page_number >= data_list.number|add:-3 and page_number <= data_list.number|add:3 %}
-                                    {% if page_number == data_list.number %}
-                                    <li class="page-item active" aria-current="page">
-                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                                    </li>
-                                    {% else %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
-                                    </li>
-                                    {% endif %}
+                            {% if page_number >= data_list.number|add:-3 and page_number <= data_list.number|add:3 %}
+                                {% if page_number == data_list.number %}
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                </li>
                                 {% endif %}
+                            {% endif %}
                             {% endfor %}
                             <!-- 다음페이지 -->
                             {% if data_list.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ data_list.next_page_number }}">>></a>
+                                <a class="page-link" href="?page={{ data_list.next_page_number|add:2 }}">>></a>
                             </li>
                             {% else %}
                             <li class="page-item disabled">
                                 <a class="page-link" tabindex="-1" aria-disabled="true" href="#">>></a>
                             </li>
                             {% endif %}
+                            <!-- 총 페이지 수 -->
+                            <li class="page-item disabled ms-auto">
+                                <div class="page-link">총: {{data_list.paginator.num_pages}} 페이지 / {{data_list.paginator.count}} 데이터</div>
+                            </li>
                         </ul>
                         <!-- 페이징처리 끝 -->
                     </div>
@@ -173,8 +173,7 @@
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 {% block script %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="{% static '/js/scripts.js' %}"></script>
 {% endblock %}
 </html>

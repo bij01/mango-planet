@@ -1,4 +1,6 @@
-
+* {
+  font-family: 'Do Hyeon', sans-serif;
+}
 html {
     height: 100vh;
 }
@@ -8,7 +10,7 @@ body {
 main {
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 .topbg {
     background-color: #0f5836 !important;
@@ -31,9 +33,7 @@ main {
 .con-center {
     place-content: center;
 }
-.card-height {
-    max-height: 120px !important;
-}
+
 .link-none {
     text-decoration: none;
     color: black;
