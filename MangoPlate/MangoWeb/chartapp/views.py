@@ -74,7 +74,8 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def detail(request):
+
+def detail(request, name):
     db, client = connect_db()
     # 즐겨찾기 추가
     res_name = request.GET.get("res_name")
