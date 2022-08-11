@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from pymongo import MongoClient
 from django.core.paginator import Paginator
-from konlpy.tag import Okt
-from collections import Counter
 
 
 def connect_db():
@@ -150,22 +148,14 @@ def detail(request, name):
             favor_list += favor["list"]
     res_name = name
     # 댓글 TOP5 차트
-    review_col = db["review_list"]
+    review_col = db["review_chart"]
     data = review_col.find_one({"name": res_name})
-    comment_list = data["comment"]
-    okt = Okt()
-    noun = okt.nouns(str(comment_list))
-    for j, m in enumerate(noun):
-        if len(m) < 2:
-            noun.pop(j)
-    count = Counter(noun)
-    noun_list = count.most_common(5)
-    x_list = []  # 검색된 글자
-    y_list = []  # 숫자
-    for x, y in noun_list:
-        x_list.append(x)
-        y_list.append(y)
-
+    if data is not None:
+        x_list = data["x_list"]
+        y_list = data["y_list"]
+    else:
+        x_list = []
+        y_list = []
     # TOP5 END
     col1 = db["info_list"]
     col2 = db["menu_list"]
