@@ -165,7 +165,7 @@ def detail(request, name):
     for x, y in noun_list:
         x_list.append(x)
         y_list.append(y)
-    y_max = max(y_list)
+
     # TOP5 END
     col1 = db["info_list"]
     col2 = db["menu_list"]
@@ -189,7 +189,6 @@ def detail(request, name):
         'favor_list': favor_list,
         'x_list': x_list,
         'y_list': y_list,
-        'y_max': y_max,
     }
     return render(request, "detail.html", context)
 
