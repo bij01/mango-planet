@@ -4,20 +4,31 @@ from django.core.paginator import Paginator
 
 
 def connect_db():
-    client = MongoClient(host='192.168.0.138', port=27017)
+    client = MongoClient(host='localhost', port=27017)
     db = client['restaurants']
     return db, client
 
 
-def check_data(col):
+def check_data(col, key):
     count = 0
     data_list = []
-    for data in col.find().sort("_id"):
-        name = data.get("name")
-        addr = data.get("info")[2]
-        count += 1  
-        data_list.append([name,addr])
-    
+    if key == "":
+        for data in col.find().sort("_id"):
+            name = data.get("name")
+            addr = data.get("info")[2]
+            count += 1
+            data_list.append([name,addr])
+    else:
+        for data in col.find({"name": {"$regex": key}}).sort("_id"):
+            name = data.get("name")
+            addr = data.get("info")[2]
+            count += 1
+            data_list.append([name, addr])
+        for data in col.find({"info": {"$regex": key}}).sort("_id"):
+            name = data.get("name")
+            addr = data.get("info")[2]
+            count += 1
+            data_list.append([name, addr])
     return data_list, count
 
 
@@ -60,12 +71,17 @@ def check_data2(res_name):
 
 
 def index(request):
+    key = request.GET.get("key")
+    page = request.GET.get('page')  # 페이지
+    print(key, page)
+    if key is None:
+        key = ""
     db, client = connect_db()
     col = db["info_list"]
     col2 = db["menu_list"]
-    info_list, count = check_data(col)
+    info_list, count = check_data(col, key)
     menu_list, count2 = check_data1(col2)
-    page = request.GET.get('page')  # 페이지
+
     paginator = Paginator(info_list, 12)  # 페이지당 12개씩 보여주기
     page_obj = paginator.get_page(page)
     context = {
@@ -73,6 +89,7 @@ def index(request):
         'count': count,
         'count2': count2,
         'data_list': page_obj,
+        'key': key,
     }
     return render(request, "index.html", context)
 

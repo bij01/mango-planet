@@ -30,10 +30,12 @@
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
             class="fas fa-bars"></i></button>
     <!-- Navbar Search-->
-    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+
+    <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
+          method="GET" action="{% url 'chart:index' %}">
         <div class="input-group">
             <input class="form-control" type="text" placeholder="검색" aria-label="검색"
-                   aria-describedby="btnNavbarSearch"/>
+                   aria-describedby="btnNavbarSearch" name="key"/>
             <button class="btn btn-warning" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
         </div>
     </form>
@@ -88,7 +90,7 @@
         <main>
             {% block main %}
             <div class="container-fluid p-0 col-xl-10">
-                <div class="row con-center mx-2">
+                <div class="row con-center">
                     <div class="row m-0">
                         <ul class="pagination justify-content-center m-0 p-3 pb-0">
                             <h3 class="mt-4 mb-0 ms-2">식당목록<span class="sub-title">Restaurant List</span></h3>
@@ -97,6 +99,11 @@
                                 <span>총: {{data_list.paginator.num_pages}} 페이지 / {{data_list.paginator.count}} 데이터</span>
                             </li>
                         </ul>
+                        {% if data_list.paginator.count == 0 %}
+                        <div class="row g-3 m-0">
+                            <h5>데이터가 존재하지 않습니다.</h5>
+                        </div>
+                        {% else %}
                         <div class="row g-3 m-0">
                             {% for name, addr in data_list %}
                             <div class="col-6 col-lg-4">
@@ -122,9 +129,9 @@
                             {% if data_list.has_previous %}
                             <li class="page-item">
                                 {% if data_list.previous_page_number|add:-2 < 1 %}
-                                <a class="page-link" href="?page=1"><<</a>
+                                <a class="page-link" href="?key={{key}}&&page=1"><<</a>
                                 {% else %}
-                                <a class="page-link" href="?page={{ data_list.previous_page_number|add:-2 }}"><<</a>
+                                <a class="page-link" href="?key={{key}}&&page={{ data_list.previous_page_number|add:-2 }}"><<</a>
                                 {% endif %}
                             </li>
                             {% else %}
@@ -137,11 +144,11 @@
                             {% if page_number >= data_list.number|add:-3 and page_number <= data_list.number|add:3 %}
                                 {% if page_number == data_list.number %}
                                 <li class="page-item active" aria-current="page">
-                                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    <a class="page-link" href="?key={{key}}&&page={{ page_number }}">{{ page_number }}</a>
                                 </li>
                                 {% else %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                    <a class="page-link" href="?key={{key}}&&page={{ page_number }}">{{ page_number }}</a>
                                 </li>
                                 {% endif %}
                             {% endif %}
@@ -149,7 +156,7 @@
                             <!-- 다음페이지 -->
                             {% if data_list.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ data_list.next_page_number|add:2 }}">>></a>
+                                <a class="page-link" href="?key={{key}}&&page={{ data_list.next_page_number|add:2 }}">>></a>
                             </li>
                             {% else %}
                             <li class="page-item disabled">
@@ -159,6 +166,7 @@
 
                         </ul>
                         <!-- 페이징처리 끝 -->
+                        {% endif %}
                     </div>
                 </div>
             </div>
