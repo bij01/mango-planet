@@ -157,6 +157,7 @@
             </div>
             <div class="row px-0">
                 {% if data_list1 == 0 %}
+
                 {% else %}
                 <div class="col-md-4 px-2 chart">
                     <div id="map" class="map border rounded h-100"><canvas id ="mymap" width=100% height=100%></canvas></div>
@@ -201,7 +202,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="{% static '/js/scripts.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="{% static 'assets/demo/chart-bar-demo.js' %}"></script>
 <script>
     // window.addEventListener('resize', change_size);
     function change_size(){
@@ -254,5 +254,52 @@ var myPieChart = new Chart(ctx, {
         position: markerPosiotion
     })
     marker.setMap(map);
+</script>
+<script type="text/javascript">
+// Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+
+// Bar Chart Example
+var ctx = document.getElementById("myBarChart");
+var myLineChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['{{x_list.0}}', '{{x_list.1}}', '{{x_list.2}}', '{{x_list.3}}', '{{x_list.4}}'],
+    datasets: [{
+      label: "DATA",
+      backgroundColor: "rgba(2,117,216,1)",
+      borderColor: "rgba(2,117,216,1)",
+      data: [{{y_list.0}}, {{y_list.1}}, {{y_list.2}}, {{y_list.3}}, {{y_list.4}}],
+    }],
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'month'
+        },
+        gridLines: {
+          display: false
+        },
+        ticks: {
+          maxTicksLimit: 5
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          min: 0,
+          maxTicksLimit: 5
+        },
+        gridLines: {
+          display: true
+        }
+      }],
+    },
+    legend: {
+      display: false
+    }
+  }
+});
 </script>
 {% endblock %}
