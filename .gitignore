@@ -3,3 +3,4 @@ imgs/
 *.pyc
 *.zip
 .idea/
+db.sqlite3
