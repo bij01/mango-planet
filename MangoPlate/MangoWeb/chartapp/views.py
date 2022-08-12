@@ -13,7 +13,7 @@ def check_data(col, key, *args):
     count = 0
     data_list = []
     if key == "":
-        for data in col.find().sort("_id"):
+        for data in col.find().sort("name"):
             name = data.get("name")
             addr = data.get("info")[2]
             count += 1
