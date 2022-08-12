@@ -56,7 +56,7 @@ def logout(request):
     
 def register(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST or None)
         if form.is_valid():
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
@@ -66,20 +66,19 @@ def register(request):
                 name = request.POST.get('name')
                 email = request.POST.get('email')
                 pwd = request.POST.get('pwd')
-                if Member.objects.filter(email=request.POST['email']).exists():  
+                if Member.objects.filter(email=request.POST['email']).exists():
                     # print("이메일 중복")
-                    message = "1"
-                    context = {
-                        "msg": message,
-                    }
-                    return render(request, "register.html", context)
+                    messages.error(request, "중복된 이메일 입니다.")
+                    return redirect('member:register')
                 else:
                     user = Member(name=name, email=email, pwd=pwd, rdate=DateTime)
                     user.save()
                     request.session['email'] = email
                     request.session['name'] = name
                     return render(request, "register_ok.html")
-            
+            else:
+                messages.error(request, '비밀번호가 일치하지 않습니다.')
+                return redirect('member:register')
     else:
         form = RegisterForm()
     return render(request, "register.html", {'form': form})

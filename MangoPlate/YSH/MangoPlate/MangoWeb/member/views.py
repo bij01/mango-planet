@@ -81,7 +81,7 @@ def register(request):
                     request.session['name'] = name
                     return render(request, "register_ok.html")
             else:
-                messages.error(request,'비밀번호가 일치하지 않습니다.')
+                messages.error(request, '비밀번호가 일치하지 않습니다.')
                 return redirect('member:register')
     else:
         form = RegisterForm()
