@@ -1,9 +1,13 @@
+from csv import writer
+import email
 from re import template
+from sqlite3 import Date
 from unittest import result
+from xml.etree.ElementTree import Comment
 from xmlrpc.client import DateTime
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
-from member.models import Member
+from member.models import Member, Qna
 from .forms import RegisterForm
 from django.contrib import auth
 from django.template import loader
@@ -89,3 +93,25 @@ def register(request):
 
 def register_ok(request):
     return render(request, "register_ok.html")
+
+
+def opinion(request):
+    if request.method == "POST":
+        writer = request.POST.get('email')
+        comment = request.POST.get('comment')
+        opinion = Qna(writer=writer, comment=comment, rdate=DateTime)
+        opinion.save()
+        request.session['writer'] = writer
+        request.session['comment'] = comment
+        
+        return render(request, "opinion_ok.html")
+    else:
+        return render(request, "opinion.html")
+    
+    
+def opinion_ok(request):
+    return render(request, "opinion_ok.html")
+
+        
+        
+    

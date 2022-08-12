@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 
 
 def connect_db():
-    client = MongoClient(host='localhost', port=27017)
+    client = MongoClient(host='192.168.0.138', port=27017)
     db = client['restaurants']
     return db, client
 
@@ -206,3 +206,7 @@ def favors(request):
         'data_list': page_obj,
     }
     return render(request, "favors.html", context)
+
+def guide(request):
+
+    return render(request, "guide.html")

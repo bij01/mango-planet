@@ -1,5 +1,6 @@
 * {
   font-family: 'Do Hyeon', sans-serif;
+
 }
 html {
     height: 100vh;
@@ -29,7 +30,7 @@ main {
     align-items: center;
 }
 .sub-title {
-    font-size: 1rem;
+    font-size: 1.0rem;
     margin-left: 10px;
     color: gray;
 }

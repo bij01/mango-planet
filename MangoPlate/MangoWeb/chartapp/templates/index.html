@@ -68,10 +68,18 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         식당목록
                     </a>
+                    <a class="nav-link enlarge" href="{% url 'chart:guide' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        이용가이드
+                    </a>
                     <div class="sb-sidenav-menu-heading">Member Only</div>
                     <a class="nav-link enlarge" href="{% url 'chart:favors' %}">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                         즐겨찾기
+                    </a>
+                    <a class="nav-link enlarge" href="{% url 'member:opinion' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        문의하기
                     </a>
                 </div>
             </div>
