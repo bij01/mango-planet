@@ -1,4 +1,6 @@
-
+* {
+  font-family: 'Do Hyeon', sans-serif;
+}
 html {
     height: 100vh;
 }
@@ -8,7 +10,10 @@ body {
 main {
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+}
+.size9 {
+    font-size: 0.9rem;
 }
 .topbg {
     background-color: #0f5836 !important;
@@ -31,8 +36,13 @@ main {
 .con-center {
     place-content: center;
 }
-.card-height {
-    max-height: 120px !important;
+
+.link-none {
+    text-decoration: none;
+    color: black;
+}
+.link-none:hover {
+    color: black;
 }
 .enlarge:hover {
     font-size: large;
@@ -50,6 +60,8 @@ main {
         max-height: 400px !important;
     }
 }
-@media(max-width:576px){
-
+@media(max-width:375px){
+    .sub-title {
+        display: none;
+    }
 }
