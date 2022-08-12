@@ -128,6 +128,12 @@
                 {% endif %}
                 {{ name }}
                 <span class="point mx-2">{% if star == 0 %}{% else %}{{ star }}{% endif %}</span>
+                &nbsp;&nbsp;<a href={{ link }} target="_blank">
+                    <img src="{% static "imgs/mango.png" %}">
+                </a> &nbsp;&nbsp;
+                <a href="https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query={{name}} {{res_addres}}" target="_blank">
+                    <img src="{% static "imgs/naver.png" %}">
+                </a> &nbsp;&nbsp;
             </h3>
 
             <div class="row px-0">

@@ -70,6 +70,17 @@ def check_data2(res_name):
     return location, review_rate
 
 
+def check_data3(col3):
+    count = 0
+    res_list = []
+    for data in col3.find().sort("_id"):
+        link = data.get("link")
+        count += 1
+        res_list.append([link])
+
+    return res_list, count
+
+
 def index(request):
     key = request.GET.get("key")
     page = request.GET.get('page')  # 페이지
@@ -163,6 +174,11 @@ def detail(request, name):
     target = col1.find({'name': res_name})[0]
     menu_list = col2.find_one({"name": res_name})["menu"]
 
+    col3 = db["res_list"]
+    res_list = col3.find({'name': res_name})[0]
+    addrs = target['info'][2].split()
+    res_addrs = addrs[1] + ' ' + addrs[2]
+
     context = {
         'data_list1': location["Y"],
         'data_list2': location["X"],
@@ -179,6 +195,8 @@ def detail(request, name):
         'favor_list': favor_list,
         'x_list': x_list,
         'y_list': y_list,
+        'link': res_list['link'],
+        'res_addres': res_addrs,
     }
     return render(request, "detail.html", context)
 
@@ -221,6 +239,6 @@ def favors(request):
     }
     return render(request, "favors.html", context)
 
-def guide(request):
 
+def guide(request):
     return render(request, "guide.html")
