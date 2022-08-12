@@ -22,7 +22,6 @@ body {
 main {
     justify-content: center;
 }
-
     
 input,
 textarea,
@@ -148,30 +147,13 @@ button[type="submit"] {
   transition: background-color 0.2s linear;
 }
 
-button[type="submit1"]:hover {
-  background-color: #565657;
-}
-
-  button[type="submit1"] {
-  width: 320px;
-  height: 51px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 30px auto 0;
-  padding: 0;
-  font-size: 20px;
-  color: #363634;
-  border: 2px solid #ffffff;
-  border-radius: 4px;
-  background-color: #909091;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: background-color 0.2s linear;
-}
-
 button[type="submit"]:hover {
-  background-color: #565657;
+    background-color: #565657;
+    color: white;
+}
+
+.left-margin {
+    margin-left: 10px;
 }
 
 @media(max-width:767px) {
@@ -194,28 +176,32 @@ button[type="submit"]:hover {
 </style>        
 {% endblock %}
 {% block main %}
-<body>
 <div class="wrapper">
     <div class="form-container" >
-        <form name="f" action="{% url "member:login_ok" %}" method="POST">
+        <form name="f" action="{% url 'member:login' %}" method="POST">
             {% csrf_token %}
             <h3>Mango Planet</h3>
             <p>상상 그 이상의 맛집</p>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <input name="email" type="text" class="form-control" required="">
-                <span>email</span>
+                <span class="left-margin">email</span>
                 <span class="border"></span>
-              </div>
-              <div class="form-group">
+            </div>
+            <div class="form-group mb-2">
                 <input name="pwd" type="Password" class="form-control" required="">
-                <span>Password</span>
+                <span class="left-margin">Password</span>
                 <span class="border"></span>
-              </div>
-              <div>
-                <button type="submit" onclick="location.href='{% url "member:login_ok" %}'">로 그 인</button>
-              </div>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}" style='color:#DD5733;'{% endif %}>{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            <div>
+                <button type="submit">로 그 인</button>
+            </div>
         </form>
-        <button type="submit1" onclick="location.href='{% url "member:register" %}'">가 입 하 기</button>
+        <button class="mt-3" type="submit" onclick="location.href='{% url "member:register" %}'">가 입 하 기</button>
     </div>
 </div>
 {% endblock %}

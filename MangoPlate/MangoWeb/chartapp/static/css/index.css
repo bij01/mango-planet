@@ -55,12 +55,24 @@ main {
 .sb-sidenav-menu-heading{
     font-family: none !important;  
 }
-@media(max-width:768px){
+
+@media(max-width:500px){
     .card-height {
-        max-height: 205px !important;
+        width: 100%;
+        max-height: 180px !important;
     }
 }
-@media(max-width:375px){
+@media(max-width:400px){
+    .card-height {
+        width: 100%;
+        max-height: 120px !important;
+    }
+    .card-body p {
+        font-size: 0.8rem;
+    }
+    .card-body h5 {
+        font-size: 1rem;
+    }
     .sub-title {
         display: none;
     }

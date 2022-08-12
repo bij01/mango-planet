@@ -1,50 +1,48 @@
-from re import template
-from unittest import result
 from xmlrpc.client import DateTime
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, HttpResponse
 from django.shortcuts import redirect
 from member.models import Member
 from .forms import RegisterForm
-from django.contrib import auth
 from django.template import loader
+from django.contrib import messages
 
 
 def login(request):
-    return render(request, "login.html")
-
-
-def login_ok(request):
     # email = request.POST['email'] #방법1
-    # pwd = request.POST['pwd'] #방법1   
+    # pwd = request.POST['pwd'] #방법1
     email = request.POST.get('email')
     pwd = request.POST.get('pwd')
     print("email", email, "pwd", pwd)
-    
-    try:
-        member = Member.objects.get(email=email)
-        print("member", member)
-    except Member.DoesNotExist:
-        member = None
-    
-    result = 0
-    if member != None:
-        print("해당 email회원 존재함")
-        if member.pwd == pwd:
-            print("비밀번호까지 일치")
-            result = 2
-            request.session['email'] = email #방법2
-            request.session['name'] = member.name
-        else:
-            print("비밀번호 틀림")
-            result = 1
+
+    if email is None and pwd is None:
+        result = -1
     else:
-        print("해당 email회원이 존재하지 않음")
-        result = 0
-    template = loader.get_template("login_ok.html")
+        try:
+            member = Member.objects.get(email=email)
+            print("member", member)
+        except Member.DoesNotExist:
+            member = None
+        if member is not None:
+            print("email회원 존재")
+            if member.pwd == pwd:
+                print("비밀번호 일치")
+                result = 2
+                request.session['email'] = email
+                request.session['name'] = member.name
+                return redirect('chart:index')
+            else:
+                print("비밀번호 틀림")
+                messages.error(request, "비밀번호가 일치하지 않습니다.")
+                result = 1
+        else:
+            print("해당 email회원이 존재하지 않음")
+            messages.error(request, "해당 email로 등록된 계정이 없습니다.")
+            result = 0
+
     context = {
         'result': result,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, "login.html", context)
 
 
 def logout(request):
