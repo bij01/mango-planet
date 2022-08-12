@@ -10,6 +10,23 @@
     {% block head %}
     <title>망고플래닛</title>
     {% endblock %}
+    <style type="text/css">
+    .mango-logo {
+        width: 225px !important;
+     }
+    @media(max-width:420px){
+        .mango-logo {
+            width: 50px !important;
+        }
+        .mango-text {
+            display: none;
+        }
+        .mango-search {
+            width: 80% !important;
+        }
+    }
+
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
@@ -21,9 +38,9 @@
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark topbg">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="{% url 'chart:index' %}">
-        <span><img class="me-3 mb-1" src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24"/>
-            망고플래닛
+    <a class="navbar-brand ps-3 mango-logo" href="{% url 'chart:index' %}">
+        <span><img src="{% static '/imgs/logo.png' %}" alt="logo" width="30" height="24"/>
+            <span class="mango-text">망고플래닛</span>
         </span>
     </a>
     <!-- Sidebar Toggle-->
@@ -31,9 +48,9 @@
             class="fas fa-bars"></i></button>
     <!-- Navbar Search-->
 
-    <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
+    <form class="d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0 center"
           method="GET" action="{% url 'chart:index' %}">
-        <div class="input-group">
+        <div class="input-group mango-search">
             <input class="form-control" type="text" placeholder="검색" aria-label="검색"
                    aria-describedby="btnNavbarSearch" name="key"/>
             <button class="btn btn-warning" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>

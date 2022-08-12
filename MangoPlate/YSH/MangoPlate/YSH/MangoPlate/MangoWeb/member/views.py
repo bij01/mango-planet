@@ -12,6 +12,7 @@ from django.template import loader
 def login(request):
     return render(request, "login.html")
 
+
 def login_ok(request):
     # email = request.POST['email'] #방법1
     # pwd = request.POST['pwd'] #방법1   
@@ -45,15 +46,14 @@ def login_ok(request):
     }
     return HttpResponse(template.render(context, request))
 
-def logout(request):
 
+def logout(request):
     if request.session.get('email'):
-        print(__file__)
-        #print("로그아웃성공")
+        print("로그아웃성공")
         del request.session['email']
         request.session.flush()
         print("세션삭제성공")
-        return redirect("/")
+    return redirect("/")
 
     
 def register(request):
@@ -68,21 +68,24 @@ def register(request):
                 name = request.POST.get('name')
                 email = request.POST.get('email')
                 pwd = request.POST.get('pwd')
-                
-                if Member.objects.filter(email=request.POST['email']).exists():
-                    print("이메일중복")
-                    return render(request, 'register')
+                if Member.objects.filter(email=request.POST['email']).exists():  
+                    # print("이메일 중복")
+                    message = "1"
+                    context = {
+                        "msg": message,
+                    }
+                    return render(request, "register.html", context)
                 else:
                     user = Member(name=name, email=email, pwd=pwd, rdate=DateTime)
                     user.save()
-                    return render(request, "login.html")
-                # try:
-                #     Member.objects.get(primarykey=email)
-                #     print('email', '이미 가입된 이메일입니다.')
-                # except:
-                #     pass  
+                    request.session['email'] = email
+                    request.session['name'] = name
+                    return render(request, "register_ok.html")
             
     else:
         form = RegisterForm()
     return render(request, "register.html", {'form': form})
 
+
+def register_ok(request):
+    return render(request, "register_ok.html")

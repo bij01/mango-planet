@@ -184,8 +184,11 @@ button[type="submit1"]:hover {
 
 button[type="submit"]:hover {
   background-color: #565657;
+  color:white;
 }
-
+.left-margin {
+    margin-left: 10px;
+}
 @media(max-width:767px) {
   h3 {
     font-size: 38px
@@ -198,9 +201,7 @@ button[type="submit"]:hover {
 
   .form-container {
     width: 100%;
-
     padding: 24px;
-
     border: none;
     box-shadow: none;
   }
@@ -218,27 +219,33 @@ button[type="submit"]:hover {
             <h3>Mango Planet</h3>
             <p>상상 그 이상의 맛집</p>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
               <input name="name" type="text" class="form-control" required />
-              <span>Username</span>
+              <span class="left-margin">Username</span>
               <span class="border"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
               <input name="email" type="email" class="form-control" required />
-              <span>E-mail</span>
+              <span class="left-margin">E-mail</span>
               <span class="border"></span>
-            </div>
-            <div class="form-group">
+                </div>
+            <div class="form-group mb-3">
               <input name="pwd" type="Password" class="form-control" required />
-              <span>PassWord</span>
+              <span class="left-margin">PassWord</span>
               <span class="border"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-2">
               <input name="password2" type="Password" class="form-control" required />
-              <span>Confirm&nbsp;Password</span>
+              <span class="left-margin">Confirm&nbsp;Password</span>
               <span class="border"></span>
             </div>
-              <button type="submit" value="회원가입" onclick="javascript:btn()">가 입 하 기</button>
+            {% if messages %}
+                {% for message in messages %}
+                <div style="color:#dd5733" {% if messages.tags %} class="alert alert-{{messages.tags}}"{% endif %}>
+                  {{message}}</div>
+              {% endfor %}
+            {% endif %}
+            <button type="submit" value="회원가입" onclick="javascript:btn()">가 입 하 기</button>
         </form>
     </div>
 </div>
@@ -247,35 +254,35 @@ button[type="submit"]:hover {
 {% block script %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
-    if({{msg}}=="1"){
+    if({{msg}}== "1"){
         alert("이미 등록되어 있는 이메일 입니다");
     }
-    function check(){
-        var pwd = $('input[name=pwd]').val();
-        var pwd2 = $('input[name=password2]').val();
-        if (pwd==pwd2){
-            //location.href='{% url "member:register" %}';
-        }else{
-            alert('비밀번호가 일치하지 않습니다.');
-        }
-    }
-    function check_name(e){
-        const regex = /^[가-힣]{3,5}$/;
-        text = $(e).val()
-         if (regex.test(text)){
-        } else {
-            alert('3~5개의 한글로 된 이름을 입력해주세요.');
-        }
-    }
-    function check_alpha(e){
-        const regex = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{3,3}$/;
-        text = $(e).val();
-        //console.log(regex.test(text));
+  function check(){
+      var pwd = $('input[name=pwd]').val();
+      var pwd2 = $('input[name=password2]').val();
+      if (pwd==pwd2){
+          //location.href='{% url "member:register" %}';
+      }else{
+        alert('비밀번호가 일치하지 않습니다.');
+      }
+  }
+  function check_name(e){
+      const regex = /^[가-힣]{3,5}$/;
+      text = $(e).val()
         if (regex.test(text)){
-        } else {
-            alert('올바른 형식의 이메일 주소를 입력해주세요.');
-        }
-    }
+      } else {
+          alert('3~5개의 한글로 된 이름을 입력해주세요.');
+      }
+  }
+  function check_alpha(e){
+      const regex = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{3,3}$/;
+      text = $(e).val();
+      //console.log(regex.test(text));
+      if (regex.test(text)){
+      } else {
+          alert('올바른 형식의 이메일 주소를 입력해주세요.');
+      }
+  }
 </script>
 {% endblock %}
 

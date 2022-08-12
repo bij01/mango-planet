@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from pymongo import MongoClient
-from django.core.paginator import Paginator 
+from django.core.paginator import Paginator
 
 
 def connect_db():
@@ -147,7 +147,16 @@ def detail(request, name):
         if favor is not None:
             favor_list += favor["list"]
     res_name = name
-
+    # 댓글 TOP5 차트
+    review_col = db["review_chart"]
+    data = review_col.find_one({"name": res_name})
+    if data is not None:
+        x_list = data["x_list"]
+        y_list = data["y_list"]
+    else:
+        x_list = []
+        y_list = []
+    # TOP5 END
     col1 = db["info_list"]
     col2 = db["menu_list"]
     location, review_rate = check_data2(res_name)
@@ -168,6 +177,8 @@ def detail(request, name):
         'price': target['info'][4],
         'menu_list': menu_list,
         'favor_list': favor_list,
+        'x_list': x_list,
+        'y_list': y_list,
     }
     return render(request, "detail.html", context)
 
@@ -188,14 +199,17 @@ def favors(request):
         pass
     else:
         datafav = col3.find_one({"email": email})
-        namelist = datafav.get("list")
-        for name in namelist:
-            for data in col.find({"name": name}).sort("_id"):
-                name = data.get("name")
-                addr = data.get("info")[2]
-                count += 1
-                data_list.append([name, addr])
-        menu_list, count2 = check_data1(col2)
+        if datafav is None:
+            pass
+        else:
+            namelist = datafav.get("list")
+            for name in namelist:
+                for data in col.find({"name": name}).sort("_id"):
+                    name = data.get("name")
+                    addr = data.get("info")[2]
+                    count += 1
+                    data_list.append([name, addr])
+            menu_list, count2 = check_data1(col2)
 
     paginator = Paginator(data_list, 12)  # 페이지당 12개씩 보여주기
     page_obj = paginator.get_page(page)
