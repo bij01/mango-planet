@@ -1,0 +1,28 @@
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>회원 가입 완료</title>
+    <style>
+      body { font-family: sans-serif; font-size: 14px; }
+    </style>
+  </head>
+
+  <body>
+  <br><br><br>
+    <h1 style="text-align:center; font-size:3.5em;" >회원 가입이 완료되었습니다.</h1>
+  </body>
+  <br><br><br>
+  <div id="join_finish">
+	<div class="box" style="text-align:center; font-size:1.5em;">
+		<strong> {{ request.session.name }}고객님,<br> 회원가입을 진심으로 환영합니다.</strong>
+		<br><br><br>
+		<p class="agree"><span>광고창</span></p>
+		<br><br>
+	</div>
+        <p class="button" style="text-align:center">
+            <a href="/"><img src="http://img.echosting.cafe24.com/skin/base_ko_KR/member/btn_complete_main.gif" alt="확인" /></a>
+
+        </p>
+  </div>
+ 
+</html>

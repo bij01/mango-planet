@@ -3,4 +3,8 @@ imgs/
 *.pyc
 *.zip
 .idea/
+<<<<<<< HEAD
 .ipynb_checkpoints
+=======
+db.sqlite3
+>>>>>>> 9b66abeb8d9b872044ac9b5ee1583079e9267fdf
