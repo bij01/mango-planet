@@ -12,4 +12,4 @@
 3. 프레임워크: Django
 4. 기능: 망고플레이트에서 수집한 데이터를 연동하여 웹으로 제공
 5. 배포: AWS EC2인스턴스 - 우분투 20.04.4LTS (Nginx, Gunicorn, Django)
-6. 도메인연결: 가비아(mangoplanet.shop)
+6. 도메인연결: 가비아(http://mangoplanet.shop)
